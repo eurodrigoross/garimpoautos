@@ -51,7 +51,7 @@ function DealCard({ deal }: { deal: Deal }) {
             <dd className="font-semibold text-foreground">{brl(deal.vendaRapida)}</dd>
           </div>
           <div className="mt-3 rounded-lg border border-emerald/30 bg-emerald-deep/40 px-3 py-2 text-center text-[12px] font-bold text-emerald">
-            💰 Lucro / Margem est.: {brl(marginOf(deal))} ({marginPct(deal)}%)
+            Lucro / Margem est.: {brl(marginOf(deal))} ({marginPct(deal)}%)
           </div>
         </dl>
 

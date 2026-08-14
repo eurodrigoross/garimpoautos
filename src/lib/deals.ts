@@ -23,7 +23,7 @@ export const deals: Deal[] = [
     fipe: 54900,
     repasse: 28500,
     vendaRapida: 44000,
-    scarcity: "🔴 4 investidores analisando",
+    scarcity: "● 4 investidores analisando",
     category: ["margem", "ate30", "sedan"],
   },
   {
@@ -43,7 +43,7 @@ export const deals: Deal[] = [
     fipe: 62400,
     repasse: 29900,
     vendaRapida: 51500,
-    scarcity: "🔴 7 investidores analisando",
+    scarcity: "● 7 investidores analisando",
     category: ["margem", "ate30", "sedan"],
   },
   {
@@ -63,7 +63,7 @@ export const deals: Deal[] = [
     fipe: 74200,
     repasse: 29800,
     vendaRapida: 63900,
-    scarcity: "🔴 11 investidores analisando",
+    scarcity: "● 11 investidores analisando",
     category: ["margem", "ate30", "sedan"],
   },
   {
