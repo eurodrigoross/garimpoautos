@@ -5,17 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * REPASSE VIP design system — Obsidian & Gold Tech.
+ * All colors in oklch. Never hardcode colors in components.
  */
 
 @theme inline {
@@ -43,93 +34,70 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-emerald: var(--emerald);
+  --color-emerald-deep: var(--emerald-deep);
+  --color-emerald-foreground: var(--emerald-foreground);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
-}
+  --radius: 0.875rem;
 
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --background: oklch(0.1596 0.0203 265.58);
+  --foreground: oklch(0.9842 0.0034 247.86);
+
+  --surface: oklch(0.2101 0.0318 264.66);
+  --surface-elevated: oklch(0.2795 0.0368 260.03);
+
+  --card: oklch(0.2101 0.0318 264.66);
+  --card-foreground: oklch(0.9842 0.0034 247.86);
+  --popover: oklch(0.2101 0.0318 264.66);
+  --popover-foreground: oklch(0.9842 0.0034 247.86);
+
+  --primary: oklch(0.7665 0.1387 91.06);
+  --primary-foreground: oklch(0.1596 0.0203 265.58);
+
+  --secondary: oklch(0.2781 0.0296 256.85);
+  --secondary-foreground: oklch(0.9842 0.0034 247.86);
+
+  --muted: oklch(0.2781 0.0296 256.85);
+  --muted-foreground: oklch(0.7107 0.0351 256.79);
+
+  --accent: oklch(0.2795 0.0368 260.03);
+  --accent-foreground: oklch(0.9842 0.0034 247.86);
+
+  --destructive: oklch(0.62 0.21 25);
+  --destructive-foreground: oklch(0.9842 0.0034 247.86);
+
+  --border: oklch(0.2781 0.0296 256.85);
+  --border-strong: oklch(0.3729 0.0306 259.73);
+  --input: oklch(0.3729 0.0306 259.73);
+  --ring: oklch(0.7665 0.1387 91.06);
+
+  --gold: oklch(0.7665 0.1387 91.06);
+  --gold-soft: oklch(0.7245 0.0998 82.35);
+  --gold-foreground: oklch(0.1596 0.0203 265.58);
+
+  --emerald: oklch(0.6959 0.1491 162.48);
+  --emerald-deep: oklch(0.378 0.073 168.94);
+  --emerald-foreground: oklch(0.1596 0.0203 265.58);
+
+  --gradient-gold: linear-gradient(135deg, var(--gold), var(--gold-soft));
+  --gradient-emerald: linear-gradient(135deg, var(--emerald), oklch(0.62 0.13 162));
+  --shadow-elevated: 0 24px 60px -24px oklch(0 0 0 / 0.8);
+  --shadow-gold: 0 0 0 1px color-mix(in oklab, var(--gold) 35%, transparent),
+    0 18px 50px -22px color-mix(in oklab, var(--gold) 55%, transparent);
+  --shadow-emerald: 0 18px 44px -18px color-mix(in oklab, var(--emerald) 55%, transparent);
 }
 
 @layer base {
@@ -140,5 +108,54 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
+
+  ::selection {
+    background: color-mix(in oklab, var(--gold) 35%, transparent);
+  }
+}
+
+@utility glass {
+  background: color-mix(in oklab, var(--surface) 65%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+@utility ambient-glow {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -20% -10% auto -10%;
+    height: 120%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        60% 55% at 50% 12%,
+        color-mix(in oklab, var(--gold) 16%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        45% 40% at 78% 30%,
+        color-mix(in oklab, var(--emerald) 12%, transparent),
+        transparent 70%
+      );
+  }
+}
+
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--border-strong) 45%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--border-strong) 45%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(70% 60% at 50% 20%, black, transparent 80%);
+}
+
+@utility text-gradient-gold {
+  background: var(--gradient-gold);
+  background-clip: text;
+  color: transparent;
 }

@@ -1,24 +1,45 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Nav } from "@/components/landing/Nav";
+import { Hero } from "@/components/landing/Hero";
+import { DealsGrid } from "@/components/landing/DealsGrid";
+import { Trust } from "@/components/landing/Trust";
+import { WHATSAPP_URL } from "@/lib/deals";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const title = "Repasse VIP | Mesa de Arrematação e Repasse de Retomados";
+const description =
+  "Mesa privada de assessoria em arrematação e repasse: retomados de banco até 50% abaixo da FIPE, documentação validada, transferência e frete cegonha inclusos.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <main>
+        <Hero />
+        <DealsGrid />
+        <Trust />
+      </main>
+      <footer className="border-t border-border">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 py-8 text-xs text-muted-foreground sm:flex-row sm:px-8">
+          <p>© {new Date().getFullYear()} Repasse VIP — Mesa de Assessoria em Arrematação e Repasse.</p>
+          <a href={WHATSAPP_URL} className="text-gold hover:underline">
+            Falar com um assessor
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }
