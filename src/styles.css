@@ -161,3 +161,115 @@
   background-clip: text;
   color: transparent;
 }
+
+/* ---- Premium interaction layer: motion, focus, hover sheen ---- */
+
+:root {
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 180ms;
+  --dur-base: 320ms;
+  --dur-slow: 620ms;
+  --shadow-hover: 0 0 0 1px color-mix(in oklab, var(--foreground) 16%, transparent),
+    0 28px 70px -32px oklch(0 0 0 / 0.95);
+}
+
+@layer base {
+  a,
+  button {
+    transition-timing-function: var(--ease-premium);
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--background),
+      0 0 0 3px color-mix(in oklab, var(--foreground) 55%, transparent);
+    border-radius: var(--radius-md);
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--foreground) 20%, transparent);
+    color: var(--foreground);
+  }
+}
+
+@utility glass {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--surface) 78%, transparent),
+    color-mix(in oklab, var(--background) 72%, transparent)
+  );
+  backdrop-filter: blur(18px) saturate(130%);
+  border-color: color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+
+@utility hover-lift {
+  transition:
+    transform var(--dur-base) var(--ease-premium),
+    border-color var(--dur-base) var(--ease-premium),
+    box-shadow var(--dur-base) var(--ease-premium),
+    background-color var(--dur-base) var(--ease-premium);
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+  }
+}
+
+/* Subtle diagonal light sweep on hover — no color, pure luminance */
+@utility sheen {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 35%,
+      color-mix(in oklab, var(--foreground) 10%, transparent) 50%,
+      transparent 65%
+    );
+    transform: translateX(-60%);
+    transition:
+      opacity var(--dur-fast) var(--ease-premium),
+      transform var(--dur-slow) var(--ease-premium);
+  }
+  &:hover::after {
+    opacity: 1;
+    transform: translateX(60%);
+  }
+}
+
+/* Hairline top highlight for glass/elevated surfaces */
+@utility edge-light {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--foreground) 28%, transparent),
+      transparent
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hover-lift:hover {
+    transform: none;
+  }
+}

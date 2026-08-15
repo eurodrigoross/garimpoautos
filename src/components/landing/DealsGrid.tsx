@@ -19,9 +19,9 @@ const bullets = [
 
 function DealCard({ deal }: { deal: Deal }) {
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border-strong/60 bg-surface/70 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-gold)]">
+    <article className="group hover-lift sheen edge-light flex flex-col overflow-hidden rounded-2xl border border-border/80 bg-surface/60 backdrop-blur-xl hover:border-foreground/25">
       <div className="relative flex h-44 items-center justify-center bg-[linear-gradient(140deg,var(--surface-elevated),var(--background))]">
-        <Car className="size-16 text-border-strong transition-transform duration-500 group-hover:scale-105" />
+        <Car className="size-16 text-border-strong transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06] group-hover:text-foreground/35" />
         <span className="absolute left-3 top-3 rounded-full border border-border-strong/70 bg-background/70 px-3 py-1 text-[10px] font-semibold tracking-wide text-foreground backdrop-blur-md">
           {deal.scarcity}
         </span>
@@ -68,7 +68,7 @@ function DealCard({ deal }: { deal: Deal }) {
           href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-emerald px-4 py-3 text-[12px] font-bold tracking-wide text-emerald-foreground transition-all hover:brightness-110"
+          className="sheen mt-5 flex items-center justify-center gap-2 rounded-xl bg-emerald px-4 py-3 text-[12px] font-bold tracking-wide text-emerald-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_34px_-16px_oklch(1_0_0/0.35)] active:translate-y-0"
         >
           SOLICITAR RESERVA DO LOTE <ArrowRight className="size-4" />
         </a>
@@ -103,10 +103,10 @@ export function DealsGrid() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`rounded-xl border px-4 py-2 text-xs font-semibold transition-all ${
+              className={`rounded-xl border px-4 py-2 text-xs font-semibold transition-all duration-300 ${
                 tab === t.id
-                  ? "border-gold/50 bg-gold/10 text-gold"
-                  : "border-border bg-surface/60 text-muted-foreground hover:border-border-strong hover:text-foreground"
+                  ? "border-foreground/45 bg-foreground/10 text-foreground shadow-[0_10px_24px_-16px_oklch(1_0_0/0.5)]"
+                  : "border-border bg-surface/60 text-muted-foreground hover:border-foreground/25 hover:bg-surface-elevated/70 hover:text-foreground"
               }`}
             >
               {t.label}
