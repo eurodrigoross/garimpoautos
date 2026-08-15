@@ -43,7 +43,7 @@ export function Hero() {
             ].map(([v, l]) => (
               <div
                 key={l}
-                className="rounded-xl border border-border bg-surface/70 px-4 py-3 backdrop-blur-md"
+                className="group rounded-xl border border-border bg-surface/60 px-4 py-3 backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:bg-surface-elevated/60"
               >
                 <dt className="text-lg font-bold text-foreground sm:text-xl">{v}</dt>
                 <dd className="mt-1 text-[11px] leading-tight text-muted-foreground">{l}</dd>
@@ -52,7 +52,7 @@ export function Hero() {
           </dl>
         </div>
 
-        <div className="rounded-2xl border border-border-strong/70 bg-surface/70 p-6 shadow-[var(--shadow-elevated)] backdrop-blur-md sm:p-8">
+        <div className="edge-light rounded-2xl border border-border/80 bg-surface/60 p-6 shadow-[var(--shadow-elevated)] backdrop-blur-xl sm:p-8">
           <div className="flex items-center gap-2 text-gold">
             <ShieldCheck className="size-4" />
             <h2 className="text-sm font-bold tracking-wide">
@@ -75,7 +75,7 @@ export function Hero() {
                     className={`flex w-full items-start gap-3 rounded-xl border px-4 py-3.5 text-left transition-all duration-300 ${
                       on
                         ? "border-emerald/60 bg-emerald/10 shadow-[var(--shadow-emerald)]"
-                        : "border-border bg-background/40 hover:border-border-strong hover:bg-surface-elevated/60"
+                        : "border-border bg-background/40 hover:border-foreground/25 hover:bg-surface-elevated/60 hover:shadow-[0_12px_28px_-20px_oklch(0_0_0/0.9)]"
                     }`}
                   >
                     <span
@@ -101,7 +101,7 @@ export function Hero() {
             aria-disabled={!active}
             className={`mt-6 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-4 text-sm font-bold tracking-wide transition-all duration-300 ${
               active
-                ? "bg-emerald text-emerald-foreground shadow-[var(--shadow-emerald)] hover:brightness-110"
+                ? "sheen bg-emerald text-emerald-foreground shadow-[var(--shadow-emerald)] hover:-translate-y-0.5 hover:shadow-[0_20px_40px_-18px_oklch(1_0_0/0.4)] active:translate-y-0"
                 : "cursor-not-allowed border border-border bg-background/40 text-muted-foreground"
             }`}
           >
@@ -110,7 +110,7 @@ export function Hero() {
 
           <p className="mt-3 text-center text-[11px] text-muted-foreground">
             Atendimento consultivo direto pela mesa —{" "}
-            <a href={WHATSAPP_URL} className="text-gold hover:underline">
+            <a href={WHATSAPP_URL} className="text-gold underline-offset-4 transition-colors duration-300 hover:underline hover:text-foreground">
               falar com um assessor
             </a>
           </p>
