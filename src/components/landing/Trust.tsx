@@ -38,7 +38,7 @@ export function Trust() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="rounded-2xl border border-border-strong/60 bg-surface/70 p-7 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-gold/40"
+              className="hover-lift edge-light rounded-2xl border border-border/80 bg-surface/60 p-7 backdrop-blur-xl hover:border-foreground/25"
             >
               <span className="flex size-11 items-center justify-center rounded-xl border border-gold/35 bg-gold/10 text-gold">
                 <f.icon className="size-5" />
