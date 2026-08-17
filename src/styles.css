@@ -317,3 +317,8 @@
 @utility pulse-dot {
   animation: ga-pulse 2s ease-in-out infinite;
 }
+
+#lovable-badge {
+  display: none !important;
+}
+
