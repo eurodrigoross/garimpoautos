@@ -1,13 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/landing/Nav";
 import { Hero } from "@/components/landing/Hero";
-import { DealsGrid } from "@/components/landing/DealsGrid";
-import { Trust } from "@/components/landing/Trust";
-import { WHATSAPP_URL } from "@/lib/deals";
+import {
+  Brand,
+  ForWho,
+  Problem,
+  ProductMockup,
+  Proof,
+  Solution,
+  TimeSaved,
+} from "@/components/landing/Sections";
+import { Pricing } from "@/components/landing/Pricing";
+import { Faq } from "@/components/landing/Faq";
+import { FinalCta, Footer, MobileBar, Urgency } from "@/components/landing/Closing";
 
-const title = "Repasse VIP | Mesa de Arrematação e Repasse de Retomados";
+const title = "Garimpo Auto | Oportunidades de leilão garimpadas por especialistas";
 const description =
-  "Mesa privada de assessoria em arrematação e repasse: retomados de banco até 50% abaixo da FIPE, documentação validada, transferência e frete cegonha inclusos.";
+  "Você procura carros. Nós procuramos oportunidades. Monitoramos leilões, filtramos lotes e entregamos oportunidades analisadas. Comece gratuitamente ou seja Prime por R$50/mês.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,21 +34,24 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
       <Nav />
       <main>
         <Hero />
-        <DealsGrid />
-        <Trust />
+        <Brand />
+        <Problem />
+        <Solution />
+        <ProductMockup />
+        <TimeSaved />
+        <ForWho />
+        <Proof />
+        <Pricing />
+        <Urgency />
+        <Faq />
+        <FinalCta />
       </main>
-      <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 py-8 text-xs text-muted-foreground sm:flex-row sm:px-8">
-          <p>© {new Date().getFullYear()} Repasse VIP — Mesa de Assessoria em Arrematação e Repasse.</p>
-          <a href={WHATSAPP_URL} className="text-gold hover:underline">
-            Falar com um assessor
-          </a>
-        </div>
-      </footer>
+      <Footer />
+      <MobileBar />
     </div>
   );
 }
