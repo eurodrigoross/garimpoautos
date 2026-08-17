@@ -273,3 +273,47 @@
     transform: none;
   }
 }
+
+/* ---- Garimpo Auto: radar / scanner motion ---- */
+
+@keyframes ga-scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+@keyframes ga-card-in {
+  from { opacity: 0; transform: translateY(10px); filter: blur(2px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes ga-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 color-mix(in oklab, var(--foreground) 45%, transparent); }
+  70% { opacity: 0.6; box-shadow: 0 0 0 6px transparent; }
+}
+
+@utility scanline {
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 38%;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      color-mix(in oklab, var(--foreground) 5%, transparent),
+      transparent
+    );
+    animation: ga-scan 5.5s var(--ease-premium) infinite;
+  }
+}
+
+@utility card-in {
+  animation: ga-card-in 620ms var(--ease-premium) both;
+}
+
+@utility pulse-dot {
+  animation: ga-pulse 2s ease-in-out infinite;
+}
