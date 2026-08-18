@@ -1,6 +1,5 @@
-import { AlertTriangle, Check, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { Reveal } from "./Reveal";
-import { WHATSAPP_FREE } from "@/lib/site";
 
 const problems = [
   ["01", "CENTENAS DE LOTES"],
@@ -10,10 +9,10 @@ const problems = [
 ];
 
 const steps = [
-  ["01", "GARIMPAMOS", "Encontramos oportunidades."],
-  ["02", "ANALISAMOS", "Filtramos os lotes."],
-  ["03", "ARREMATAMOS", "Buscamos boas condições."],
-  ["04", "REPASSAMOS", "A oportunidade chega até você."],
+  ["01", "GARIMPAMOS", "Monitoramos leilões e encontramos lotes."],
+  ["02", "ANALISAMOS", "Estudamos números, condições e riscos."],
+  ["03", "SELECIONAMOS", "Só o que faz sentido segue adiante."],
+  ["04", "DISPONIBILIZAMOS", "A oportunidade chega até você."],
 ];
 
 const yes = [
@@ -32,11 +31,6 @@ const no = [
   "Procura apenas um carro novo convencional.",
 ];
 
-const testimonials = [
-  "Depoimento em breve — espaço reservado para membros da comunidade.",
-  "Depoimento em breve — espaço reservado para membros da comunidade.",
-  "Depoimento em breve — espaço reservado para membros da comunidade.",
-];
 
 export function Brand() {
   return (
@@ -120,105 +114,6 @@ export function Solution() {
   );
 }
 
-export function ProductMockup() {
-  return (
-    <section id="oportunidade" className="mx-auto max-w-6xl scroll-mt-20 border-t border-border px-5 py-20 sm:px-8">
-      <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
-        <Reveal>
-          <span className="text-[10px] font-semibold tracking-[0.22em] text-muted-foreground">
-            O PRODUTO
-          </span>
-          <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-            É assim que a oportunidade chega até você.
-          </h2>
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Cada oportunidade publicada vem com números, contexto e a nossa análise — pontos
-            positivos e pontos de atenção.
-          </p>
-        </Reveal>
-
-        <Reveal delay={120}>
-          <article className="edge-light overflow-hidden rounded-2xl border border-border/80 bg-surface/50 shadow-[var(--shadow-elevated)] backdrop-blur-xl">
-            <div className="flex items-center justify-between border-b border-border px-6 py-4">
-              <span className="text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">
-                GARIMPO #0247
-              </span>
-              <span className="rounded-full border border-foreground/30 px-3 py-1 text-[9px] font-bold tracking-[0.16em] text-foreground">
-                OPORTUNIDADE SELECIONADA
-              </span>
-            </div>
-
-            <div className="p-6">
-              <h3 className="text-lg font-extrabold tracking-tight text-foreground">
-                TOYOTA COROLLA XEI 2021
-              </h3>
-
-              <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border text-xs sm:grid-cols-3">
-                {[
-                  ["Valor do arremate", "R$ 58.400"],
-                  ["Referência de mercado", "R$ 82.000"],
-                  ["Taxas estimadas", "R$ 4.900"],
-                  ["Localização", "Rio de Janeiro / RJ"],
-                  ["Tipo", "Leilão"],
-                  ["Documentação", "Conforme edital"],
-                ].map(([k, v]) => (
-                  <div key={k} className="bg-background p-4">
-                    <dt className="text-[10px] text-muted-foreground">{k}</dt>
-                    <dd className="mt-1 font-bold text-foreground">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-xl border border-border bg-background/50 p-4">
-                  <p className="text-[10px] font-bold tracking-[0.16em] text-muted-foreground">
-                    PONTOS POSITIVOS
-                  </p>
-                  <ul className="mt-3 space-y-2 text-xs text-foreground">
-                    {["Valor de arremate abaixo da referência", "Baixa quilometragem informada"].map(
-                      (p) => (
-                        <li key={p} className="flex gap-2">
-                          <Check className="mt-px size-3.5 shrink-0" strokeWidth={3} /> {p}
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </div>
-                <div className="rounded-xl border border-border bg-background/50 p-4">
-                  <p className="text-[10px] font-bold tracking-[0.16em] text-muted-foreground">
-                    PONTOS DE ATENÇÃO
-                  </p>
-                  <ul className="mt-3 space-y-2 text-xs text-muted-foreground">
-                    {["Avarias descritas no laudo do leilão", "Retirada e frete por conta do comprador"].map(
-                      (p) => (
-                        <li key={p} className="flex gap-2">
-                          <AlertTriangle className="mt-px size-3.5 shrink-0" /> {p}
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </div>
-              </div>
-
-              <a
-                href={WHATSAPP_FREE}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="sheen mt-6 flex items-center justify-center rounded-xl bg-primary px-5 py-3.5 text-[12px] font-bold tracking-wide text-primary-foreground transition-all duration-300 hover:-translate-y-0.5"
-              >
-                VER OPORTUNIDADE
-              </a>
-              <p className="mt-3 text-[10px] leading-relaxed text-muted-foreground">
-                Exemplo ilustrativo. As informações são baseadas nos dados disponíveis da operação e
-                devem ser conferidas no edital do respectivo leilão.
-              </p>
-            </div>
-          </article>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
 
 export function TimeSaved() {
   return (
@@ -315,26 +210,28 @@ export function Proof() {
         </Reveal>
       </div>
 
-      <div className="mt-14">
+    </section>
+  );
+}
+
+export function Transparency() {
+  return (
+    <section className="border-y border-border bg-surface/30">
+      <div className="mx-auto max-w-4xl px-5 py-20 text-center sm:px-8">
         <Reveal>
-          <h3 className="text-[12px] font-bold tracking-[0.18em] text-muted-foreground">
-            QUEM JÁ ENTROU NO GARIMPO.
-          </h3>
+          <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+            UM VALOR. SEM PEGADINHA.
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            O <span className="font-semibold text-foreground">Valor Garimpo</span> é o valor
+            apresentado para aquela oportunidade. FIPE e média de mercado aparecem apenas como
+            referência de comparação.
+          </p>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Eventuais custos externos ou operacionais — como transporte, documentação ou despachante
+            — dependem de cada operação e são informados e tratados caso a caso, antes da conclusão.
+          </p>
         </Reveal>
-        <div className="mt-6 grid gap-6 md:grid-cols-3">
-          {testimonials.map((t, i) => (
-            <Reveal key={i} delay={i * 100}>
-              <figure className="hover-lift h-full rounded-2xl border border-dashed border-border-strong/60 bg-surface/30 p-6">
-                <blockquote className="text-sm leading-relaxed text-muted-foreground">
-                  “{t}”
-                </blockquote>
-                <figcaption className="mt-5 text-[11px] tracking-[0.16em] text-foreground/40">
-                  NOME / CIDADE
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
-        </div>
       </div>
     </section>
   );

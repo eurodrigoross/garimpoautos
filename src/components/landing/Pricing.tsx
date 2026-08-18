@@ -1,24 +1,128 @@
-import { Check } from "lucide-react";
+import { Check, Clock } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { WHATSAPP_FREE, WHATSAPP_PRIME } from "@/lib/site";
 
 const free = [
-  "Acesso ao grupo gratuito",
-  "Seleção de oportunidades",
-  "Avisos",
-  "Conteúdos",
-  "Acesso à comunidade",
+  "Acesso à comunidade Garimpo Aberto",
+  "Seleção de oportunidades garimpadas",
+  "Avisos de novos garimpos",
+  "Conteúdos sobre leilão e revenda",
+  "Porta de entrada para conhecer a operação",
 ];
 
 const prime = [
   "Tudo do Garimpo Aberto",
-  "Maior volume de oportunidades",
-  "Oportunidades exclusivas",
-  "Alertas de novos arremates",
-  "Informações mais completas",
-  "Comunidade exclusiva",
-  "Maior proximidade com o radar Garimpo",
+  "Oportunidades exclusivas do Prime",
+  "Maior volume de veículos garimpados",
+  "Alertas prioritários de novos garimpos",
+  "Números completos de cada oportunidade",
+  "Acesso antecipado a oportunidades selecionadas",
+  "Comunidade VIP de networking",
 ];
+
+type Pillar = { title: string; now: string[]; soon: string[] };
+
+const pillars: Pillar[] = [
+  {
+    title: "OPORTUNIDADES",
+    now: [
+      "Oportunidades exclusivas do Prime",
+      "Maior volume de veículos garimpados",
+      "Alertas prioritários de novos garimpos",
+      "Informações e números completos de cada oportunidade",
+      "Acesso antecipado a oportunidades selecionadas",
+    ],
+    soon: [],
+  },
+  {
+    title: "FERRAMENTAS",
+    now: [],
+    soon: [
+      "Calculadora Garimpo — custo, FIPE, preço de mercado, despesas e resultado estimado",
+      "Gerenciador de Arremates — veículos, custos, documentação, venda e resultado",
+      "Planilha de Lucratividade",
+      "Histórico dos seus garimpos e operações",
+      "Área exclusiva do membro Prime",
+    ],
+  },
+  {
+    title: "COMUNIDADE & CRESCIMENTO",
+    now: [
+      "Comunidade VIP de networking",
+      "Troca de experiências entre compradores e revendedores",
+      "Contatos e conexões estratégicas do mercado automotivo",
+      "Conteúdos exclusivos sobre compra e revenda",
+    ],
+    soon: [
+      "Mentoria de tráfego pago para venda de veículos",
+      "Estratégias para anunciar e acelerar a venda",
+      "Encontros e mentorias exclusivas para membros",
+    ],
+  },
+];
+
+export function PrimeEcosystem() {
+  return (
+    <section className="mx-auto max-w-6xl border-t border-border px-5 py-20 sm:px-8">
+      <Reveal>
+        <span className="text-[10px] font-semibold tracking-[0.22em] text-muted-foreground">
+          O ECOSSISTEMA
+        </span>
+        <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+          GARIMPO PRIME
+        </h2>
+        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          Seu ecossistema para comprar, organizar e vender melhor.
+        </p>
+      </Reveal>
+
+      <div className="mt-10 grid gap-6 lg:grid-cols-3">
+        {pillars.map((p, i) => (
+          <Reveal key={p.title} delay={i * 100}>
+            <div className="hover-lift edge-light h-full rounded-2xl border border-border/80 bg-surface/40 p-7 backdrop-blur-md">
+              <h3 className="text-[12px] font-bold tracking-[0.18em] text-foreground">{p.title}</h3>
+
+              {p.now.length > 0 && (
+                <ul className="mt-5 space-y-3">
+                  {p.now.map((t) => (
+                    <li key={t} className="flex gap-3 text-sm text-muted-foreground">
+                      <Check className="mt-0.5 size-4 shrink-0 text-foreground" strokeWidth={3} />
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {p.soon.length > 0 && (
+                <div className="mt-6 rounded-xl border border-dashed border-border-strong/60 p-4">
+                  <p className="text-[10px] font-bold tracking-[0.18em] text-foreground/60">
+                    ROADMAP PRIME — EM DESENVOLVIMENTO
+                  </p>
+                  <ul className="mt-3 space-y-3">
+                    {p.soon.map((t) => (
+                      <li key={t} className="flex gap-3 text-sm text-muted-foreground">
+                        <Clock className="mt-0.5 size-4 shrink-0 text-foreground/40" />
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
+      <Reveal delay={120}>
+        <p className="mt-8 text-xs leading-relaxed text-muted-foreground">
+          Itens marcados como Roadmap Prime ainda estão em desenvolvimento e serão liberados aos
+          membros conforme forem concluídos.
+        </p>
+      </Reveal>
+    </section>
+  );
+}
+
 
 export function Pricing() {
   return (
@@ -101,8 +205,9 @@ export function Pricing() {
               R$ 50<span className="text-base font-semibold text-muted-foreground">/mês</span>
             </p>
             <p className="mt-3 text-sm text-muted-foreground">
-              Para quem quer estar mais perto das oportunidades.
+              Seu ecossistema para comprar, organizar e vender melhor.
             </p>
+
             <ul className="mt-6 space-y-3">
               {prime.map((f) => (
                 <li key={f} className="flex gap-3 text-sm text-foreground">

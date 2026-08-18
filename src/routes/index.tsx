@@ -5,18 +5,19 @@ import {
   Brand,
   ForWho,
   Problem,
-  ProductMockup,
   Proof,
   Solution,
   TimeSaved,
+  Transparency,
 } from "@/components/landing/Sections";
-import { Pricing } from "@/components/landing/Pricing";
+import { UltimosGarimpos } from "@/components/landing/Garimpos";
+import { Pricing, PrimeEcosystem } from "@/components/landing/Pricing";
 import { Faq } from "@/components/landing/Faq";
 import { FinalCta, Footer, MobileBar, Urgency } from "@/components/landing/Closing";
 
-const title = "Garimpo Auto | Oportunidades de leilão garimpadas por especialistas";
+const title = "Garimpo Auto | Oportunidades de veículos de leilão garimpadas e analisadas";
 const description =
-  "Você procura carros. Nós procuramos oportunidades. Monitoramos leilões, filtramos lotes e entregamos oportunidades analisadas. Comece gratuitamente ou seja Prime por R$50/mês.";
+  "Você procura carros. Nós procuramos oportunidades. Monitoramos leilões, filtramos lotes e apresentamos o Valor Garimpo de cada oportunidade analisada. Comece pelo Garimpo Aberto ou seja Prime.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,11 +41,13 @@ function Index() {
         <Hero />
         <Brand />
         <Problem />
+        <UltimosGarimpos />
         <Solution />
-        <ProductMockup />
         <TimeSaved />
         <ForWho />
         <Proof />
+        <Transparency />
+        <PrimeEcosystem />
         <Pricing />
         <Urgency />
         <Faq />
@@ -55,3 +58,4 @@ function Index() {
     </div>
   );
 }
+

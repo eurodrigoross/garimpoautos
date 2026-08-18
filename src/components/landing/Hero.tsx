@@ -1,11 +1,8 @@
 import { ArrowRight, Radar } from "lucide-react";
-import { WHATSAPP_FREE } from "@/lib/site";
+import { WHATSAPP_FREE, brl } from "@/lib/site";
+import { GARIMPOS, STATUS_LABEL } from "@/lib/garimpos";
 
-const found = [
-  { id: "#0247", car: "TOYOTA COROLLA XEI 2021", bid: "R$ 58.400", market: "R$ 82.000" },
-  { id: "#0251", car: "JEEP COMPASS LONGITUDE 2020", bid: "R$ 89.400", market: "R$ 121.500" },
-  { id: "#0258", car: "HONDA CIVIC EXL 2019", bid: "R$ 71.200", market: "R$ 96.800" },
-];
+const g = GARIMPOS[0]!;
 
 export function Hero() {
   return (
@@ -42,10 +39,10 @@ export function Hero() {
               QUERO RECEBER AS OPORTUNIDADES <ArrowRight className="size-4" />
             </a>
             <a
-              href="#como-funciona"
+              href="#oportunidade"
               className="flex items-center justify-center rounded-xl border border-border px-6 py-4 text-[12px] font-bold tracking-wide text-foreground transition-all duration-300 hover:border-foreground/35 hover:bg-surface/60"
             >
-              COMO FUNCIONA
+              VER ÚLTIMOS GARIMPOS
             </a>
           </div>
 
@@ -56,43 +53,58 @@ export function Hero() {
           <div className="scanline pointer-events-none absolute inset-0 rounded-2xl" />
           <div className="flex items-center justify-between text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">
             <span>RADAR GARIMPO</span>
-            <span className="flex items-center gap-1.5 text-foreground">
-              <span className="pulse-dot size-1.5 rounded-full bg-foreground" /> AO VIVO
+            <span className="rounded-full border border-foreground/25 px-3 py-1 text-[9px] font-bold text-muted-foreground">
+              {STATUS_LABEL[g.status]}
             </span>
           </div>
 
-          <ul className="mt-5 space-y-3">
-            {found.map((f, i) => (
-              <li
-                key={f.id}
-                style={{ animationDelay: `${i * 60}ms` }}
-                className="card-in hover-lift rounded-xl border border-border bg-background/50 p-4"
-              >
-                <div className="flex items-center justify-between text-[10px] tracking-[0.18em] text-muted-foreground">
-                  <span>GARIMPO {f.id}</span>
-                  <span className="text-foreground">OPORTUNIDADE ENCONTRADA</span>
-                </div>
-                <p className="mt-2 text-sm font-bold text-foreground">{f.car}</p>
-                <div className="mt-3 grid grid-cols-2 gap-3 text-xs">
-                  <div>
-                    <p className="text-muted-foreground">Arremate</p>
-                    <p className="font-bold text-foreground">{f.bid}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Referência de mercado</p>
-                    <p className="font-semibold text-muted-foreground line-through decoration-border-strong">
-                      {f.market}
-                    </p>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <div className="card-in mt-5 rounded-xl border border-border bg-background/50 p-5">
+            <p className="text-sm font-bold leading-snug text-foreground">{g.vehicle}</p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {g.year} · {g.km}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">{g.location}</p>
 
-          <p className="mt-4 text-[10px] leading-relaxed text-muted-foreground">
-            Exemplo ilustrativo de como as oportunidades são apresentadas na comunidade. Valores e
-            condições variam conforme cada leilão.
-          </p>
+            <div className="mt-5 space-y-2">
+              <div className="flex items-center justify-between rounded-lg border border-border px-4 py-3">
+                <span className="text-[10px] tracking-[0.16em] text-muted-foreground">FIPE</span>
+                <span className="text-sm font-semibold text-muted-foreground line-through decoration-border-strong">
+                  {brl(g.fipe)}
+                </span>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-border px-4 py-3">
+                <span className="text-[10px] tracking-[0.16em] text-muted-foreground">
+                  MÉDIA DE MERCADO
+                </span>
+                <span className="text-sm font-semibold text-muted-foreground line-through decoration-border-strong">
+                  {brl(g.market)}
+                </span>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-foreground/30 bg-surface/60 px-4 py-3">
+                <span className="text-[10px] font-bold tracking-[0.16em] text-foreground">
+                  VALOR GARIMPO
+                </span>
+                <span className="text-lg font-extrabold tracking-tight text-foreground">
+                  {brl(g.garimpo)}
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2 text-[10px] font-bold tracking-[0.14em]">
+              <span className="rounded-lg border border-foreground/30 px-3 py-2 text-foreground">
+                {g.belowFipePct.toString().replace(".", ",")}% ABAIXO DA FIPE
+              </span>
+              <span className="rounded-lg border border-border px-3 py-2 text-muted-foreground">
+                {brl(g.marketDiff)} DE DIFERENÇA PARA A MÉDIA
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-3 rounded-xl border border-dashed border-border-strong/60 p-4 text-center">
+            <p className="text-[10px] font-bold tracking-[0.18em] text-foreground/50">
+              NOVOS GARIMPOS EM BREVE
+            </p>
+          </div>
         </div>
       </div>
     </section>
