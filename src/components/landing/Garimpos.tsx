@@ -3,9 +3,9 @@ import { ArrowRight, ImageIcon, Lock } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { GarimpoPoints } from "./GarimpoPoints";
 import { brl, waGarimpoLink, waGarimpoPrimeLink, WHATSAPP_FREE } from "@/lib/site";
+import { useGarimpos } from "@/lib/garimpos.data";
 import {
   ACCESS_LABEL,
-  GARIMPOS,
   PUBLIC_CLOSED_LIMIT,
   STATUS_LABEL,
   openGarimpos,
@@ -68,7 +68,7 @@ function Metrics({ g, locked = false }: { g: Garimpo; locked?: boolean }) {
 
 export function GarimpoCard({ g }: { g: Garimpo }) {
   const isPrime = g.access === "PRIME";
-  const isClosed = g.status === "ENCERRADO";
+  const isClosed = g.status === "CLOSED";
   const locked = isPrime && !isClosed;
 
   return (
@@ -98,7 +98,7 @@ export function GarimpoCard({ g }: { g: Garimpo }) {
           <>
             <div className="mt-5 rounded-xl border border-dashed border-border-strong/60 bg-background/40 p-4">
               <p className="text-[10px] font-bold tracking-[0.16em] text-foreground">
-                MAIS DE {Math.floor(g.belowFipePct)}% ABAIXO DA FIPE
+                MAIS DE {Math.floor(g.belowFipePct ?? 0)}% ABAIXO DA FIPE
               </p>
               <p className="mt-2 text-xs text-muted-foreground">
                 Valor Garimpo, análise completa e pontos de atenção liberados apenas para membros
@@ -112,7 +112,7 @@ export function GarimpoCard({ g }: { g: Garimpo }) {
             <Metrics g={g} />
             <div className="mt-4 flex flex-wrap gap-2 text-[10px] font-bold tracking-[0.14em]">
               <span className="rounded-lg border border-foreground/30 px-3 py-2 text-foreground">
-                {g.belowFipePct.toString().replace(".", ",")}% ABAIXO DA FIPE
+                {(g.belowFipePct ?? 0).toString().replace(".", ",")}% ABAIXO DA FIPE
               </span>
               <span className="rounded-lg border border-border px-3 py-2 text-muted-foreground">
                 {brl(g.marketDiff)} DE DIFERENÇA PARA A MÉDIA DE MERCADO
@@ -222,9 +222,12 @@ const TABS: { id: Tab; label: string }[] = [
 export function UltimosGarimpos() {
   const [tab, setTab] = useState<Tab>("TODOS");
 
-  const abertos = openGarimpos(GARIMPOS);
-  const primes = primeGarimpos(GARIMPOS);
-  const encerrados = recentClosedGarimpos(GARIMPOS);
+  const { data, isLoading, isError } = useGarimpos();
+  const garimpos = data ?? [];
+
+  const abertos = openGarimpos(garimpos);
+  const primes = primeGarimpos(garimpos);
+  const encerrados = recentClosedGarimpos(garimpos);
 
   const showAbertos = tab === "TODOS" || tab === "ABERTOS";
   const showPrime = tab === "TODOS" || tab === "PRIME";
@@ -282,29 +285,41 @@ export function UltimosGarimpos() {
         </div>
       </Reveal>
 
+      {isLoading && (
+        <p className="mt-10 text-[10px] font-bold tracking-[0.18em] text-muted-foreground">
+          CARREGANDO GARIMPOS...
+        </p>
+      )}
+
+      {isError && (
+        <p className="mt-10 rounded-xl border border-border bg-surface/30 p-4 text-xs text-muted-foreground">
+          Não foi possível carregar os garimpos agora. Atualize a página em instantes.
+        </p>
+      )}
+
       <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {showAbertos &&
+        {!isLoading && showAbertos &&
           abertos.map((g, i) => (
             <Reveal key={g.id} delay={i * 80}>
               <GarimpoCard g={g} />
             </Reveal>
           ))}
 
-        {showPrime &&
+        {!isLoading && showPrime &&
           primes.map((g, i) => (
             <Reveal key={g.id} delay={i * 80}>
               <GarimpoCard g={g} />
             </Reveal>
           ))}
 
-        {showEncerrados &&
+        {!isLoading && showEncerrados &&
           encerrados.map((g, i) => (
             <Reveal key={g.id} delay={i * 80}>
               <GarimpoCard g={g} />
             </Reveal>
           ))}
 
-        {showAbertos && abertos.length === 0 && (
+        {!isLoading && !isError && showAbertos && abertos.length === 0 && (
           <Reveal delay={100}>
             <PlaceholderCard
               kind="ABERTO"
@@ -314,7 +329,7 @@ export function UltimosGarimpos() {
           </Reveal>
         )}
 
-        {showPrime && primes.length === 0 && (
+        {!isLoading && !isError && showPrime && primes.length === 0 && (
           <Reveal delay={160}>
             <PlaceholderCard
               kind="PRIME"
