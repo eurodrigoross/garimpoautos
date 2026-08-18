@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { ArrowRight, Radar } from "lucide-react";
 import { WHATSAPP_FREE } from "@/lib/site";
 
@@ -9,17 +8,6 @@ const found = [
 ];
 
 export function Hero() {
-  const [n, setN] = useState(1);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setN(found.length);
-      return;
-    }
-    const t = setInterval(() => setN((v) => (v >= found.length ? 1 : v + 1)), 2200);
-    return () => clearInterval(t);
-  }, []);
-
   return (
     <section id="topo" className="ambient-glow relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 grid-lines opacity-30" />
@@ -74,7 +62,7 @@ export function Hero() {
           </div>
 
           <ul className="mt-5 space-y-3">
-            {found.slice(0, n).map((f, i) => (
+            {found.map((f, i) => (
               <li
                 key={f.id}
                 style={{ animationDelay: `${i * 60}ms` }}
