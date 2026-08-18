@@ -310,27 +310,31 @@ export function Proof() {
         </Reveal>
       </div>
 
-      <div className="mt-14">
+    </section>
+  );
+}
+
+export function Transparency() {
+  return (
+    <section className="border-y border-border bg-surface/30">
+      <div className="mx-auto max-w-4xl px-5 py-20 text-center sm:px-8">
         <Reveal>
-          <h3 className="text-[12px] font-bold tracking-[0.18em] text-muted-foreground">
-            QUEM JÁ ENTROU NO GARIMPO.
-          </h3>
+          <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+            UM VALOR. SEM PEGADINHA.
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            O <span className="font-semibold text-foreground">Valor Garimpo</span> é o valor
+            apresentado para aquela oportunidade. FIPE e média de mercado aparecem apenas como
+            referência de comparação.
+          </p>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Eventuais custos externos ou operacionais — como transporte, documentação ou despachante
+            — dependem de cada operação e são informados e tratados caso a caso, antes da conclusão.
+          </p>
         </Reveal>
-        <div className="mt-6 grid gap-6 md:grid-cols-3">
-          {testimonials.map((t, i) => (
-            <Reveal key={i} delay={i * 100}>
-              <figure className="hover-lift h-full rounded-2xl border border-dashed border-border-strong/60 bg-surface/30 p-6">
-                <blockquote className="text-sm leading-relaxed text-muted-foreground">
-                  “{t}”
-                </blockquote>
-                <figcaption className="mt-5 text-[11px] tracking-[0.16em] text-foreground/40">
-                  NOME / CIDADE
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
-        </div>
       </div>
     </section>
   );
+}
+
 }
