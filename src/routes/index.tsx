@@ -11,7 +11,7 @@ import {
   Transparency,
 } from "@/components/landing/Sections";
 import { UltimosGarimpos } from "@/components/landing/Garimpos";
-import { Pricing } from "@/components/landing/Pricing";
+import { Pricing, PrimeEcosystem } from "@/components/landing/Pricing";
 import { Faq } from "@/components/landing/Faq";
 import { FinalCta, Footer, MobileBar, Urgency } from "@/components/landing/Closing";
 
@@ -47,6 +47,7 @@ function Index() {
         <ForWho />
         <Proof />
         <Transparency />
+        <PrimeEcosystem />
         <Pricing />
         <Urgency />
         <Faq />
