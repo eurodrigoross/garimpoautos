@@ -13,18 +13,27 @@ export const WHATSAPP_PRIME = waLink(
   "Olá, quero assinar o Garimpo Prime (R$50/mês)",
 );
 
-export const brl = (v: number) =>
-  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+export const brl = (v?: number | null) =>
+  typeof v === "number"
+    ? v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 })
+    : "—";
 
-/** Mensagem contextualizada por garimpo — sempre com ID, veículo e Valor Garimpo. */
+/** Mensagem contextualizada por garimpo — sempre com código, veículo e Valor Garimpo. */
 export const waGarimpoLink = (g: Garimpo) =>
   waLink(
-    `Olá, quero esse garimpo.\nID: ${g.id}\nVeículo: ${g.vehicle}\nValor Garimpo: ${brl(g.garimpo)}`,
+    [
+      "Olá, quero esse garimpo.",
+      `Código: ${g.code}`,
+      `Veículo: ${g.vehicle}`,
+      typeof g.garimpo === "number" ? `Valor Garimpo: ${brl(g.garimpo)}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n"),
   );
 
 export const waGarimpoPrimeLink = (g?: Garimpo) =>
   waLink(
     g
-      ? `Olá, quero desbloquear um Garimpo Prime.\nID: ${g.id}\nVeículo: ${g.vehicle}`
+      ? `Olá, quero desbloquear um Garimpo Prime.\nCódigo: ${g.code}\nVeículo: ${g.vehicle}`
       : "Olá, quero ser Garimpo Prime e desbloquear as oportunidades exclusivas",
   );
