@@ -1,8 +1,30 @@
-export const WHATSAPP_FREE =
-  "https://wa.me/5511999999999?text=Ol%C3%A1%2C%20quero%20entrar%20no%20grupo%20gratuito%20da%20Garimpo%20Auto";
+import type { Garimpo } from "@/lib/garimpos";
 
-export const WHATSAPP_PRIME =
-  "https://wa.me/5511999999999?text=Ol%C3%A1%2C%20quero%20assinar%20o%20Garimpo%20Prime%20(R%2450%2Fm%C3%AAs)";
+const WHATSAPP_NUMBER = "5511999999999";
+
+export const waLink = (message: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+export const WHATSAPP_FREE = waLink(
+  "Olá, quero entrar no grupo gratuito da Garimpo Auto",
+);
+
+export const WHATSAPP_PRIME = waLink(
+  "Olá, quero assinar o Garimpo Prime (R$50/mês)",
+);
 
 export const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+
+/** Mensagem contextualizada por garimpo — sempre com ID, veículo e Valor Garimpo. */
+export const waGarimpoLink = (g: Garimpo) =>
+  waLink(
+    `Olá, quero esse garimpo.\nID: ${g.id}\nVeículo: ${g.vehicle}\nValor Garimpo: ${brl(g.garimpo)}`,
+  );
+
+export const waGarimpoPrimeLink = (g?: Garimpo) =>
+  waLink(
+    g
+      ? `Olá, quero desbloquear um Garimpo Prime.\nID: ${g.id}\nVeículo: ${g.vehicle}`
+      : "Olá, quero ser Garimpo Prime e desbloquear as oportunidades exclusivas",
+  );
