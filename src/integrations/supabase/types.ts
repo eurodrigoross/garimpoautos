@@ -14,16 +14,174 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      garimpos: {
+        Row: {
+          access_type: Database["public"]["Enums"]["garimpo_access"]
+          attention_points: string[]
+          closed_at: string | null
+          code: string
+          created_at: string
+          discount_fipe_percent: number | null
+          fipe_value: number | null
+          fuel: string | null
+          garimpo_note: string | null
+          garimpo_value: number | null
+          id: string
+          internal_agio: number | null
+          internal_base_cost: number | null
+          location: string | null
+          main_image_url: string | null
+          market_difference: number | null
+          market_value: number | null
+          mileage_km: string | null
+          positives: string[]
+          published: boolean
+          published_at: string | null
+          status: Database["public"]["Enums"]["garimpo_status"]
+          transmission: string | null
+          updated_at: string
+          vehicle_name: string
+          year: string | null
+        }
+        Insert: {
+          access_type?: Database["public"]["Enums"]["garimpo_access"]
+          attention_points?: string[]
+          closed_at?: string | null
+          code: string
+          created_at?: string
+          discount_fipe_percent?: number | null
+          fipe_value?: number | null
+          fuel?: string | null
+          garimpo_note?: string | null
+          garimpo_value?: number | null
+          id?: string
+          internal_agio?: number | null
+          internal_base_cost?: number | null
+          location?: string | null
+          main_image_url?: string | null
+          market_difference?: number | null
+          market_value?: number | null
+          mileage_km?: string | null
+          positives?: string[]
+          published?: boolean
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["garimpo_status"]
+          transmission?: string | null
+          updated_at?: string
+          vehicle_name: string
+          year?: string | null
+        }
+        Update: {
+          access_type?: Database["public"]["Enums"]["garimpo_access"]
+          attention_points?: string[]
+          closed_at?: string | null
+          code?: string
+          created_at?: string
+          discount_fipe_percent?: number | null
+          fipe_value?: number | null
+          fuel?: string | null
+          garimpo_note?: string | null
+          garimpo_value?: number | null
+          id?: string
+          internal_agio?: number | null
+          internal_base_cost?: number | null
+          location?: string | null
+          main_image_url?: string | null
+          market_difference?: number | null
+          market_value?: number | null
+          mileage_km?: string | null
+          positives?: string[]
+          published?: boolean
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["garimpo_status"]
+          transmission?: string | null
+          updated_at?: string
+          vehicle_name?: string
+          year?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      garimpos_public: {
+        Row: {
+          access_type: Database["public"]["Enums"]["garimpo_access"] | null
+          attention_points: string[] | null
+          closed_at: string | null
+          code: string | null
+          discount_fipe_percent: number | null
+          fipe_value: number | null
+          fuel: string | null
+          garimpo_note: string | null
+          garimpo_value: number | null
+          id: string | null
+          location: string | null
+          main_image_url: string | null
+          market_difference: number | null
+          market_value: number | null
+          mileage_km: string | null
+          positives: string[] | null
+          published_at: string | null
+          status: Database["public"]["Enums"]["garimpo_status"] | null
+          transmission: string | null
+          vehicle_name: string | null
+          year: string | null
+        }
+        Insert: {
+          access_type?: Database["public"]["Enums"]["garimpo_access"] | null
+          attention_points?: string[] | null
+          closed_at?: string | null
+          code?: string | null
+          discount_fipe_percent?: number | null
+          fipe_value?: number | null
+          fuel?: string | null
+          garimpo_note?: string | null
+          garimpo_value?: number | null
+          id?: string | null
+          location?: string | null
+          main_image_url?: string | null
+          market_difference?: number | null
+          market_value?: number | null
+          mileage_km?: string | null
+          positives?: string[] | null
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["garimpo_status"] | null
+          transmission?: string | null
+          vehicle_name?: string | null
+          year?: string | null
+        }
+        Update: {
+          access_type?: Database["public"]["Enums"]["garimpo_access"] | null
+          attention_points?: string[] | null
+          closed_at?: string | null
+          code?: string | null
+          discount_fipe_percent?: number | null
+          fipe_value?: number | null
+          fuel?: string | null
+          garimpo_note?: string | null
+          garimpo_value?: number | null
+          id?: string | null
+          location?: string | null
+          main_image_url?: string | null
+          market_difference?: number | null
+          market_value?: number | null
+          mileage_km?: string | null
+          positives?: string[] | null
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["garimpo_status"] | null
+          transmission?: string | null
+          vehicle_name?: string | null
+          year?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      garimpo_access: "OPEN" | "PRIME"
+      garimpo_status: "AVAILABLE" | "RESERVED" | "CLOSED"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +308,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      garimpo_access: ["OPEN", "PRIME"],
+      garimpo_status: ["AVAILABLE", "RESERVED", "CLOSED"],
+    },
   },
 } as const
