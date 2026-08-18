@@ -62,7 +62,7 @@ export function Hero() {
           </div>
 
           <ul className="mt-5 space-y-3">
-            {found.slice(0, n).map((f, i) => (
+            {found.map((f, i) => (
               <li
                 key={f.id}
                 style={{ animationDelay: `${i * 60}ms` }}
