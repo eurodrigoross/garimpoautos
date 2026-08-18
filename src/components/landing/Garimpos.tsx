@@ -37,27 +37,27 @@ function GarimpoMedia({ g }: { g: Garimpo }) {
 
 function Metrics({ g, locked = false }: { g: Garimpo; locked?: boolean }) {
   return (
-    <div className="mt-5 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3">
-      <div className="bg-background p-4">
+    <div className="mt-5 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border">
+      <div className="flex items-center justify-between bg-background p-4">
         <p className="text-[10px] tracking-[0.14em] text-muted-foreground">FIPE</p>
-        <p className="mt-1 text-sm font-semibold text-muted-foreground line-through decoration-border-strong">
+        <p className="text-sm font-semibold text-muted-foreground line-through decoration-border-strong">
           {brl(g.fipe)}
         </p>
       </div>
-      <div className="bg-background p-4">
+      <div className="flex items-center justify-between bg-background p-4">
         <p className="text-[10px] tracking-[0.14em] text-muted-foreground">MÉDIA DE MERCADO</p>
-        <p className="mt-1 text-sm font-semibold text-muted-foreground line-through decoration-border-strong">
+        <p className="text-sm font-semibold text-muted-foreground line-through decoration-border-strong">
           {brl(g.market)}
         </p>
       </div>
-      <div className="bg-background p-4">
+      <div className="flex items-center justify-between bg-background p-4">
         <p className="text-[10px] tracking-[0.14em] text-foreground">VALOR GARIMPO</p>
         {locked ? (
-          <p className="mt-1 inline-flex items-center gap-2 text-sm font-extrabold tracking-tight text-foreground/60">
+          <p className="inline-flex items-center gap-2 text-sm font-extrabold tracking-tight text-foreground/60">
             <Lock className="size-3.5" /> BLOQUEADO
           </p>
         ) : (
-          <p className="mt-1 text-lg font-extrabold tracking-tight text-foreground">
+          <p className="text-lg font-extrabold tracking-tight text-foreground">
             {brl(g.garimpo)}
           </p>
         )}
