@@ -10,6 +10,7 @@ export const Route = createFileRoute("/api/public/radar/publish")({
   server: {
     handlers: {
       OPTIONS: async ({ request }) => preflight(request),
+      GET: async ({ request }) => fail(request, 405, "Método não permitido. Use POST."),
       POST: async ({ request }) => {
         const unauthorized = authorize(request);
         if (unauthorized) return unauthorized;
