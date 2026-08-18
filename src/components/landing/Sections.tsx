@@ -336,5 +336,3 @@ export function Transparency() {
     </section>
   );
 }
-
-}
