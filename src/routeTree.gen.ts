@@ -10,33 +10,59 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicRadarPublishRouteImport } from './routes/api/public/radar/publish'
+import { Route as ApiPublicRadarUploadImageRouteImport } from './routes/api/public/radar/upload-image'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicRadarPublishRoute = ApiPublicRadarPublishRouteImport.update({
+  id: '/api/public/radar/publish',
+  path: '/api/public/radar/publish',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicRadarUploadImageRoute =
+  ApiPublicRadarUploadImageRouteImport.update({
+    id: '/api/public/radar/upload-image',
+    path: '/api/public/radar/upload-image',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
+  '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
+  '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
+  '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/api/public/radar/publish' | '/api/public/radar/upload-image'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/api/public/radar/publish' | '/api/public/radar/upload-image'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/public/radar/publish'
+    | '/api/public/radar/upload-image'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPublicRadarPublishRoute: typeof ApiPublicRadarPublishRoute
+  ApiPublicRadarUploadImageRoute: typeof ApiPublicRadarUploadImageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +74,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/radar/publish': {
+      id: '/api/public/radar/publish'
+      path: '/api/public/radar/publish'
+      fullPath: '/api/public/radar/publish'
+      preLoaderRoute: typeof ApiPublicRadarPublishRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/radar/upload-image': {
+      id: '/api/public/radar/upload-image'
+      path: '/api/public/radar/upload-image'
+      fullPath: '/api/public/radar/upload-image'
+      preLoaderRoute: typeof ApiPublicRadarUploadImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPublicRadarPublishRoute: ApiPublicRadarPublishRoute,
+  ApiPublicRadarUploadImageRoute: ApiPublicRadarUploadImageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
