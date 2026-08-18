@@ -205,8 +205,9 @@ export function Pricing() {
               R$ 50<span className="text-base font-semibold text-muted-foreground">/mês</span>
             </p>
             <p className="mt-3 text-sm text-muted-foreground">
-              Para quem quer estar mais perto das oportunidades.
+              Seu ecossistema para comprar, organizar e vender melhor.
             </p>
+
             <ul className="mt-6 space-y-3">
               {prime.map((f) => (
                 <li key={f} className="flex gap-3 text-sm text-foreground">

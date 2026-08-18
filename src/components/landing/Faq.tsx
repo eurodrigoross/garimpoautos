@@ -13,7 +13,11 @@ const faq = [
   ],
   [
     "O VEÍCULO FICA NO MEU NOME?",
-    "Depende das regras de cada operação. Quando a destinação direta ao comprador final é permitida, a documentação segue as condições do respectivo leilão.",
+    "A documentação e a transferência dependem das regras e da estrutura de cada operação. Antes da conclusão, informamos ao comprador como será o processo aplicável àquela oportunidade.",
+  ],
+  [
+    "O QUE É O VALOR GARIMPO?",
+    "É o valor apresentado para aquela oportunidade. FIPE e média de mercado aparecem apenas como referência de comparação. Eventuais custos externos, como transporte ou documentação, são informados conforme cada operação.",
   ],
   [
     "A GARIMPO AUTO GARANTE QUE É UM BOM NEGÓCIO?",
@@ -21,12 +25,13 @@ const faq = [
   ],
   [
     "O QUE EU RECEBO NO GARIMPO PRIME?",
-    "Maior volume de oportunidades, grupo exclusivo, alertas de novos arremates e informações mais completas sobre cada lote.",
+    "Mais oportunidades e acesso antecipado, comunidade VIP e conteúdos exclusivos. As ferramentas (Calculadora Garimpo, Gerenciador de Arremates e área do membro) estão no roadmap e serão liberadas conforme forem concluídas.",
   ],
   [
     "POSSO COMEÇAR GRATUITAMENTE?",
     "Sim. O Garimpo Aberto dá acesso à comunidade e a uma seleção de oportunidades, sem mensalidade.",
   ],
+
 ];
 
 export function Faq() {
