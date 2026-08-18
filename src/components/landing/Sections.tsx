@@ -10,10 +10,10 @@ const problems = [
 ];
 
 const steps = [
-  ["01", "GARIMPAMOS", "Encontramos oportunidades."],
-  ["02", "ANALISAMOS", "Filtramos os lotes."],
-  ["03", "ARREMATAMOS", "Buscamos boas condições."],
-  ["04", "REPASSAMOS", "A oportunidade chega até você."],
+  ["01", "GARIMPAMOS", "Monitoramos leilões e encontramos lotes."],
+  ["02", "ANALISAMOS", "Estudamos números, condições e riscos."],
+  ["03", "SELECIONAMOS", "Só o que faz sentido segue adiante."],
+  ["04", "DISPONIBILIZAMOS", "A oportunidade chega até você."],
 ];
 
 const yes = [
@@ -32,11 +32,6 @@ const no = [
   "Procura apenas um carro novo convencional.",
 ];
 
-const testimonials = [
-  "Depoimento em breve — espaço reservado para membros da comunidade.",
-  "Depoimento em breve — espaço reservado para membros da comunidade.",
-  "Depoimento em breve — espaço reservado para membros da comunidade.",
-];
 
 export function Brand() {
   return (
