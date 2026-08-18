@@ -1,10 +1,12 @@
 import { ArrowRight, Radar } from "lucide-react";
 import { WHATSAPP_FREE, brl } from "@/lib/site";
-import { GARIMPOS, STATUS_LABEL } from "@/lib/garimpos";
-
-const g = GARIMPOS[0]!;
+import { STATUS_LABEL } from "@/lib/garimpos";
+import { useGarimpos } from "@/lib/garimpos.data";
 
 export function Hero() {
+  const { data } = useGarimpos();
+  const g = data?.[0];
+
   return (
     <section id="topo" className="ambient-glow relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 grid-lines opacity-30" />
@@ -53,15 +55,18 @@ export function Hero() {
           <div className="scanline pointer-events-none absolute inset-0 rounded-2xl" />
           <div className="flex items-center justify-between text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">
             <span>RADAR GARIMPO</span>
-            <span className="rounded-full border border-foreground/25 px-3 py-1 text-[9px] font-bold text-muted-foreground">
-              {STATUS_LABEL[g.status]}
-            </span>
+            {g && (
+              <span className="rounded-full border border-foreground/25 px-3 py-1 text-[9px] font-bold text-muted-foreground">
+                {STATUS_LABEL[g.status]}
+              </span>
+            )}
           </div>
 
+          {g && (
           <div className="card-in mt-5 rounded-xl border border-border bg-background/50 p-5">
             <p className="text-sm font-bold leading-snug text-foreground">{g.vehicle}</p>
             <p className="mt-2 text-xs text-muted-foreground">
-              {g.year} · {g.km}
+              {[g.year, g.km].filter(Boolean).join(" · ")}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">{g.location}</p>
 
@@ -92,13 +97,14 @@ export function Hero() {
 
             <div className="mt-4 flex flex-wrap gap-2 text-[10px] font-bold tracking-[0.14em]">
               <span className="rounded-lg border border-foreground/30 px-3 py-2 text-foreground">
-                {g.belowFipePct.toString().replace(".", ",")}% ABAIXO DA FIPE
+                {(g.belowFipePct ?? 0).toString().replace(".", ",")}% ABAIXO DA FIPE
               </span>
               <span className="rounded-lg border border-border px-3 py-2 text-muted-foreground">
                 {brl(g.marketDiff)} DE DIFERENÇA PARA A MÉDIA
               </span>
             </div>
           </div>
+          )}
 
           <div className="mt-3 rounded-xl border border-dashed border-border-strong/60 p-4 text-center">
             <p className="text-[10px] font-bold tracking-[0.18em] text-foreground/50">
