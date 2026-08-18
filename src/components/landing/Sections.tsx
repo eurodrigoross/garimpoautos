@@ -1,6 +1,5 @@
-import { AlertTriangle, Check, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { Reveal } from "./Reveal";
-import { WHATSAPP_FREE } from "@/lib/site";
 
 const problems = [
   ["01", "CENTENAS DE LOTES"],
