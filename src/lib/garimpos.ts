@@ -28,25 +28,25 @@ export type Garimpo = {
   /** Código/slug público usado nas mensagens de WhatsApp. */
   code: string;
   vehicle: string;
-  year?: string;
-  km?: string;
-  transmission?: string;
-  fuel?: string;
-  location?: string;
+  year?: string | undefined;
+  km?: string | undefined;
+  transmission?: string | undefined;
+  fuel?: string | undefined;
+  location?: string | undefined;
   /** Foto principal real. Nulo => placeholder neutro no card. */
-  imageUrl?: string;
-  fipe?: number;
-  market?: number;
-  garimpo?: number;
-  belowFipePct?: number;
-  marketDiff?: number;
+  imageUrl?: string | undefined;
+  fipe?: number | undefined;
+  market?: number | undefined;
+  garimpo?: number | undefined;
+  belowFipePct?: number | undefined;
+  marketDiff?: number | undefined;
   status: GarimpoStatus;
   access: GarimpoAccess;
   positives: string[];
   attentionPoints: string[];
-  note?: string;
-  publishedAt?: string;
-  closedAt?: string;
+  note?: string | undefined;
+  publishedAt?: string | undefined;
+  closedAt?: string | undefined;
 };
 
 /** Limite de garimpos ENCERRADOS exibidos publicamente. Prova de operação, não arquivo. */
