@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Garimpo, GarimpoAccess, GarimpoStatus } from "@/lib/garimpos";
+import { getPrimeTeasers } from "@/lib/garimpos.teaser.functions";
 
 /** Colunas explícitas da fonte pública segura. Nunca usar SELECT * na tabela administrativa. */
 const PUBLIC_COLUMNS =
