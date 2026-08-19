@@ -322,11 +322,11 @@ function EditGarimpoPage() {
 
             <Field label="STATUS">
               <div className="flex flex-wrap gap-2">
-                {(["AVAILABLE", "RESERVED", "CLOSED"] as const).map((value) => (
+                {(["AVAILABLE", "RESERVED", "SOLD", "CLOSED"] as const).map((value) => (
                   <Toggle
                     key={value}
                     active={form.status === value}
-                    label={value === "AVAILABLE" ? "DISPONÍVEL" : value === "RESERVED" ? "RESERVADO" : "ENCERRADO"}
+                    label={STATUS_TEXT[value]}
                     onClick={() => {
                       if (value === "CLOSED" && form.status !== "CLOSED") {
                         setConfirming({
