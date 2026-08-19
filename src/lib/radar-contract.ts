@@ -220,7 +220,7 @@ export function validatePublishPayload(input: unknown): RadarInsertRow {
     access_type: enumValue(body["access_type"], "access_type", ACCESS_TYPES, "OPEN"),
     status,
     published,
-    main_image_url: httpsUrl(body["main_image_url"], "main_image_url"),
+    main_image_url: httpsUrl(body["main_image_url"], "main_image_url", 4096),
     published_at: published ? now : null,
     closed_at: status === "CLOSED" ? now : null,
   };
