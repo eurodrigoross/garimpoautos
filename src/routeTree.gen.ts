@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as ApiRadarPublishRouteImport } from './routes/api/radar/publish'
 import { Route as ApiRadarUploadImageRouteImport } from './routes/api/radar/upload-image'
 import { Route as ApiPublicRadarHealthRouteImport } from './routes/api/public/radar/health'
@@ -19,6 +20,11 @@ import { Route as ApiPublicRadarUploadImageRouteImport } from './routes/api/publ
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiRadarPublishRoute = ApiRadarPublishRouteImport.update({
@@ -50,6 +56,7 @@ const ApiPublicRadarUploadImageRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
@@ -67,6 +75,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
@@ -77,6 +86,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin/login'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/api/public/radar/health'
@@ -85,6 +95,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin/login'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/api/public/radar/health'
@@ -93,6 +104,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin/login'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/api/public/radar/health'
@@ -102,6 +114,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   ApiRadarPublishRoute: typeof ApiRadarPublishRoute
   ApiRadarUploadImageRoute: typeof ApiRadarUploadImageRoute
   ApiPublicRadarHealthRoute: typeof ApiPublicRadarHealthRoute
@@ -116,6 +129,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/radar/publish': {
@@ -158,6 +178,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminLoginRoute: AdminLoginRoute,
   ApiRadarPublishRoute: ApiRadarPublishRoute,
   ApiRadarUploadImageRoute: ApiRadarUploadImageRoute,
   ApiPublicRadarHealthRoute: ApiPublicRadarHealthRoute,
