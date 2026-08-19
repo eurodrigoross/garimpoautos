@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminShellRouteImport } from './routes/admin/_shell'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminShellIndexRouteImport } from './routes/admin/_shell/index'
 import { Route as ApiRadarPublishRouteImport } from './routes/api/radar/publish'
 import { Route as ApiRadarUploadImageRouteImport } from './routes/api/radar/upload-image'
 import { Route as ApiPublicRadarHealthRouteImport } from './routes/api/public/radar/health'
@@ -32,6 +33,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminShellIndexRoute = AdminShellIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminShellRoute,
 } as any)
 const ApiRadarPublishRoute = ApiRadarPublishRouteImport.update({
   id: '/api/radar/publish',
@@ -62,20 +68,21 @@ const ApiPublicRadarUploadImageRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminShellRoute
+  '/admin': typeof AdminShellRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
+  '/admin/': typeof AdminShellIndexRoute
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminShellRoute
   '/admin/login': typeof AdminLoginRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
+  '/admin': typeof AdminShellIndexRoute
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
@@ -83,10 +90,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin/_shell': typeof AdminShellRoute
+  '/admin/_shell': typeof AdminShellRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
+  '/admin/_shell/': typeof AdminShellIndexRoute
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
@@ -99,16 +107,17 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
+    | '/admin/'
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/admin/login'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
+    | '/admin'
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
+    | '/admin/_shell/'
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
@@ -126,7 +136,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminShellRoute: typeof AdminShellRoute
+  AdminShellRoute: typeof AdminShellRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
   ApiRadarPublishRoute: typeof ApiRadarPublishRoute
   ApiRadarUploadImageRoute: typeof ApiRadarUploadImageRoute
@@ -157,6 +167,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/_shell/': {
+      id: '/admin/_shell/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminShellIndexRouteImport
+      parentRoute: typeof AdminShellRoute
     }
     '/api/radar/publish': {
       id: '/api/radar/publish'
@@ -196,9 +213,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminShellRouteChildren {
+  AdminShellIndexRoute: typeof AdminShellIndexRoute
+}
+
+const AdminShellRouteChildren: AdminShellRouteChildren = {
+  AdminShellIndexRoute: AdminShellIndexRoute,
+}
+
+const AdminShellRouteWithChildren = AdminShellRoute._addFileChildren(
+  AdminShellRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminShellRoute: AdminShellRoute,
+  AdminShellRoute: AdminShellRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
   ApiRadarPublishRoute: ApiRadarPublishRoute,
   ApiRadarUploadImageRoute: ApiRadarUploadImageRoute,
