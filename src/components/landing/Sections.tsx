@@ -89,33 +89,22 @@ export function Problem() {
 
 export function Solution() {
   return (
-    <section id="como-funciona" className="mx-auto max-w-6xl scroll-mt-20 border-t border-border px-5 py-20 sm:px-8">
+    <section id="como-funciona" className="mx-auto max-w-4xl scroll-mt-20 border-t border-border px-5 py-16 text-center sm:px-8">
       <Reveal>
-        <h2 className="max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl">
+        <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-foreground sm:text-3xl">
           NÓS FAZEMOS O GARIMPO.
           <br />
           <span className="text-muted-foreground">VOCÊ ESCOLHE A OPORTUNIDADE.</span>
         </h2>
-        <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Monitoramos leilões, filtramos oportunidades e analisamos as informações disponíveis para
-          colocar diante de você aquilo que merece sua atenção.
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+          Monitoramos, filtramos e analisamos oportunidades para que você possa decidir com mais
+          informação.
         </p>
       </Reveal>
-
-      <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {steps.map(([n, t, d], i) => (
-          <Reveal key={n} delay={i * 120}>
-            <div className="hover-lift edge-light h-full rounded-2xl border border-border/80 bg-surface/40 p-6 backdrop-blur-md hover:border-foreground/25">
-              <span className="text-2xl font-extrabold tracking-tight text-foreground/25">{n}</span>
-              <h3 className="mt-4 text-[13px] font-bold tracking-[0.16em] text-foreground">{t}</h3>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{d}</p>
-            </div>
-          </Reveal>
-        ))}
-      </div>
     </section>
   );
 }
+
 
 
 export function TimeSaved() {
