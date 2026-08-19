@@ -16,8 +16,6 @@ type Fields = {
   reparos: string;
   outros: string;
   fipe: string;
-  market: string;
-  vendaEstimada: string;
 };
 
 const EMPTY: Fields = {
@@ -27,8 +25,6 @@ const EMPTY: Fields = {
   reparos: "",
   outros: "",
   fipe: "",
-  market: "",
-  vendaEstimada: "",
 };
 
 const n = (v: string) => {
@@ -45,20 +41,12 @@ function Calculadora() {
 
   const result = useMemo(() => {
     const valorGarimpo = n(f.garimpo);
-    const custoTotal =
-      valorGarimpo + n(f.transporte) + n(f.documentacao) + n(f.reparos) + n(f.outros);
-    const venda = n(f.vendaEstimada);
-    const resultado = venda - custoTotal;
-    const margem = custoTotal > 0 ? (resultado / custoTotal) * 100 : 0;
+    const custosExternos = n(f.transporte) + n(f.documentacao) + n(f.reparos) + n(f.outros);
+    const custoTotal = valorGarimpo + custosExternos;
     const fipe = n(f.fipe);
-    const market = n(f.market);
-    return {
-      custoTotal,
-      resultado,
-      margem,
-      difFipe: fipe > 0 ? fipe - valorGarimpo : null,
-      difMarket: market > 0 ? market - valorGarimpo : null,
-    };
+    const margemFipe = fipe > 0 ? fipe - custoTotal : null;
+    const margemPercent = fipe > 0 && custoTotal > 0 ? ((fipe - custoTotal) / custoTotal) * 100 : null;
+    return { valorGarimpo, custosExternos, custoTotal, margemFipe, margemPercent };
   }, [f]);
 
   function preencherComGarimpo(id: string) {
@@ -68,8 +56,6 @@ function Calculadora() {
       ...prev,
       garimpo: g.garimpo ? String(g.garimpo) : prev.garimpo,
       fipe: g.fipe ? String(g.fipe) : prev.fipe,
-      market: g.market ? String(g.market) : prev.market,
-      vendaEstimada: g.market ? String(g.market) : prev.vendaEstimada,
     }));
   }
 
@@ -78,8 +64,8 @@ function Calculadora() {
       <header>
         <h1 className="text-xl font-semibold tracking-tight">Calculadora de custo total</h1>
         <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Comece pelo Valor Garimpo — o valor final da oportunidade — e acrescente apenas os custos
-          externos que se aplicam ao seu caso.
+          O Valor Garimpo já é o valor final da oportunidade. Aqui você soma apenas os custos
+          externos do seu caso e compara o custo total com a FIPE.
         </p>
       </header>
 
@@ -120,8 +106,6 @@ function Calculadora() {
           <Field label="REPAROS PREVISTOS (R$)" value={f.reparos} onChange={set("reparos")} />
           <Field label="OUTROS CUSTOS (R$)" value={f.outros} onChange={set("outros")} />
           <Field label="FIPE (R$)" value={f.fipe} onChange={set("fipe")} />
-          <Field label="MÉDIA DE MERCADO (R$)" value={f.market} onChange={set("market")} />
-          <Field label="PREÇO ESTIMADO DE VENDA (R$)" value={f.vendaEstimada} onChange={set("vendaEstimada")} />
           <button
             type="button"
             onClick={() => setF(EMPTY)}
@@ -132,34 +116,35 @@ function Calculadora() {
         </div>
 
         <aside className="h-fit space-y-4 rounded-xl border border-border/50 p-5">
-          <Row label="Custo total estimado" value={formatBRL(result.custoTotal)} strong />
+          <Row label="Valor Garimpo (final)" value={formatBRL(result.valorGarimpo)} />
+          <Row label="Custos externos" value={formatBRL(result.custosExternos)} />
           <div className="border-t border-border/40 pt-4">
-            <Row
-              label="Diferença para a FIPE"
-              value={result.difFipe === null ? "—" : formatBRL(result.difFipe)}
-            />
-            <Row
-              label="Diferença para a média de mercado"
-              value={result.difMarket === null ? "—" : formatBRL(result.difMarket)}
-            />
+            <Row label="Custo total estimado" value={formatBRL(result.custoTotal)} strong />
           </div>
           <div className="border-t border-border/40 pt-4">
-            <Row label="Resultado bruto estimado" value={formatBRL(result.resultado)} strong />
             <Row
-              label="Percentual sobre o custo"
-              value={`${result.margem.toFixed(1).replace(".", ",")}%`}
+              label="Margem até a FIPE"
+              value={result.margemFipe === null ? "—" : formatBRL(result.margemFipe)}
+              strong
+            />
+            <Row
+              label="Percentual sobre o custo total"
+              value={
+                result.margemPercent === null
+                  ? "—"
+                  : `${result.margemPercent.toFixed(1).replace(".", ",")}%`
+              }
             />
           </div>
           <p className="text-[10px] leading-relaxed text-muted-foreground">
-            Simulação baseada nos valores informados pelo usuário. Não representa garantia de venda,
-            lucro ou resultado.
+            A FIPE é referência de mercado, não preço de venda garantido. Simulação baseada nos
+            valores informados por você — não representa garantia de venda, lucro ou resultado.
           </p>
         </aside>
       </div>
     </div>
   );
 }
-
 
 function Field({
   label,
