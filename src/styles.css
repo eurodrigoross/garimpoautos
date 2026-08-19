@@ -87,6 +87,12 @@
   --input: oklch(0.4 0 0);
   --ring: oklch(0.985 0 0);
 
+  /* Única cor do painel: azul PRIME */
+  --prime: oklch(0.55 0.16 258);
+  --prime-foreground: oklch(0.99 0 0);
+
+
+
   /* Monochrome accents: "gold" and "emerald" tokens now render as white/greys */
   --gold: oklch(0.985 0 0);
   --gold-soft: oklch(0.78 0 0);
