@@ -7,6 +7,7 @@ import type { RadarAccessType, RadarStatus } from "@/lib/radar-contract";
 export const STATUS_TEXT: Record<RadarStatus, string> = {
   AVAILABLE: "DISPONÍVEL",
   RESERVED: "RESERVADO",
+  SOLD: "VENDIDO",
   CLOSED: "ENCERRADO",
 };
 
