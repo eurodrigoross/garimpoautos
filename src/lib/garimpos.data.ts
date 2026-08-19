@@ -45,20 +45,20 @@ const sortGarimpos = (list: Garimpo[]) =>
 /**
  * Fonte pública do radar.
  * - `garimpos_public`: dados completos dos garimpos abertos (e do que o usuário pode ver).
- * - `garimpos_teaser`: versão mascarada dos garimpos PRIME, sem números sensíveis
- *   enquanto não estiverem encerrados.
+ * - `getPrimeTeasers`: versão mascarada dos garimpos PRIME, calculada no servidor,
+ *   sem números sensíveis enquanto não estiverem encerrados.
  * Quando a linha existe nas duas fontes, a versão completa prevalece.
  */
 export async function fetchPublicGarimpos(): Promise<Garimpo[]> {
   const [full, teaser] = await Promise.all([
     supabase.from("garimpos_public").select(PUBLIC_COLUMNS),
-    supabase.from("garimpos_teaser").select(PUBLIC_COLUMNS),
+    getPrimeTeasers().catch(() => [] as Row[]),
   ]);
 
-  if (full.error && teaser.error) throw full.error;
+  if (full.error && teaser.length === 0) throw full.error;
 
   const byId = new Map<string, Garimpo>();
-  for (const row of (teaser.data ?? []) as Row[]) {
+  for (const row of teaser as Row[]) {
     const g = mapRow(row);
     byId.set(g.id, g);
   }
