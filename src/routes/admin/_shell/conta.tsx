@@ -89,6 +89,7 @@ function AdminAccount() {
               className={inputClass}
             />
           </Field>
+          <PasswordStrength password={password} />
           <Field label="CONFIRMAR NOVA SENHA">
             <input
               type="password"
@@ -98,7 +99,7 @@ function AdminAccount() {
               className={inputClass}
             />
           </Field>
-          <SolidButton type="submit" disabled={saving}>
+          <SolidButton type="submit" disabled={saving || !allRulesMet}>
             {saving ? "SALVANDO..." : "SALVAR SENHA"}
           </SolidButton>
         </form>
