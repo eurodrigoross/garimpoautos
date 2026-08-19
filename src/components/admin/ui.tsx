@@ -43,11 +43,15 @@ export function Chip({
 }
 
 export function StatusChip({ status }: { status: RadarStatus }) {
-  return (
-    <Chip tone={status === "AVAILABLE" ? "outline" : status === "RESERVED" ? "muted" : "faint"}>
-      {STATUS_TEXT[status]}
-    </Chip>
-  );
+  const tone =
+    status === "AVAILABLE"
+      ? "outline"
+      : status === "RESERVED"
+        ? "muted"
+        : status === "SOLD"
+          ? "solid"
+          : "faint";
+  return <Chip tone={tone}>{STATUS_TEXT[status]}</Chip>;
 }
 
 export function AccessChip({ access }: { access: RadarAccessType }) {
