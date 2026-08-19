@@ -1,0 +1,1 @@
+UPDATE public.garimpos SET status = 'AVAILABLE', closed_at = NULL WHERE code = 'ford-ka-se-1-5-sd-b-2017-2018-2017-2018-lote-1-2608190232';
