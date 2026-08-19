@@ -37,6 +37,7 @@ export type Database = {
           positives: string[]
           published: boolean
           published_at: string | null
+          sold_at: string | null
           status: Database["public"]["Enums"]["garimpo_status"]
           transmission: string | null
           updated_at: string
@@ -65,6 +66,7 @@ export type Database = {
           positives?: string[]
           published?: boolean
           published_at?: string | null
+          sold_at?: string | null
           status?: Database["public"]["Enums"]["garimpo_status"]
           transmission?: string | null
           updated_at?: string
@@ -93,6 +95,7 @@ export type Database = {
           positives?: string[]
           published?: boolean
           published_at?: string | null
+          sold_at?: string | null
           status?: Database["public"]["Enums"]["garimpo_status"]
           transmission?: string | null
           updated_at?: string
@@ -279,7 +282,7 @@ export type Database = {
     Enums: {
       app_role: "admin" | "moderator" | "user"
       garimpo_access: "OPEN" | "PRIME"
-      garimpo_status: "AVAILABLE" | "RESERVED" | "CLOSED"
+      garimpo_status: "AVAILABLE" | "RESERVED" | "CLOSED" | "SOLD"
       membership_status: "active" | "inactive" | "expired" | "cancelled"
     }
     CompositeTypes: {
@@ -410,7 +413,7 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "moderator", "user"],
       garimpo_access: ["OPEN", "PRIME"],
-      garimpo_status: ["AVAILABLE", "RESERVED", "CLOSED"],
+      garimpo_status: ["AVAILABLE", "RESERVED", "CLOSED", "SOLD"],
       membership_status: ["active", "inactive", "expired", "cancelled"],
     },
   },
