@@ -243,7 +243,7 @@ export const updateGarimpo = createServerFn({ method: "POST" })
 
     const { data: saved, error } = await db
       .from("garimpos")
-      .update(update)
+      .update(update as never)
       .eq("id", id)
       .select(ADMIN_COLUMNS)
       .single();
