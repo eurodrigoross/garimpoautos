@@ -28,6 +28,7 @@ import { Route as AdminShellGarimposIdRouteImport } from './routes/admin/_shell/
 import { Route as ApiPublicRadarHealthRouteImport } from './routes/api/public/radar/health'
 import { Route as ApiPublicRadarPublishRouteImport } from './routes/api/public/radar/publish'
 import { Route as ApiPublicRadarUploadImageRouteImport } from './routes/api/public/radar/upload-image'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as PrimeShellConteudosIndexRouteImport } from './routes/prime/_shell/conteudos.index'
 import { Route as PrimeShellConteudosSlugRouteImport } from './routes/prime/_shell/conteudos.$slug'
 import { Route as PrimeShellGarimposIndexRouteImport } from './routes/prime/_shell/garimpos.index'
@@ -129,6 +130,12 @@ const ApiPublicRadarUploadImageRoute =
     path: '/api/public/radar/upload-image',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const PrimeShellConteudosIndexRoute =
   PrimeShellConteudosIndexRouteImport.update({
     id: '/conteudos/',
@@ -170,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/prime/conteudos/$slug': typeof PrimeShellConteudosSlugRoute
   '/prime/garimpos/$id': typeof PrimeShellGarimposIdRoute
   '/admin/garimpos/': typeof AdminShellGarimposIndexRoute
@@ -193,6 +201,7 @@ export interface FileRoutesByTo {
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/prime/conteudos/$slug': typeof PrimeShellConteudosSlugRoute
   '/prime/garimpos/$id': typeof PrimeShellGarimposIdRoute
   '/admin/garimpos': typeof AdminShellGarimposIndexRoute
@@ -219,6 +228,7 @@ export interface FileRoutesById {
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/prime/_shell/conteudos/$slug': typeof PrimeShellConteudosSlugRoute
   '/prime/_shell/garimpos/$id': typeof PrimeShellGarimposIdRoute
   '/admin/_shell/garimpos/': typeof AdminShellGarimposIndexRoute
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
+    | '/lovable/email/transactional/preview'
     | '/prime/conteudos/$slug'
     | '/prime/garimpos/$id'
     | '/admin/garimpos/'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
+    | '/lovable/email/transactional/preview'
     | '/prime/conteudos/$slug'
     | '/prime/garimpos/$id'
     | '/admin/garimpos'
@@ -294,6 +306,7 @@ export interface FileRouteTypes {
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
+    | '/lovable/email/transactional/preview'
     | '/prime/_shell/conteudos/$slug'
     | '/prime/_shell/garimpos/$id'
     | '/admin/_shell/garimpos/'
@@ -313,6 +326,7 @@ export interface RootRouteChildren {
   ApiPublicRadarHealthRoute: typeof ApiPublicRadarHealthRoute
   ApiPublicRadarPublishRoute: typeof ApiPublicRadarPublishRoute
   ApiPublicRadarUploadImageRoute: typeof ApiPublicRadarUploadImageRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -450,6 +464,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRadarUploadImageRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/prime/_shell/conteudos/': {
       id: '/prime/_shell/conteudos/'
       path: '/conteudos'
@@ -537,6 +558,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicRadarHealthRoute: ApiPublicRadarHealthRoute,
   ApiPublicRadarPublishRoute: ApiPublicRadarPublishRoute,
   ApiPublicRadarUploadImageRoute: ApiPublicRadarUploadImageRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
