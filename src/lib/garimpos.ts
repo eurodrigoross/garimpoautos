@@ -1,11 +1,15 @@
-export type GarimpoStatus = "AVAILABLE" | "RESERVED" | "CLOSED";
+export type GarimpoStatus = "AVAILABLE" | "RESERVED" | "SOLD" | "CLOSED";
 export type GarimpoAccess = "OPEN" | "PRIME";
 
 export const STATUS_LABEL: Record<GarimpoStatus, string> = {
   AVAILABLE: "GARIMPO DISPONÍVEL",
   RESERVED: "GARIMPO RESERVADO",
+  SOLD: "GARIMPO VENDIDO",
   CLOSED: "GARIMPO ENCERRADO",
 };
+
+/** VENDIDO e ENCERRADO saem do fluxo de interesse — sem CTA de compra. */
+export const isInactiveStatus = (s: GarimpoStatus) => s === "CLOSED" || s === "SOLD";
 
 export const ACCESS_LABEL: Record<GarimpoAccess, string> = {
   OPEN: "GARIMPO ABERTO",
