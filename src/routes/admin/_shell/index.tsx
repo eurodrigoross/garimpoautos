@@ -79,7 +79,7 @@ function AdminOverview() {
               >
                 <div className="h-10 w-14 shrink-0 overflow-hidden rounded border border-border/50 bg-muted/20">
                   {g.main_image_url ? (
-                    <img src={g.main_image_url} alt={g.vehicle_name} className="h-full w-full object-cover" loading="lazy" />
+                    <img src={g.main_image_url} alt={g.vehicle_name} className="h-full w-full object-contain p-0.5" loading="lazy" />
                   ) : null}
                 </div>
                 <div className="min-w-0 flex-1">

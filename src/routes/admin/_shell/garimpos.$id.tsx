@@ -260,7 +260,7 @@ function EditGarimpoPage() {
             <SectionTitle>FOTO PRINCIPAL</SectionTitle>
             <div className="aspect-video overflow-hidden rounded-md border border-border/50 bg-muted/20">
               {form.main_image_url ? (
-                <img src={form.main_image_url} alt={form.vehicle_name} className="h-full w-full object-cover" />
+                <img src={form.main_image_url} alt={form.vehicle_name} className="h-full w-full object-contain p-2" />
               ) : (
                 <div className="flex h-full items-center justify-center text-[10px] tracking-[0.2em] text-muted-foreground/60">
                   SEM FOTO
