@@ -80,14 +80,8 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <div className="flex items-center gap-2.5">
-              <span className="flex size-8 items-center justify-center rounded-lg border border-border-strong/70 text-[11px] font-black text-foreground">
-                GA
-              </span>
-              <span className="text-[13px] font-extrabold tracking-[0.28em] text-foreground">
-                GARIMPO <span className="text-muted-foreground">AUTO</span>
-              </span>
-            </div>
+            <BrandLockup />
+
             <p className="mt-3 max-w-xs text-xs text-muted-foreground">
               Oportunidades de leilão, garimpadas por especialistas.
             </p>
