@@ -26,7 +26,19 @@ CORS é liberado apenas para origens `chrome-extension://…` / `moz-extension:/
 
 ## Endpoints
 
-Base: `https://garimpoautos.lovable.app` (produção) ou `https://project--<id>-dev.lovable.app` (preview).
+Base (produção): `https://garimpoautos.lovable.app` — **use exatamente este host**.
+Os domínios `garimpoautos.com.br` / `www.garimpoautos.com.br` ainda não estão ativos e não respondem.
+
+URLs finais aceitas (mesmos handlers, mesmo token):
+
+| Endpoint | Canônico | Alias |
+| --- | --- | --- |
+| Publicar | `https://garimpoautos.lovable.app/api/public/radar/publish` | `https://garimpoautos.lovable.app/api/radar/publish` |
+| Upload | `https://garimpoautos.lovable.app/api/public/radar/upload-image` | `https://garimpoautos.lovable.app/api/radar/upload-image` |
+
+Diagnóstico (GET, sem token): `https://garimpoautos.lovable.app/api/public/radar/health` →
+`{"ok":true,"data":{"service":"radar-api","token_configured":true,...}}`. Se isso responder 200 e o
+seu POST der 404, a URL usada pela extensão está errada.
 
 ### `POST /api/public/radar/publish`
 
