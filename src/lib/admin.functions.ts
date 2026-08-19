@@ -55,15 +55,17 @@ export type AdminGarimpo = {
 const requireAdmin = createMiddleware({ type: "function" })
   .middleware([requireSupabaseAuth])
   .server(async ({ next, context }) => {
-    const { data, error } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
+    const { data, error } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
     if (error) {
       console.error("[admin] falha ao verificar papel", error.message);
       throw new Error("Unauthorized: role check failed");
     }
-    if (data !== true) throw new Error("Forbidden: admin role required");
+    if (!data) throw new Error("Forbidden: admin role required");
     return next({ context: { userId: context.userId } });
   });
 
@@ -114,11 +116,13 @@ const oneOf = <T extends string>(v: unknown, allowed: readonly T[], fallback: T)
 export const checkAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    return { isAdmin: data === true, userId: context.userId };
+    const { data } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    return { isAdmin: Boolean(data), userId: context.userId };
   });
 
 export const listGarimpos = createServerFn({ method: "GET" })
