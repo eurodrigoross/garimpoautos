@@ -3,32 +3,35 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAdminSession } from "@/lib/admin.data";
+import { usePrimeSession } from "@/lib/prime.data";
 import { cn } from "@/lib/utils";
 import { BrandMark } from "@/components/Brand";
+import { PrimeBadge } from "@/components/PrimeBadge";
+import { WHATSAPP_PRIME } from "@/lib/site";
 
-export const Route = createFileRoute("/admin/_shell")({
+export const Route = createFileRoute("/prime/_shell")({
   ssr: false,
   beforeLoad: async () => {
     const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/admin/login" });
+    if (error || !data.user) throw redirect({ to: "/prime/login" });
     return { user: data.user };
   },
-  component: AdminShell,
+  component: PrimeShell,
 });
 
 const NAV = [
-  { to: "/admin", label: "VISÃO GERAL", exact: true },
-  { to: "/admin/garimpos", label: "GARIMPOS", exact: false },
-  { to: "/admin/membros", label: "MEMBROS", exact: false },
-  { to: "/admin/conta", label: "CONTA", exact: false },
+  { to: "/prime", label: "INÍCIO", exact: true },
+  { to: "/prime/garimpos", label: "GARIMPOS", exact: false },
+  { to: "/prime/calculadora", label: "CALCULADORA", exact: false },
+  { to: "/prime/conteudos", label: "CONTEÚDOS", exact: false },
+  { to: "/prime/conta", label: "MINHA CONTA", exact: false },
 ] as const;
 
-const SOON = ["CLIENTES", "PRIME", "ARREMATES", "MÉTRICAS"];
+const SOON = ["MEUS ARREMATES", "COMUNIDADE VIP", "MENTORIAS", "FERRAMENTAS AVANÇADAS"];
 
-function AdminShell() {
+function PrimeShell() {
   const { user } = Route.useRouteContext();
-  const session = useAdminSession();
+  const session = usePrimeSession();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -37,28 +40,25 @@ function AdminShell() {
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    void navigate({ to: "/admin/login", replace: true });
+    void navigate({ to: "/prime/login", replace: true });
   }
 
-  const denied = session.isError || (session.data && !session.data.isAdmin);
+  const allowed = session.data?.isPrime || session.data?.isAdmin;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="lg:flex">
-        {/* Sidebar */}
-        <aside
-          className={cn(
-            "border-b border-border/60 lg:sticky lg:top-0 lg:h-screen lg:w-60 lg:shrink-0 lg:border-r lg:border-b-0",
-          )}
-        >
+        <aside className="border-b border-border/60 lg:sticky lg:top-0 lg:h-screen lg:w-60 lg:shrink-0 lg:border-r lg:border-b-0">
           <div className="flex items-center justify-between px-5 py-5">
-            <div className="flex items-center gap-2.5">
+            <Link to="/prime" className="flex items-center gap-2.5">
               <BrandMark className="size-7" />
               <div>
-              <p className="text-xs font-semibold tracking-[0.3em]">GARIMPO AUTO</p>
-              <p className="mt-1 text-[10px] tracking-[0.28em] text-muted-foreground">ADMIN</p>
+                <p className="text-xs font-semibold tracking-[0.3em]">GARIMPO AUTO</p>
+                <span className="mt-1 inline-flex items-center gap-1.5 text-[10px] tracking-[0.28em] text-muted-foreground">
+                  ÁREA <PrimeBadge size="sm" />
+                </span>
               </div>
-            </div>
+            </Link>
             <button
               type="button"
               onClick={() => setMenuOpen((v) => !v)}
@@ -68,7 +68,12 @@ function AdminShell() {
             </button>
           </div>
 
-          <div className={cn("px-3 pb-5 lg:block lg:h-[calc(100vh-92px)] lg:flex lg:flex-col", !menuOpen && "hidden")}>
+          <div
+            className={cn(
+              "px-3 pb-5 lg:flex lg:h-[calc(100vh-92px)] lg:flex-col",
+              !menuOpen && "hidden lg:flex",
+            )}
+          >
             <nav className="space-y-1">
               {NAV.map((item) => (
                 <Link
@@ -86,7 +91,9 @@ function AdminShell() {
             </nav>
 
             <div className="mt-6 space-y-1 border-t border-border/40 pt-4">
-              <p className="px-3 pb-1 text-[9px] tracking-[0.24em] text-muted-foreground/60">EM BREVE</p>
+              <p className="px-3 pb-1 text-[9px] tracking-[0.24em] text-muted-foreground/60">
+                EM DESENVOLVIMENTO
+              </p>
               {SOON.map((label) => (
                 <p key={label} className="px-3 py-1.5 text-[11px] tracking-[0.2em] text-muted-foreground/40">
                   {label}
@@ -110,22 +117,32 @@ function AdminShell() {
         <main className="min-w-0 flex-1 px-5 py-8 lg:px-10">
           {session.isLoading ? (
             <div className="h-40 animate-pulse rounded-xl border border-border/40 bg-muted/20" />
-          ) : denied ? (
-            <div className="mx-auto max-w-md pt-20 text-center">
-              <p className="text-sm font-semibold tracking-[0.2em]">ACESSO NEGADO</p>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Sua conta está autenticada, mas não possui permissão de administrador.
+          ) : allowed ? (
+            <Outlet />
+          ) : (
+            <div className="mx-auto max-w-md pt-16 text-center">
+              <PrimeBadge size="lg" />
+              <h1 className="mt-5 text-lg font-semibold tracking-[0.16em]">ACESSO PRIME PENDENTE</h1>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                Sua conta está criada, mas ainda não há uma assinatura Prime ativa. Fale com a mesa
+                da Garimpo Auto para liberar a área exclusiva.
               </p>
+              <a
+                href={WHATSAPP_PRIME}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-block rounded-md bg-prime px-5 py-2.5 text-[11px] font-semibold tracking-[0.18em] text-prime-foreground transition-opacity hover:opacity-90"
+              >
+                QUERO ATIVAR MEU ACESSO
+              </a>
               <button
                 type="button"
                 onClick={() => void signOut()}
-                className="mt-6 rounded-md border border-border/60 px-4 py-2 text-[10px] tracking-[0.2em] text-muted-foreground hover:text-foreground"
+                className="mt-6 block w-full text-[10px] tracking-[0.2em] text-muted-foreground hover:text-foreground"
               >
                 SAIR
               </button>
             </div>
-          ) : (
-            <Outlet />
           )}
         </main>
       </div>

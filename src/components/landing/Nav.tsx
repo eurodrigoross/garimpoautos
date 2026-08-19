@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { WHATSAPP_FREE } from "@/lib/site";
@@ -35,6 +36,12 @@ export function Nav() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <Link
+            to="/prime/login"
+            className="hidden rounded-xl border border-border px-3 py-2 text-[11px] font-semibold tracking-wide text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground sm:block"
+          >
+            ÁREA DE MEMBROS
+          </Link>
           <a
             href={WHATSAPP_FREE}
             target="_blank"

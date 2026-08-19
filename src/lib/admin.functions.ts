@@ -283,3 +283,83 @@ export const uploadGarimpoImage = createServerFn({ method: "POST" })
 
     return { main_image_url: signed.signedUrl, path };
   });
+
+/* --------------------------- MEMBROS PRIME (admin) -------------------------- */
+
+export type AdminMember = {
+  userId: string;
+  email: string | null;
+  createdAt: string;
+  lastSignInAt: string | null;
+  isAdmin: boolean;
+  isPrime: boolean;
+  status: string;
+  expiresAt: string | null;
+};
+
+/** Lista usuários (Auth Admin API) cruzando papéis e assinaturas Prime. */
+export const listMembers = createServerFn({ method: "GET" })
+  .middleware([requireAdmin])
+  .handler(async (): Promise<AdminMember[]> => {
+    const db = await admin();
+    const { data: users, error } = await db.auth.admin.listUsers({ page: 1, perPage: 200 });
+    if (error) throw new Error(error.message);
+
+    const [{ data: memberships }, { data: roles }] = await Promise.all([
+      db.from("memberships").select("user_id, status, expires_at, plan").eq("plan", "PRIME"),
+      db.from("user_roles").select("user_id, role").eq("role", "admin"),
+    ]);
+
+    const byUser = new Map(
+      (memberships ?? []).map((m) => [m.user_id as string, m as { status: string; expires_at: string | null }]),
+    );
+    const admins = new Set((roles ?? []).map((r) => r.user_id as string));
+
+    return users.users.map((u) => {
+      const m = byUser.get(u.id);
+      const expired = Boolean(m?.expires_at && new Date(m.expires_at).getTime() <= Date.now());
+      return {
+        userId: u.id,
+        email: u.email ?? null,
+        createdAt: u.created_at,
+        lastSignInAt: u.last_sign_in_at ?? null,
+        isAdmin: admins.has(u.id),
+        isPrime: m?.status === "active" && !expired,
+        status: m?.status ?? "none",
+        expiresAt: m?.expires_at ?? null,
+      };
+    });
+  });
+
+/** Ativa ou desativa manualmente o acesso Prime de um usuário. */
+export const setMembership = createServerFn({ method: "POST" })
+  .inputValidator((raw: unknown) => {
+    const o = asObject(raw);
+    const { id } = asId({ id: o["user_id"] });
+    const active = Boolean(o["active"]);
+    const expiresRaw = optText(o["expires_at"], 40);
+    let expires_at: string | null = null;
+    if (expiresRaw) {
+      const d = new Date(expiresRaw);
+      if (Number.isNaN(d.getTime())) throw new Error("Data de vencimento inválida.");
+      expires_at = d.toISOString();
+    }
+    return { user_id: id, active, expires_at };
+  })
+  .middleware([requireAdmin])
+  .handler(async ({ data }) => {
+    const db = await admin();
+    const { error } = await db
+      .from("memberships")
+      .upsert(
+        {
+          user_id: data.user_id,
+          plan: "PRIME",
+          status: data.active ? "active" : "inactive",
+          expires_at: data.active ? data.expires_at : null,
+        } as never,
+        { onConflict: "user_id,plan" },
+      );
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

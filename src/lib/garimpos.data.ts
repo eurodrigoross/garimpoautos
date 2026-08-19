@@ -11,38 +11,63 @@ const num = (v: number | string | null): number | undefined =>
 
 const str = (v: string | null): string | undefined => v ?? undefined;
 
+type Row = Record<string, unknown>;
+
+const mapRow = (row: Row): Garimpo => ({
+  id: row["id"] as string,
+  code: row["code"] as string,
+  vehicle: row["vehicle_name"] as string,
+  year: str(row["year"] as string | null),
+  km: str(row["mileage_km"] as string | null),
+  transmission: str(row["transmission"] as string | null),
+  fuel: str(row["fuel"] as string | null),
+  location: str(row["location"] as string | null),
+  imageUrl: str(row["main_image_url"] as string | null),
+  fipe: num(row["fipe_value"] as number | null),
+  market: num(row["market_value"] as number | null),
+  garimpo: num(row["garimpo_value"] as number | null),
+  belowFipePct: num(row["discount_fipe_percent"] as number | null),
+  marketDiff: num(row["market_difference"] as number | null),
+  status: ((row["status"] as string) ?? "AVAILABLE") as GarimpoStatus,
+  access: ((row["access_type"] as string) ?? "OPEN") as GarimpoAccess,
+  positives: (row["positives"] as string[]) ?? [],
+  attentionPoints: (row["attention_points"] as string[]) ?? [],
+  note: str(row["garimpo_note"] as string | null),
+  publishedAt: str(row["published_at"] as string | null),
+  closedAt: str(row["closed_at"] as string | null),
+});
+
+const sortGarimpos = (list: Garimpo[]) =>
+  [...list].sort((a, b) =>
+    (b.closedAt ?? b.publishedAt ?? "").localeCompare(a.closedAt ?? a.publishedAt ?? ""),
+  );
+
+/**
+ * Fonte pública do radar.
+ * - `garimpos_public`: dados completos dos garimpos abertos (e do que o usuário pode ver).
+ * - `garimpos_teaser`: versão mascarada dos garimpos PRIME, sem números sensíveis
+ *   enquanto não estiverem encerrados.
+ * Quando a linha existe nas duas fontes, a versão completa prevalece.
+ */
 export async function fetchPublicGarimpos(): Promise<Garimpo[]> {
-  const { data, error } = await supabase
-    .from("garimpos_public")
-    .select(PUBLIC_COLUMNS)
-    .order("closed_at", { ascending: false, nullsFirst: false })
-    .order("published_at", { ascending: false, nullsFirst: false });
+  const [full, teaser] = await Promise.all([
+    supabase.from("garimpos_public").select(PUBLIC_COLUMNS),
+    supabase.from("garimpos_teaser").select(PUBLIC_COLUMNS),
+  ]);
 
-  if (error) throw error;
+  if (full.error && teaser.error) throw full.error;
 
-  return (data ?? []).map((row) => ({
-    id: row.id as string,
-    code: row.code as string,
-    vehicle: row.vehicle_name as string,
-    year: str(row.year),
-    km: str(row.mileage_km),
-    transmission: str(row.transmission),
-    fuel: str(row.fuel),
-    location: str(row.location),
-    imageUrl: str(row.main_image_url),
-    fipe: num(row.fipe_value),
-    market: num(row.market_value),
-    garimpo: num(row.garimpo_value),
-    belowFipePct: num(row.discount_fipe_percent),
-    marketDiff: num(row.market_difference),
-    status: (row.status ?? "AVAILABLE") as GarimpoStatus,
-    access: (row.access_type ?? "OPEN") as GarimpoAccess,
-    positives: (row.positives ?? []) as string[],
-    attentionPoints: (row.attention_points ?? []) as string[],
-    note: str(row.garimpo_note),
-    publishedAt: str(row.published_at),
-    closedAt: str(row.closed_at),
-  }));
+  const byId = new Map<string, Garimpo>();
+  for (const row of (teaser.data ?? []) as Row[]) {
+    const g = mapRow(row);
+    byId.set(g.id, g);
+  }
+  for (const row of (full.data ?? []) as Row[]) {
+    const g = mapRow(row);
+    byId.set(g.id, g);
+  }
+
+  return sortGarimpos([...byId.values()]);
 }
 
 export const garimposQueryOptions = {

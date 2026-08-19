@@ -6,6 +6,8 @@ import {
   checkAdmin,
   getGarimpo,
   listGarimpos,
+  listMembers,
+  setMembership,
   updateGarimpo,
   uploadGarimpoImage,
   type AdminGarimpo,
@@ -70,3 +72,27 @@ export function useUploadGarimpoImage() {
 }
 
 export type { AdminGarimpo };
+
+/* ----------------------------- Membros Prime ------------------------------ */
+export const MEMBER_KEYS = { list: ["admin", "members"] as const };
+
+export function useAdminMembers() {
+  const fn = useServerFn(listMembers);
+  return useQuery({ queryKey: MEMBER_KEYS.list, queryFn: () => fn(), retry: false });
+}
+
+export function useSetMembership() {
+  const fn = useServerFn(setMembership);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { user_id: string; active: boolean; expires_at?: string | null }) =>
+      fn({ data: input }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: MEMBER_KEYS.list });
+      toast.success("Acesso Prime atualizado.");
+    },
+    onError: (error: Error) => toast.error(error.message || "Erro ao atualizar acesso."),
+  });
+}
+
+export type { AdminMember } from "@/lib/admin.functions";
