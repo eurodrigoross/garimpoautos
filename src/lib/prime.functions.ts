@@ -2,7 +2,7 @@
  * Server functions da Área Prime.
  * Todo acesso passa por:
  *   1) validação do bearer token (requireSupabaseAuth)
- *   2) verificação de membership ativo (public.is_prime_member) ou papel admin
+ *   2) verificação de membership PRIME ativa ou papel admin (leitura direta com RLS)
  *   3) leitura via `context.supabase` — RLS continua aplicada como o próprio usuário.
  * Campos internos (internal_base_cost / internal_agio) nunca são selecionados aqui.
  */
@@ -20,10 +20,22 @@ const requirePrime = createMiddleware({ type: "function" })
   .middleware([requireSupabaseAuth])
   .server(async ({ next, context }) => {
     const [{ data: prime }, { data: isAdmin }] = await Promise.all([
-      context.supabase.rpc("is_prime_member", { _user_id: context.userId }),
-      context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" }),
+      context.supabase
+        .from("memberships")
+        .select("id")
+        .eq("user_id", context.userId)
+        .eq("plan", "PRIME")
+        .eq("status", "active")
+        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
+        .maybeSingle(),
+      context.supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", context.userId)
+        .eq("role", "admin")
+        .maybeSingle(),
     ]);
-    if (prime !== true && isAdmin !== true) throw new Error("Forbidden: prime membership required");
+    if (!prime && !isAdmin) throw new Error("Forbidden: prime membership required");
     return next({ context: { userId: context.userId } });
   });
 
@@ -31,8 +43,20 @@ export const checkPrime = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<PrimeSession> => {
     const [{ data: prime }, { data: isAdmin }, membership] = await Promise.all([
-      context.supabase.rpc("is_prime_member", { _user_id: context.userId }),
-      context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" }),
+      context.supabase
+        .from("memberships")
+        .select("id")
+        .eq("user_id", context.userId)
+        .eq("plan", "PRIME")
+        .eq("status", "active")
+        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
+        .maybeSingle(),
+      context.supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", context.userId)
+        .eq("role", "admin")
+        .maybeSingle(),
       context.supabase
         .from("memberships")
         .select("plan, status, starts_at, expires_at")
@@ -45,8 +69,8 @@ export const checkPrime = createServerFn({ method: "GET" })
       userId: context.userId,
       email: (claims?.["email"] as string) ?? null,
       createdAt: null,
-      isPrime: prime === true,
-      isAdmin: isAdmin === true,
+      isPrime: Boolean(prime),
+      isAdmin: Boolean(isAdmin),
       membership: (membership.data as PrimeSession["membership"]) ?? null,
     };
   });
