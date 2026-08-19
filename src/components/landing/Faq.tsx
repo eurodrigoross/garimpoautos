@@ -43,7 +43,7 @@ export function Faq() {
         <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">FAQ</h2>
       </Reveal>
       <div className="mt-8 divide-y divide-border border-y border-border">
-        {faq.map(([q, a], i) => {
+        {FAQ_ITEMS.map(([q, a], i) => {
           const on = open === i;
           return (
             <div key={q}>
