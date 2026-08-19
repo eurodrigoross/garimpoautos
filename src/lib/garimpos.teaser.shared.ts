@@ -6,11 +6,11 @@ export type TeaserRow = {
 };
 
 /**
- * Mascara os números sensíveis dos garimpos PRIME que ainda não foram encerrados.
- * Mesma regra que a antiga view `garimpos_teaser`, agora aplicada no servidor.
+ * Mascara os números sensíveis dos garimpos PRIME ainda ativos.
+ * Encerrados e vendidos viram histórico público — números liberados.
  */
 export const maskTeaserRow = (row: TeaserRow): TeaserRow => {
-  if (row.status === "CLOSED") return row;
+  if (row.status === "CLOSED" || row.status === "SOLD") return row;
   return {
     ...row,
     garimpo_value: null,
