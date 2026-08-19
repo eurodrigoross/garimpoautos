@@ -367,3 +367,32 @@ export const setMembership = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/**
+ * Exclusão definitiva de um garimpo (admin).
+ * Remove também a foto do bucket quando ela pertence ao storage do projeto.
+ */
+export const deleteGarimpo = createServerFn({ method: "POST" })
+  .inputValidator((raw: unknown) => asId(asObject(raw)))
+  .middleware([requireAdmin])
+  .handler(async ({ data }) => {
+    const db = await admin();
+    const { data: current, error: readError } = await db
+      .from("garimpos")
+      .select("id, main_image_url")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (readError) throw new Error(readError.message);
+    if (!current) throw new Error("Garimpo não encontrado.");
+
+    const { error } = await db.from("garimpos").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+
+    const url = (current as { main_image_url: string | null }).main_image_url;
+    const marker = `/${BUCKET}/`;
+    if (url && url.includes(marker)) {
+      const path = decodeURIComponent(url.split(marker)[1]?.split("?")[0] ?? "");
+      if (path) await db.storage.from(BUCKET).remove([path]);
+    }
+    return { ok: true };
+  });
