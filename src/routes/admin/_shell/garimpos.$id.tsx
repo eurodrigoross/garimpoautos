@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import {
   useAdminGarimpo,
   useUpdateGarimpo,
+  useDeleteGarimpo,
   useUploadGarimpoImage,
   type AdminGarimpo,
 } from "@/lib/admin.data";
@@ -82,6 +83,8 @@ function EditGarimpoPage() {
   const { data, isLoading, isError, error } = useAdminGarimpo(id);
   const update = useUpdateGarimpo("Garimpo atualizado.");
   const upload = useUploadGarimpoImage();
+  const remove = useDeleteGarimpo();
+  const navigate = useNavigate();
   const fileRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState<FormState | null>(null);
   const [confirming, setConfirming] = useState<null | { label: string; run: () => void }>(null);
@@ -361,6 +364,30 @@ function EditGarimpoPage() {
           <SolidButton className="w-full" onClick={save} disabled={update.isPending}>
             {update.isPending ? "SALVANDO..." : "SALVAR ALTERAÇÕES"}
           </SolidButton>
+
+          <Panel className="space-y-3 p-5">
+            <SectionTitle>ZONA DE RISCO</SectionTitle>
+            <p className="text-[11px] leading-relaxed text-muted-foreground">
+              A exclusão remove o garimpo e a foto principal em definitivo. Para tirar do Radar sem
+              apagar o histórico, use ENCERRADO ou VENDIDO.
+            </p>
+            <GhostButton
+              disabled={remove.isPending}
+              className="w-full justify-center border-destructive/50 text-destructive hover:border-destructive"
+              onClick={() =>
+                setConfirming({
+                  label: "Excluir este Garimpo definitivamente? Esta ação não pode ser desfeita.",
+                  run: () =>
+                    remove.mutate(id, {
+                      onSuccess: () => void navigate({ to: "/admin/garimpos" }),
+                      onSettled: () => setConfirming(null),
+                    }),
+                })
+              }
+            >
+              {remove.isPending ? "EXCLUINDO..." : "EXCLUIR GARIMPO"}
+            </GhostButton>
+          </Panel>
         </div>
       </div>
 
