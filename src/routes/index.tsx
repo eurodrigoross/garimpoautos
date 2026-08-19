@@ -5,11 +5,11 @@ import {
   Brand,
   ForWho,
   Problem,
-  Proof,
   Solution,
   TimeSaved,
   Transparency,
 } from "@/components/landing/Sections";
+
 import { UltimosGarimpos } from "@/components/landing/Garimpos";
 import { Pricing, PrimeEcosystem } from "@/components/landing/Pricing";
 import { Faq, FAQ_ITEMS } from "@/components/landing/Faq";
@@ -63,7 +63,7 @@ function Index() {
         <Solution />
         <TimeSaved />
         <ForWho />
-        <Proof />
+        
         <Transparency />
         <PrimeEcosystem />
         <Pricing />

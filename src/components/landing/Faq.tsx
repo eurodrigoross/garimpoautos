@@ -16,9 +16,14 @@ export const FAQ_ITEMS: [string, string][] = [
     "A documentação e a transferência dependem das regras e da estrutura de cada operação. Antes da conclusão, informamos ao comprador como será o processo aplicável àquela oportunidade.",
   ],
   [
-    "O QUE É O VALOR GARIMPO?",
-    "É o valor apresentado para aquela oportunidade. FIPE e média de mercado aparecem apenas como referência de comparação. Eventuais custos externos, como transporte ou documentação, são informados conforme cada operação.",
+    "O VALOR GARIMPO É O VALOR FINAL?",
+    "Sim. O Valor Garimpo apresentado na oportunidade já inclui o valor do veículo, comissão do leiloeiro, taxas administrativas do leilão e o ágio do Garimpo Auto. Custos externos, como transporte e documentação/despachante, quando necessários, são de responsabilidade do comprador.",
   ],
+  [
+    "O QUE É O VALOR GARIMPO?",
+    "É o valor final da oportunidade, com taxas do leilão, comissão do leiloeiro e ágio Garimpo já inclusos. FIPE e média de mercado aparecem apenas como referência de comparação.",
+  ],
+
   [
     "A GARIMPO AUTO GARANTE QUE É UM BOM NEGÓCIO?",
     "Não. Analisamos e destacamos pontos de atenção, mas não prometemos lucro, valorização ou ausência de risco. A decisão é sua.",

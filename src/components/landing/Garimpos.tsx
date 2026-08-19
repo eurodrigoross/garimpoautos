@@ -51,18 +51,27 @@ function Metrics({ g, locked = false }: { g: Garimpo; locked?: boolean }) {
           {brl(g.market)}
         </p>
       </div>
-      <div className="flex items-center justify-between bg-background p-4">
-        <p className="text-[10px] tracking-[0.14em] text-foreground">VALOR GARIMPO</p>
-        {locked ? (
-          <p className="inline-flex items-center gap-2 text-sm font-extrabold tracking-tight text-foreground/60">
-            <Lock className="size-3.5" /> BLOQUEADO
-          </p>
-        ) : (
-          <p className="text-lg font-extrabold tracking-tight text-foreground">
-            {brl(g.garimpo)}
-          </p>
-        )}
+      <div className="bg-background p-4">
+        <div className="flex items-center justify-between">
+          <p className="text-[10px] tracking-[0.14em] text-foreground">VALOR GARIMPO</p>
+          {locked ? (
+            <p className="inline-flex items-center gap-2 text-sm font-extrabold tracking-tight text-foreground/60">
+              <Lock className="size-3.5" /> BLOQUEADO
+            </p>
+          ) : (
+            <p className="text-lg font-extrabold tracking-tight text-foreground">
+              {brl(g.garimpo)}
+            </p>
+          )}
+        </div>
+        <p
+          title="O Valor Garimpo já inclui o valor do veículo, comissão do leiloeiro, taxas administrativas do leilão e ágio do Garimpo Auto. Transporte e documentação/despachante, quando necessários, são custos externos."
+          className="mt-1.5 text-[9px] leading-relaxed text-muted-foreground"
+        >
+          Taxas, comissão do leiloeiro e ágio Garimpo já inclusos.
+        </p>
       </div>
+
     </div>
   );
 }
