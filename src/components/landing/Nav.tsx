@@ -74,6 +74,24 @@ export function Nav() {
               </a>
             </li>
           ))}
+          <li className="mt-3 flex flex-col gap-2 border-t border-border/60 pt-3">
+            <Link
+              to="/prime/login"
+              onClick={() => setOpen(false)}
+              className="rounded-xl border border-border px-3 py-2.5 text-center text-[11px] font-semibold tracking-wide text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground"
+            >
+              ÁREA DE MEMBROS
+            </Link>
+            <a
+              href={WHATSAPP_FREE}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+              className="sheen rounded-xl bg-primary px-4 py-2.5 text-center text-[11px] font-bold tracking-wide text-primary-foreground"
+            >
+              ENTRAR NO GARIMPO
+            </a>
+          </li>
         </ul>
       )}
     </header>
