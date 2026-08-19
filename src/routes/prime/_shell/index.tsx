@@ -18,6 +18,7 @@ function PrimeHome() {
   const list = garimpos.data ?? [];
   const active = list.filter((g) => g.status === "AVAILABLE");
   const reserved = list.filter((g) => g.status === "RESERVED");
+  const sold = list.filter((g) => g.status === "SOLD");
   const closed = list.filter((g) => g.status === "CLOSED");
 
   return (
@@ -72,7 +73,11 @@ function PrimeHome() {
                 </p>
                 <p className="mt-3 text-sm">{formatBRL(g.garimpo ?? null)}</p>
                 <p className="mt-1 text-[10px] tracking-[0.18em] text-muted-foreground">
-                  {g.status === "CLOSED" ? `ENCERRADO ${formatDate(g.closedAt)}` : g.status}
+                  {g.status === "CLOSED"
+                    ? `ENCERRADO ${formatDate(g.closedAt)}`
+                    : g.status === "SOLD"
+                      ? `VENDIDO ${formatDate(g.soldAt)}`
+                      : g.status}
                 </p>
               </Link>
             ))}

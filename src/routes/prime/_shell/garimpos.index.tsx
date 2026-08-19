@@ -16,6 +16,7 @@ const TABS: { key: "ALL" | GarimpoStatus; label: string }[] = [
   { key: "ALL", label: "TODOS" },
   { key: "AVAILABLE", label: "DISPONÍVEIS" },
   { key: "RESERVED", label: "RESERVADOS" },
+  { key: "SOLD", label: "VENDIDOS" },
   { key: "CLOSED", label: "ENCERRADOS" },
 ];
 
@@ -86,7 +87,7 @@ function PrimeGarimpos() {
               className={cn(
                 "overflow-hidden rounded-xl border transition-colors hover:border-foreground/30",
                 g.access === "PRIME" ? "border-prime/30 border-t-2 border-t-prime/70" : "border-border/50",
-                g.status === "CLOSED" && "opacity-70",
+                (g.status === "CLOSED" || g.status === "SOLD") && "opacity-70",
               )}
             >
               <div className="flex h-40 items-center justify-center bg-muted/20">
@@ -121,9 +122,11 @@ function PrimeGarimpos() {
                 <p className="text-[10px] tracking-[0.18em] text-muted-foreground">
                   {g.status === "CLOSED"
                     ? `ENCERRADO ${formatDate(g.closedAt)}`
-                    : g.status === "RESERVED"
-                      ? "RESERVADO"
-                      : "DISPONÍVEL"}
+                    : g.status === "SOLD"
+                      ? `VENDIDO ${formatDate(g.soldAt)}`
+                      : g.status === "RESERVED"
+                        ? "RESERVADO"
+                        : "DISPONÍVEL"}
                 </p>
               </div>
             </Link>

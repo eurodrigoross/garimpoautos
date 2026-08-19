@@ -49,7 +49,7 @@ function PrimeGarimpoDetail() {
         <div className="flex items-center gap-2">
           {g.access === "PRIME" ? <PrimeBadge /> : null}
           <span className="rounded-md border border-border/60 px-2.5 py-1 text-[10px] tracking-[0.2em] text-muted-foreground">
-            {g.status === "CLOSED" ? "ENCERRADO" : g.status === "RESERVED" ? "RESERVADO" : "DISPONÍVEL"}
+            {STATUS_LABEL[g.status].replace("GARIMPO ", "")}
           </span>
         </div>
       </header>
@@ -91,16 +91,22 @@ function PrimeGarimpoDetail() {
         <p>
           {g.status === "CLOSED"
             ? `Encerrado em ${formatDate(g.closedAt)}`
-            : `Publicado em ${formatDate(g.publishedAt)}`}
+            : g.status === "SOLD"
+              ? `Vendido em ${formatDate(g.soldAt)}`
+              : `Publicado em ${formatDate(g.publishedAt)}`}
         </p>
       </section>
 
       <section className="rounded-xl border border-prime/30 border-t-2 border-t-prime/70 p-5">
         <p className="text-sm font-medium">
-          {g.status === "CLOSED" ? "Este garimpo já foi encerrado" : "Quer reservar este garimpo?"}
+          {isInactiveStatus(g.status)
+            ? g.status === "SOLD"
+              ? "Este garimpo já foi vendido"
+              : "Este garimpo já foi encerrado"
+            : "Quer reservar este garimpo?"}
         </p>
         <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">
-          {g.status === "CLOSED"
+          {isInactiveStatus(g.status)
             ? "Fale com a mesa para receber oportunidades parecidas assim que entrarem no radar."
             : "A mesa confirma disponibilidade, documentação e próximos passos com você pelo WhatsApp."}
         </p>
@@ -111,7 +117,7 @@ function PrimeGarimpoDetail() {
             rel="noopener noreferrer"
             className="rounded-md bg-prime px-4 py-2 text-[11px] font-semibold tracking-[0.18em] text-prime-foreground transition-opacity hover:opacity-90"
           >
-            {g.status === "CLOSED" ? "QUERO OPORTUNIDADES ASSIM" : "FALAR COM A MESA"}
+            {isInactiveStatus(g.status) ? "QUERO OPORTUNIDADES ASSIM" : "FALAR COM A MESA"}
           </a>
           <Link
             to="/prime/calculadora"
