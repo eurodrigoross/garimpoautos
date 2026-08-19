@@ -215,6 +215,7 @@ export type Database = {
           mileage_km: string | null
           positives: string[] | null
           published_at: string | null
+          sold_at: string | null
           status: Database["public"]["Enums"]["garimpo_status"] | null
           transmission: string | null
           vehicle_name: string | null
@@ -238,6 +239,7 @@ export type Database = {
           mileage_km?: string | null
           positives?: string[] | null
           published_at?: string | null
+          sold_at?: string | null
           status?: Database["public"]["Enums"]["garimpo_status"] | null
           transmission?: string | null
           vehicle_name?: string | null
@@ -261,6 +263,7 @@ export type Database = {
           mileage_km?: string | null
           positives?: string[] | null
           published_at?: string | null
+          sold_at?: string | null
           status?: Database["public"]["Enums"]["garimpo_status"] | null
           transmission?: string | null
           vehicle_name?: string | null
