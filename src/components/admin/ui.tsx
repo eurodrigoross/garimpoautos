@@ -20,7 +20,7 @@ export function Chip({
   className,
 }: {
   children: ReactNode;
-  tone?: "muted" | "solid" | "outline";
+  tone?: "muted" | "solid" | "outline" | "faint" | "prime";
   className?: string;
 }) {
   return (
@@ -30,6 +30,8 @@ export function Chip({
         tone === "solid" && "border-foreground bg-foreground text-background",
         tone === "muted" && "border-border/60 bg-muted/30 text-muted-foreground",
         tone === "outline" && "border-foreground/40 bg-transparent text-foreground",
+        tone === "faint" && "border-border/40 bg-transparent text-muted-foreground/60",
+        tone === "prime" && "border-prime bg-prime text-prime-foreground",
         className,
       )}
     >
@@ -40,19 +42,20 @@ export function Chip({
 
 export function StatusChip({ status }: { status: RadarStatus }) {
   return (
-    <Chip tone={status === "AVAILABLE" ? "outline" : status === "RESERVED" ? "solid" : "muted"}>
+    <Chip tone={status === "AVAILABLE" ? "outline" : status === "RESERVED" ? "muted" : "faint"}>
       {STATUS_TEXT[status]}
     </Chip>
   );
 }
 
 export function AccessChip({ access }: { access: RadarAccessType }) {
-  return <Chip tone={access === "PRIME" ? "solid" : "muted"}>{ACCESS_TEXT[access]}</Chip>;
+  return <Chip tone={access === "PRIME" ? "prime" : "muted"}>{ACCESS_TEXT[access]}</Chip>;
 }
 
 export function PublishChip({ published }: { published: boolean }) {
-  return <Chip tone={published ? "outline" : "muted"}>{published ? "PUBLICADO" : "RASCUNHO"}</Chip>;
+  return <Chip tone={published ? "outline" : "faint"}>{published ? "PUBLICADO" : "RASCUNHO"}</Chip>;
 }
+
 
 export function Panel({ children, className }: { children: ReactNode; className?: string }) {
   return (
