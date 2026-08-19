@@ -48,7 +48,7 @@ type FormState = {
   positives: string[];
   attention_points: string[];
   access_type: "OPEN" | "PRIME";
-  status: "AVAILABLE" | "RESERVED" | "CLOSED";
+  status: "AVAILABLE" | "RESERVED" | "SOLD" | "CLOSED";
   published: boolean;
   main_image_url: string | null;
 };
