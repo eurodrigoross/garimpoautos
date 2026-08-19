@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { PasswordStrength } from "@/components/admin/password-strength";
 import { Field, Panel, SectionTitle, SolidButton, inputClass } from "@/components/admin/ui";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -17,15 +18,28 @@ export const Route = createFileRoute("/admin/_shell/conta")({
   }),
 });
 
+const passwordRules = [
+  (v: string) => v.length >= 8,
+  (v: string) => /[A-Z]/.test(v),
+  (v: string) => /[a-z]/.test(v),
+  (v: string) => /\d/.test(v),
+  (v: string) => /[^A-Za-z0-9]/.test(v),
+];
+
 function AdminAccount() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [saving, setSaving] = useState(false);
 
+  const allRulesMet = useMemo(
+    () => passwordRules.every((rule) => rule(password)),
+    [password],
+  );
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (password.length < 8) {
-      toast.error("A senha precisa ter pelo menos 8 caracteres.");
+    if (!allRulesMet) {
+      toast.error("A senha não atende a todos os requisitos de segurança.");
       return;
     }
     if (password !== confirm) {
@@ -75,6 +89,7 @@ function AdminAccount() {
               className={inputClass}
             />
           </Field>
+          <PasswordStrength password={password} />
           <Field label="CONFIRMAR NOVA SENHA">
             <input
               type="password"
@@ -84,7 +99,7 @@ function AdminAccount() {
               className={inputClass}
             />
           </Field>
-          <SolidButton type="submit" disabled={saving}>
+          <SolidButton type="submit" disabled={saving || !allRulesMet}>
             {saving ? "SALVANDO..." : "SALVAR SENHA"}
           </SolidButton>
         </form>
