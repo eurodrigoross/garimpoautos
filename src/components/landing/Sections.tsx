@@ -121,28 +121,22 @@ export function Solution() {
 export function TimeSaved() {
   return (
     <section className="border-y border-border bg-surface/30">
-      <div className="mx-auto max-w-5xl px-5 py-20 text-center sm:px-8">
+      <div className="mx-auto max-w-5xl px-5 py-14 text-center sm:px-8">
         <Reveal>
-          <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+          <h2 className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
             O NOSSO TRABALHO ACONTECE ANTES DE VOCÊ CHEGAR.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">
-            Enquanto você trabalha, dirige ou cuida da sua rotina, nosso radar continua procurando.
-          </p>
-        </Reveal>
-
-        <Reveal delay={100}>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3 text-[11px] font-bold tracking-[0.18em] text-muted-foreground">
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-2 text-[10px] font-bold tracking-[0.16em] text-muted-foreground">
             {["PESQUISA", "FILTRAGEM", "ANÁLISE", "OPORTUNIDADE"].map((s, i) => (
-              <span key={s} className="flex items-center gap-3">
-                {i > 0 && <span className="text-foreground/30">+</span>}
-                <span className="rounded-lg border border-border px-4 py-2.5 text-foreground">
+              <span key={s} className="flex items-center gap-2">
+                {i > 0 && <span className="text-foreground/30">→</span>}
+                <span className="rounded-lg border border-border px-3 py-2 text-foreground">
                   {s}
                 </span>
               </span>
             ))}
           </div>
-          <p className="mt-8 text-sm font-semibold text-foreground">
+          <p className="mt-6 text-sm font-semibold text-foreground">
             Você recebe o resultado do nosso garimpo.
           </p>
         </Reveal>
@@ -150,6 +144,7 @@ export function TimeSaved() {
     </section>
   );
 }
+
 
 export function ForWho() {
   return (
