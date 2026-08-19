@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { WHATSAPP_FREE } from "@/lib/site";
+import { BrandLockup } from "@/components/Brand";
 
 const links = [
   { label: "Como funciona", href: "#como-funciona" },
