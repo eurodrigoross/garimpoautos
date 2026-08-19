@@ -17,6 +17,7 @@ import { Route as PrimeShellRouteImport } from './routes/prime/_shell'
 import { Route as PrimeLoginRouteImport } from './routes/prime/login'
 import { Route as AdminShellIndexRouteImport } from './routes/admin/_shell/index'
 import { Route as AdminShellContaRouteImport } from './routes/admin/_shell/conta'
+import { Route as AdminShellMembrosRouteImport } from './routes/admin/_shell/membros'
 import { Route as ApiRadarPublishRouteImport } from './routes/api/radar/publish'
 import { Route as ApiRadarUploadImageRouteImport } from './routes/api/radar/upload-image'
 import { Route as PrimeShellIndexRouteImport } from './routes/prime/_shell/index'
@@ -70,6 +71,11 @@ const AdminShellIndexRoute = AdminShellIndexRouteImport.update({
 const AdminShellContaRoute = AdminShellContaRouteImport.update({
   id: '/conta',
   path: '/conta',
+  getParentRoute: () => AdminShellRoute,
+} as any)
+const AdminShellMembrosRoute = AdminShellMembrosRouteImport.update({
+  id: '/membros',
+  path: '/membros',
   getParentRoute: () => AdminShellRoute,
 } as any)
 const ApiRadarPublishRoute = ApiRadarPublishRouteImport.update({
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/prime': typeof PrimeShellRouteWithChildren
   '/prime/login': typeof PrimeLoginRoute
   '/admin/conta': typeof AdminShellContaRoute
+  '/admin/membros': typeof AdminShellMembrosRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/prime/calculadora': typeof PrimeShellCalculadoraRoute
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/prime/login': typeof PrimeLoginRoute
   '/admin/conta': typeof AdminShellContaRoute
+  '/admin/membros': typeof AdminShellMembrosRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/prime/calculadora': typeof PrimeShellCalculadoraRoute
@@ -200,6 +208,7 @@ export interface FileRoutesById {
   '/prime/_shell': typeof PrimeShellRouteWithChildren
   '/prime/login': typeof PrimeLoginRoute
   '/admin/_shell/conta': typeof AdminShellContaRoute
+  '/admin/_shell/membros': typeof AdminShellMembrosRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/prime/_shell/calculadora': typeof PrimeShellCalculadoraRoute
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/prime'
     | '/prime/login'
     | '/admin/conta'
+    | '/admin/membros'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/prime/calculadora'
@@ -248,6 +258,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/prime/login'
     | '/admin/conta'
+    | '/admin/membros'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/prime/calculadora'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/prime/_shell'
     | '/prime/login'
     | '/admin/_shell/conta'
+    | '/admin/_shell/membros'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/prime/_shell/calculadora'
@@ -359,6 +371,13 @@ declare module '@tanstack/react-router' {
       path: '/conta'
       fullPath: '/admin/conta'
       preLoaderRoute: typeof AdminShellContaRouteImport
+      parentRoute: typeof AdminShellRoute
+    }
+    '/admin/_shell/membros': {
+      id: '/admin/_shell/membros'
+      path: '/membros'
+      fullPath: '/admin/membros'
+      preLoaderRoute: typeof AdminShellMembrosRouteImport
       parentRoute: typeof AdminShellRoute
     }
     '/api/radar/publish': {
@@ -464,6 +483,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminShellRouteChildren {
   AdminShellContaRoute: typeof AdminShellContaRoute
+  AdminShellMembrosRoute: typeof AdminShellMembrosRoute
   AdminShellIndexRoute: typeof AdminShellIndexRoute
   AdminShellGarimposIdRoute: typeof AdminShellGarimposIdRoute
   AdminShellGarimposIndexRoute: typeof AdminShellGarimposIndexRoute
@@ -471,6 +491,7 @@ interface AdminShellRouteChildren {
 
 const AdminShellRouteChildren: AdminShellRouteChildren = {
   AdminShellContaRoute: AdminShellContaRoute,
+  AdminShellMembrosRoute: AdminShellMembrosRoute,
   AdminShellIndexRoute: AdminShellIndexRoute,
   AdminShellGarimposIdRoute: AdminShellGarimposIdRoute,
   AdminShellGarimposIndexRoute: AdminShellGarimposIndexRoute,
