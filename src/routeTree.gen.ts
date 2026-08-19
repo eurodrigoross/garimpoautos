@@ -16,6 +16,7 @@ import { Route as AdminShellIndexRouteImport } from './routes/admin/_shell/index
 import { Route as ApiRadarPublishRouteImport } from './routes/api/radar/publish'
 import { Route as ApiRadarUploadImageRouteImport } from './routes/api/radar/upload-image'
 import { Route as AdminShellGarimposIndexRouteImport } from './routes/admin/_shell/garimpos.index'
+import { Route as AdminShellGarimposIdRouteImport } from './routes/admin/_shell/garimpos.$id'
 import { Route as ApiPublicRadarHealthRouteImport } from './routes/api/public/radar/health'
 import { Route as ApiPublicRadarPublishRouteImport } from './routes/api/public/radar/publish'
 import { Route as ApiPublicRadarUploadImageRouteImport } from './routes/api/public/radar/upload-image'
@@ -55,6 +56,11 @@ const AdminShellGarimposIndexRoute = AdminShellGarimposIndexRouteImport.update({
   path: '/garimpos/',
   getParentRoute: () => AdminShellRoute,
 } as any)
+const AdminShellGarimposIdRoute = AdminShellGarimposIdRouteImport.update({
+  id: '/garimpos/$id',
+  path: '/garimpos/$id',
+  getParentRoute: () => AdminShellRoute,
+} as any)
 const ApiPublicRadarHealthRoute = ApiPublicRadarHealthRouteImport.update({
   id: '/api/public/radar/health',
   path: '/api/public/radar/health',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/admin/': typeof AdminShellIndexRoute
+  '/admin/garimpos/$id': typeof AdminShellGarimposIdRoute
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/admin': typeof AdminShellIndexRoute
+  '/admin/garimpos/$id': typeof AdminShellGarimposIdRoute
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/admin/_shell/': typeof AdminShellIndexRoute
+  '/admin/_shell/garimpos/$id': typeof AdminShellGarimposIdRoute
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/admin/'
+    | '/admin/garimpos/$id'
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/admin'
+    | '/admin/garimpos/$id'
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/admin/_shell/'
+    | '/admin/_shell/garimpos/$id'
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
@@ -208,6 +220,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminShellGarimposIndexRouteImport
       parentRoute: typeof AdminShellRoute
     }
+    '/admin/_shell/garimpos/$id': {
+      id: '/admin/_shell/garimpos/$id'
+      path: '/garimpos/$id'
+      fullPath: '/admin/garimpos/$id'
+      preLoaderRoute: typeof AdminShellGarimposIdRouteImport
+      parentRoute: typeof AdminShellRoute
+    }
     '/api/public/radar/health': {
       id: '/api/public/radar/health'
       path: '/api/public/radar/health'
@@ -234,11 +253,13 @@ declare module '@tanstack/react-router' {
 
 interface AdminShellRouteChildren {
   AdminShellIndexRoute: typeof AdminShellIndexRoute
+  AdminShellGarimposIdRoute: typeof AdminShellGarimposIdRoute
   AdminShellGarimposIndexRoute: typeof AdminShellGarimposIndexRoute
 }
 
 const AdminShellRouteChildren: AdminShellRouteChildren = {
   AdminShellIndexRoute: AdminShellIndexRoute,
+  AdminShellGarimposIdRoute: AdminShellGarimposIdRoute,
   AdminShellGarimposIndexRoute: AdminShellGarimposIndexRoute,
 }
 
