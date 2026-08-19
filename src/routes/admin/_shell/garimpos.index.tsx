@@ -1,7 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
-import { useAdminGarimpos, useUpdateGarimpo, type AdminGarimpo } from "@/lib/admin.data";
+import {
+  useAdminGarimpos,
+  useDeleteGarimpo,
+  useUpdateGarimpo,
+  type AdminGarimpo,
+} from "@/lib/admin.data";
 import { formatBRL, formatDate, formatPct } from "@/lib/garimpo-finance";
 import {
   AccessChip,
@@ -29,6 +34,7 @@ const FILTERS = [
   "TODOS",
   "DISPONÍVEIS",
   "RESERVADOS",
+  "VENDIDOS",
   "ENCERRADOS",
   "ABERTOS",
   "PRIME",
@@ -43,6 +49,8 @@ const matchFilter = (g: AdminGarimpo, f: Filter) => {
       return g.status === "AVAILABLE";
     case "RESERVADOS":
       return g.status === "RESERVED";
+    case "VENDIDOS":
+      return g.status === "SOLD";
     case "ENCERRADOS":
       return g.status === "CLOSED";
     case "ABERTOS":
@@ -131,6 +139,7 @@ function AdminGarimposPage() {
 
 function GarimpoRow({ g }: { g: AdminGarimpo }) {
   const update = useUpdateGarimpo();
+  const remove = useDeleteGarimpo();
   const [confirming, setConfirming] = useState<null | { label: string; run: () => void }>(null);
 
   const ask = (label: string, run: () => void) => setConfirming({ label, run });
@@ -215,6 +224,19 @@ function GarimpoRow({ g }: { g: AdminGarimpo }) {
             </GhostButton>
           ) : null}
 
+          {g.status !== "SOLD" ? (
+            <GhostButton
+              disabled={update.isPending}
+              onClick={() =>
+                ask("Marcar este Garimpo como VENDIDO?", () =>
+                  update.mutate({ id: g.id, status: "SOLD" }, { onSettled: () => setConfirming(null) }),
+                )
+              }
+            >
+              MARCAR VENDIDO
+            </GhostButton>
+          ) : null}
+
           {g.status !== "CLOSED" ? (
             <GhostButton
               disabled={update.isPending}
@@ -242,6 +264,18 @@ function GarimpoRow({ g }: { g: AdminGarimpo }) {
             {g.published ? "DESPUBLICAR" : "PUBLICAR"}
           </GhostButton>
 
+          <GhostButton
+            disabled={remove.isPending}
+            className="border-destructive/50 text-destructive hover:border-destructive"
+            onClick={() =>
+              ask("Excluir este Garimpo definitivamente? Esta ação não pode ser desfeita.", () =>
+                remove.mutate(g.id, { onSettled: () => setConfirming(null) }),
+              )
+            }
+          >
+            EXCLUIR
+          </GhostButton>
+
           <a
             href={radarUrl}
             target="_blank"
@@ -259,7 +293,7 @@ function GarimpoRow({ g }: { g: AdminGarimpo }) {
           <div className="flex gap-2">
             <GhostButton onClick={() => setConfirming(null)}>CANCELAR</GhostButton>
             <GhostButton
-              disabled={update.isPending}
+              disabled={update.isPending || remove.isPending}
               className="border-foreground/60"
               onClick={() => confirming.run()}
             >

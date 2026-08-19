@@ -26,6 +26,7 @@ function AdminOverview() {
   const cards = [
     { label: "GARIMPOS DISPONÍVEIS", value: count((g) => g.status === "AVAILABLE") },
     { label: "GARIMPOS RESERVADOS", value: count((g) => g.status === "RESERVED") },
+    { label: "GARIMPOS VENDIDOS", value: count((g) => g.status === "SOLD") },
     { label: "GARIMPOS ENCERRADOS", value: count((g) => g.status === "CLOSED") },
     { label: "GARIMPOS PRIME", value: count((g) => g.access_type === "PRIME") },
     { label: "GARIMPOS ABERTOS", value: count((g) => g.access_type === "OPEN") },

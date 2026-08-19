@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import {
   checkAdmin,
+  deleteGarimpo,
   getGarimpo,
   listGarimpos,
   listMembers,
@@ -52,6 +53,20 @@ export function useUpdateGarimpo(successMessage = "Garimpo atualizado.") {
       toast.success(successMessage);
     },
     onError: (error: Error) => toast.error(error.message || "Erro ao atualizar."),
+  });
+}
+
+export function useDeleteGarimpo() {
+  const fn = useServerFn(deleteGarimpo);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => fn({ data: { id } }) as Promise<{ ok: boolean }>,
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ADMIN_KEYS.list });
+      void qc.invalidateQueries({ queryKey: ["garimpos-public"] });
+      toast.success("Garimpo excluído definitivamente.");
+    },
+    onError: (error: Error) => toast.error(error.message || "Erro ao excluir."),
   });
 }
 

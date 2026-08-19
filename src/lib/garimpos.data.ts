@@ -5,7 +5,7 @@ import { getPrimeTeasers } from "@/lib/garimpos.teaser.functions";
 
 /** Colunas explícitas da fonte pública segura. Nunca usar SELECT * na tabela administrativa. */
 const PUBLIC_COLUMNS =
-  "id, code, vehicle_name, year, mileage_km, transmission, fuel, location, fipe_value, market_value, garimpo_value, discount_fipe_percent, market_difference, main_image_url, positives, attention_points, garimpo_note, access_type, status, published_at, closed_at";
+  "id, code, vehicle_name, year, mileage_km, transmission, fuel, location, fipe_value, market_value, garimpo_value, discount_fipe_percent, market_difference, main_image_url, positives, attention_points, garimpo_note, access_type, status, published_at, closed_at, sold_at";
 
 const num = (v: number | string | null): number | undefined =>
   v === null || v === undefined ? undefined : Number(v);
@@ -36,6 +36,7 @@ const mapRow = (row: Row): Garimpo => ({
   note: str(row["garimpo_note"] as string | null),
   publishedAt: str(row["published_at"] as string | null),
   closedAt: str(row["closed_at"] as string | null),
+  soldAt: str(row["sold_at"] as string | null),
 });
 
 const sortGarimpos = (list: Garimpo[]) =>

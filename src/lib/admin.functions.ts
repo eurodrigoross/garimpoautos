@@ -21,7 +21,7 @@ const BUCKET = "garimpo-images";
 const SIGNED_URL_TTL = 60 * 60 * 24 * 3650;
 
 export const ADMIN_COLUMNS =
-  "id, code, vehicle_name, year, mileage_km, transmission, fuel, location, fipe_value, market_value, internal_base_cost, internal_agio, garimpo_value, discount_fipe_percent, market_difference, main_image_url, positives, attention_points, garimpo_note, access_type, status, published, published_at, closed_at, created_at, updated_at";
+  "id, code, vehicle_name, year, mileage_km, transmission, fuel, location, fipe_value, market_value, internal_base_cost, internal_agio, garimpo_value, discount_fipe_percent, market_difference, main_image_url, positives, attention_points, garimpo_note, access_type, status, published, published_at, closed_at, sold_at, created_at, updated_at";
 
 export type AdminGarimpo = {
   id: string;
@@ -48,6 +48,7 @@ export type AdminGarimpo = {
   published: boolean;
   published_at: string | null;
   closed_at: string | null;
+  sold_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -235,11 +236,10 @@ export const updateGarimpo = createServerFn({ method: "POST" })
 
     // Ciclo de vida coerente: encerrar carimba closed_at, reabrir limpa.
     if (patch.status !== undefined) {
-      if (patch.status === "CLOSED") {
-        update["closed_at"] = row.closed_at ?? new Date().toISOString();
-      } else {
-        update["closed_at"] = null;
-      }
+      update["closed_at"] =
+        patch.status === "CLOSED" ? (row.closed_at ?? new Date().toISOString()) : null;
+      update["sold_at"] =
+        patch.status === "SOLD" ? (row.sold_at ?? new Date().toISOString()) : null;
     }
     if (patch.published !== undefined) {
       update["published_at"] = patch.published ? (row.published_at ?? new Date().toISOString()) : null;
@@ -365,5 +365,34 @@ export const setMembership = createServerFn({ method: "POST" })
         { onConflict: "user_id,plan" },
       );
     if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/**
+ * Exclusão definitiva de um garimpo (admin).
+ * Remove também a foto do bucket quando ela pertence ao storage do projeto.
+ */
+export const deleteGarimpo = createServerFn({ method: "POST" })
+  .inputValidator((raw: unknown) => asId(asObject(raw)))
+  .middleware([requireAdmin])
+  .handler(async ({ data }) => {
+    const db = await admin();
+    const { data: current, error: readError } = await db
+      .from("garimpos")
+      .select("id, main_image_url")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (readError) throw new Error(readError.message);
+    if (!current) throw new Error("Garimpo não encontrado.");
+
+    const { error } = await db.from("garimpos").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+
+    const url = (current as { main_image_url: string | null }).main_image_url;
+    const marker = `/${BUCKET}/`;
+    if (url && url.includes(marker)) {
+      const path = decodeURIComponent(url.split(marker)[1]?.split("?")[0] ?? "");
+      if (path) await db.storage.from(BUCKET).remove([path]);
+    }
     return { ok: true };
   });

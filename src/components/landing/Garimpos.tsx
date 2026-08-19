@@ -79,7 +79,8 @@ function Metrics({ g, locked = false }: { g: Garimpo; locked?: boolean }) {
 export function GarimpoCard({ g }: { g: Garimpo }) {
   const isPrime = g.access === "PRIME";
   const isClosed = g.status === "CLOSED";
-  const locked = isPrime && !isClosed;
+  const isSold = g.status === "SOLD";
+  const locked = isPrime && !isClosed && !isSold;
 
   return (
     <article

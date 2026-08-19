@@ -6,9 +6,9 @@ import type { Garimpo, GarimpoAccess, GarimpoStatus } from "@/lib/garimpos";
 
 /** Colunas liberadas ao membro Prime. internal_base_cost / internal_agio JAMAIS entram aqui. */
 export const PRIME_GARIMPO_COLUMNS =
-  "id, code, vehicle_name, year, mileage_km, transmission, fuel, location, fipe_value, market_value, garimpo_value, discount_fipe_percent, market_difference, main_image_url, positives, attention_points, garimpo_note, access_type, status, published_at, closed_at";
+  "id, code, vehicle_name, year, mileage_km, transmission, fuel, location, fipe_value, market_value, garimpo_value, discount_fipe_percent, market_difference, main_image_url, positives, attention_points, garimpo_note, access_type, status, published_at, closed_at, sold_at";
 
-/** Limite de encerrados recentes carregados na Área Prime. */
+/** Limite de encerrados/vendidos recentes carregados na Área Prime. */
 export const PRIME_CLOSED_LIMIT = 20;
 
 export type PrimeContent = {
@@ -76,15 +76,20 @@ export function mapGarimpoRow(row: Record<string, unknown>): Garimpo {
     note: str(row["garimpo_note"]),
     publishedAt: str(row["published_at"]),
     closedAt: str(row["closed_at"]),
+    soldAt: str(row["sold_at"]),
   };
 }
 
-/** Ordena e limita: ativos/reservados primeiro, depois encerrados recentes. */
+/** Ordena e limita: ativos/reservados primeiro, depois vendidos e encerrados recentes. */
 export function organizePrimeGarimpos(all: Garimpo[]): Garimpo[] {
-  const openOnes = all.filter((g) => g.status !== "CLOSED");
+  const openOnes = all.filter((g) => g.status === "AVAILABLE" || g.status === "RESERVED");
+  const sold = all
+    .filter((g) => g.status === "SOLD")
+    .sort((a, b) => (b.soldAt ?? "").localeCompare(a.soldAt ?? ""))
+    .slice(0, PRIME_CLOSED_LIMIT);
   const closed = all
     .filter((g) => g.status === "CLOSED")
     .sort((a, b) => (b.closedAt ?? "").localeCompare(a.closedAt ?? ""))
     .slice(0, PRIME_CLOSED_LIMIT);
-  return [...openOnes, ...closed];
+  return [...openOnes, ...sold, ...closed];
 }
