@@ -1,6 +1,8 @@
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { WHATSAPP_FREE, WHATSAPP_PRIME } from "@/lib/site";
+import { BrandLockup } from "@/components/Brand";
+
 
 const links = [
   ["Como funciona", "#como-funciona"],
