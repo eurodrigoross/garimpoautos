@@ -5,6 +5,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminSession } from "@/lib/admin.data";
 import { cn } from "@/lib/utils";
+import { BrandMark } from "@/components/Brand";
 
 export const Route = createFileRoute("/admin/_shell")({
   ssr: false,
@@ -50,9 +51,12 @@ function AdminShell() {
           )}
         >
           <div className="flex items-center justify-between px-5 py-5">
-            <div>
+            <div className="flex items-center gap-2.5">
+              <BrandMark className="size-7" />
+              <div>
               <p className="text-xs font-semibold tracking-[0.3em]">GARIMPO AUTO</p>
               <p className="mt-1 text-[10px] tracking-[0.28em] text-muted-foreground">ADMIN</p>
+              </div>
             </div>
             <button
               type="button"

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { WHATSAPP_FREE } from "@/lib/site";
+import { BrandLockup } from "@/components/Brand";
 
 const links = [
   { label: "Como funciona", href: "#como-funciona" },
@@ -15,14 +16,10 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 glass edge-light">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-        <a href="#topo" className="flex items-center gap-2.5">
-          <span className="flex size-8 items-center justify-center rounded-lg border border-border-strong/70 text-[11px] font-black tracking-tight text-foreground">
-            GA
-          </span>
-          <span className="text-[13px] font-extrabold tracking-[0.28em] text-foreground">
-            GARIMPO <span className="text-muted-foreground">AUTO</span>
-          </span>
+        <a href="#topo" className="flex items-center">
+          <BrandLockup />
         </a>
+
 
         <ul className="hidden items-center gap-8 md:flex">
           {links.map((l) => (
