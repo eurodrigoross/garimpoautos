@@ -76,15 +76,20 @@ export function mapGarimpoRow(row: Record<string, unknown>): Garimpo {
     note: str(row["garimpo_note"]),
     publishedAt: str(row["published_at"]),
     closedAt: str(row["closed_at"]),
+    soldAt: str(row["sold_at"]),
   };
 }
 
-/** Ordena e limita: ativos/reservados primeiro, depois encerrados recentes. */
+/** Ordena e limita: ativos/reservados primeiro, depois vendidos e encerrados recentes. */
 export function organizePrimeGarimpos(all: Garimpo[]): Garimpo[] {
-  const openOnes = all.filter((g) => g.status !== "CLOSED");
+  const openOnes = all.filter((g) => g.status === "AVAILABLE" || g.status === "RESERVED");
+  const sold = all
+    .filter((g) => g.status === "SOLD")
+    .sort((a, b) => (b.soldAt ?? "").localeCompare(a.soldAt ?? ""))
+    .slice(0, PRIME_CLOSED_LIMIT);
   const closed = all
     .filter((g) => g.status === "CLOSED")
     .sort((a, b) => (b.closedAt ?? "").localeCompare(a.closedAt ?? ""))
     .slice(0, PRIME_CLOSED_LIMIT);
-  return [...openOnes, ...closed];
+  return [...openOnes, ...sold, ...closed];
 }
