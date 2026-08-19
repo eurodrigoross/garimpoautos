@@ -313,6 +313,7 @@ function EditGarimpoPage() {
                     key={value}
                     active={form.access_type === value}
                     label={value === "OPEN" ? "ABERTO" : "PRIME"}
+                    tone={value === "PRIME" ? "prime" : "default"}
                     onClick={() => set("access_type", value)}
                   />
                 ))}
@@ -388,14 +389,26 @@ function Metric({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Toggle({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
+function Toggle({
+  active,
+  label,
+  onClick,
+  tone = "default",
+}: {
+  active: boolean;
+  label: string;
+  onClick: () => void;
+  tone?: "default" | "prime";
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-md border px-3 py-1.5 text-[10px] tracking-[0.16em] transition-colors ${
+      className={`rounded-md border px-3 py-1.5 text-[10px] font-semibold tracking-[0.16em] transition-colors ${
         active
-          ? "border-foreground bg-foreground text-background"
+          ? tone === "prime"
+            ? "border-prime bg-prime text-prime-foreground"
+            : "border-foreground bg-foreground text-background"
           : "border-border/60 text-muted-foreground hover:border-foreground/40"
       }`}
     >
