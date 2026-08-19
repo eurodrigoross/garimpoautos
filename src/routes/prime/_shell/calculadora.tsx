@@ -10,24 +10,24 @@ export const Route = createFileRoute("/prime/_shell/calculadora")({
 });
 
 type Fields = {
-  lance: string;
-  comissaoPct: string;
-  taxas: string;
-  transferencia: string;
-  logistica: string;
+  garimpo: string;
+  transporte: string;
+  documentacao: string;
   reparos: string;
-  reserva: string;
+  outros: string;
+  fipe: string;
+  market: string;
   vendaEstimada: string;
 };
 
 const EMPTY: Fields = {
-  lance: "",
-  comissaoPct: "5",
-  taxas: "",
-  transferencia: "",
-  logistica: "",
+  garimpo: "",
+  transporte: "",
+  documentacao: "",
   reparos: "",
-  reserva: "",
+  outros: "",
+  fipe: "",
+  market: "",
   vendaEstimada: "",
 };
 
@@ -44,20 +44,21 @@ function Calculadora() {
     setF((prev) => ({ ...prev, [key]: e.target.value }));
 
   const result = useMemo(() => {
-    const lance = n(f.lance);
-    const comissao = (lance * n(f.comissaoPct)) / 100;
+    const valorGarimpo = n(f.garimpo);
     const custoTotal =
-      lance +
-      comissao +
-      n(f.taxas) +
-      n(f.transferencia) +
-      n(f.logistica) +
-      n(f.reparos) +
-      n(f.reserva);
+      valorGarimpo + n(f.transporte) + n(f.documentacao) + n(f.reparos) + n(f.outros);
     const venda = n(f.vendaEstimada);
     const resultado = venda - custoTotal;
     const margem = custoTotal > 0 ? (resultado / custoTotal) * 100 : 0;
-    return { comissao, custoTotal, resultado, margem };
+    const fipe = n(f.fipe);
+    const market = n(f.market);
+    return {
+      custoTotal,
+      resultado,
+      margem,
+      difFipe: fipe > 0 ? fipe - valorGarimpo : null,
+      difMarket: market > 0 ? market - valorGarimpo : null,
+    };
   }, [f]);
 
   function preencherComGarimpo(id: string) {
@@ -65,7 +66,9 @@ function Calculadora() {
     if (!g) return;
     setF((prev) => ({
       ...prev,
-      lance: g.garimpo ? String(g.garimpo) : prev.lance,
+      garimpo: g.garimpo ? String(g.garimpo) : prev.garimpo,
+      fipe: g.fipe ? String(g.fipe) : prev.fipe,
+      market: g.market ? String(g.market) : prev.market,
       vendaEstimada: g.market ? String(g.market) : prev.vendaEstimada,
     }));
   }
@@ -75,8 +78,8 @@ function Calculadora() {
       <header>
         <h1 className="text-xl font-semibold tracking-tight">Calculadora de custo total</h1>
         <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Simule o custo real do arremate e o resultado bruto estimado antes de dar o lance. Os
-          valores são uma estimativa e não substituem a análise da mesa.
+          Comece pelo Valor Garimpo — o valor final da oportunidade — e acrescente apenas os custos
+          externos que se aplicam ao seu caso.
         </p>
       </header>
 
@@ -102,14 +105,23 @@ function Calculadora() {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <div className="grid gap-4 rounded-xl border border-border/50 p-5 sm:grid-cols-2">
-          <Field label="LANCE / VALOR DO GARIMPO (R$)" value={f.lance} onChange={set("lance")} />
-          <Field label="COMISSÃO DO LEILOEIRO (%)" value={f.comissaoPct} onChange={set("comissaoPct")} />
-          <Field label="TAXAS E DESPESAS DO LEILÃO (R$)" value={f.taxas} onChange={set("taxas")} />
-          <Field label="TRANSFERÊNCIA / DOCUMENTAÇÃO (R$)" value={f.transferencia} onChange={set("transferencia")} />
-          <Field label="LOGÍSTICA / PÁTIO (R$)" value={f.logistica} onChange={set("logistica")} />
-          <Field label="REPAROS ESTIMADOS (R$)" value={f.reparos} onChange={set("reparos")} />
-          <Field label="RESERVA DE IMPREVISTOS (R$)" value={f.reserva} onChange={set("reserva")} />
-          <Field label="VENDA ESTIMADA (R$)" value={f.vendaEstimada} onChange={set("vendaEstimada")} />
+          <div className="sm:col-span-2 rounded-lg border border-border/50 bg-background/40 p-3">
+            <Field label="VALOR GARIMPO (R$)" value={f.garimpo} onChange={set("garimpo")} />
+            <p
+              title="O Valor Garimpo já inclui valor do veículo, comissão do leiloeiro, taxas administrativas do leilão e ágio Garimpo."
+              className="mt-2 text-[10px] leading-relaxed text-muted-foreground"
+            >
+              O Valor Garimpo já inclui valor do veículo, comissão do leiloeiro, taxas
+              administrativas do leilão e ágio Garimpo. Não some esses custos novamente.
+            </p>
+          </div>
+          <Field label="TRANSPORTE / REMOÇÃO (R$)" value={f.transporte} onChange={set("transporte")} />
+          <Field label="DOCUMENTAÇÃO / DESPACHANTE (R$)" value={f.documentacao} onChange={set("documentacao")} />
+          <Field label="REPAROS PREVISTOS (R$)" value={f.reparos} onChange={set("reparos")} />
+          <Field label="OUTROS CUSTOS (R$)" value={f.outros} onChange={set("outros")} />
+          <Field label="FIPE (R$)" value={f.fipe} onChange={set("fipe")} />
+          <Field label="MÉDIA DE MERCADO (R$)" value={f.market} onChange={set("market")} />
+          <Field label="PREÇO ESTIMADO DE VENDA (R$)" value={f.vendaEstimada} onChange={set("vendaEstimada")} />
           <button
             type="button"
             onClick={() => setF(EMPTY)}
@@ -120,24 +132,34 @@ function Calculadora() {
         </div>
 
         <aside className="h-fit space-y-4 rounded-xl border border-border/50 p-5">
-          <Row label="Comissão calculada" value={formatBRL(result.comissao)} />
           <Row label="Custo total estimado" value={formatBRL(result.custoTotal)} strong />
+          <div className="border-t border-border/40 pt-4">
+            <Row
+              label="Diferença para a FIPE"
+              value={result.difFipe === null ? "—" : formatBRL(result.difFipe)}
+            />
+            <Row
+              label="Diferença para a média de mercado"
+              value={result.difMarket === null ? "—" : formatBRL(result.difMarket)}
+            />
+          </div>
           <div className="border-t border-border/40 pt-4">
             <Row label="Resultado bruto estimado" value={formatBRL(result.resultado)} strong />
             <Row
-              label="Margem sobre o custo"
+              label="Percentual sobre o custo"
               value={`${result.margem.toFixed(1).replace(".", ",")}%`}
             />
           </div>
           <p className="text-[10px] leading-relaxed text-muted-foreground">
-            Estimativa sem impostos sobre a venda e sem custos de anúncio. Use como referência de
-            decisão, não como garantia de resultado.
+            Simulação baseada nos valores informados pelo usuário. Não representa garantia de venda,
+            lucro ou resultado.
           </p>
         </aside>
       </div>
     </div>
   );
 }
+
 
 function Field({
   label,
