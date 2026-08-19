@@ -34,9 +34,10 @@ function PrimeHome() {
         </p>
       </header>
 
-      <section className="grid gap-3 sm:grid-cols-3">
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="GARIMPOS ATIVOS" value={String(active.length)} />
         <Stat label="RESERVADOS" value={String(reserved.length)} />
+        <Stat label="VENDIDOS" value={String(sold.length)} />
         <Stat label="ENCERRADOS" value={String(closed.length)} />
       </section>
 
