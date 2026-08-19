@@ -72,7 +72,13 @@ export function GarimpoCard({ g }: { g: Garimpo }) {
   const locked = isPrime && !isClosed;
 
   return (
-    <article className="edge-light hover-lift flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-surface/50 shadow-[var(--shadow-elevated)] backdrop-blur-xl">
+    <article
+      className={`edge-light hover-lift flex h-full flex-col overflow-hidden rounded-2xl border bg-surface/50 shadow-[var(--shadow-elevated)] backdrop-blur-xl ${
+        isPrime
+          ? "border-prime/30 border-t-prime/70"
+          : "border-border/80"
+      }`}
+    >
       <div className="flex items-center justify-between gap-3 border-b border-border px-6 py-4">
         <span className="inline-flex items-center gap-2 text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">
           {isPrime && <Lock className="size-3" />}
