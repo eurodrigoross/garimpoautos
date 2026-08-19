@@ -11,12 +11,8 @@ const problems = [
   ["04", "OPORTUNIDADES QUE PASSAM"],
 ];
 
-const steps = [
-  ["01", "GARIMPAMOS", "Monitoramos leilões e encontramos lotes."],
-  ["02", "ANALISAMOS", "Estudamos números, condições e riscos."],
-  ["03", "SELECIONAMOS", "Só o que faz sentido segue adiante."],
-  ["04", "DISPONIBILIZAMOS", "A oportunidade chega até você."],
-];
+
+
 
 const yes = [
   "Quer encontrar oportunidades em leilões.",
