@@ -1,0 +1,3 @@
+GRANT SELECT (id, code, vehicle_name, year, mileage_km, transmission, fuel, location, fipe_value, market_value, garimpo_value, discount_fipe_percent, market_difference, main_image_url, positives, attention_points, garimpo_note, access_type, status, published, published_at, closed_at, created_at, updated_at, sold_at) ON public.garimpos TO anon, authenticated;
+GRANT INSERT, UPDATE, DELETE ON public.garimpos TO authenticated;
+GRANT ALL ON public.garimpos TO service_role;
