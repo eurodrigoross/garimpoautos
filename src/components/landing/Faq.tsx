@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Reveal } from "./Reveal";
 
-const faq = [
+export const FAQ_ITEMS: [string, string][] = [
   [
     "COMO FUNCIONA A GARIMPO AUTO?",
     "Monitoramos leilões, filtramos lotes e analisamos as informações disponíveis. As oportunidades selecionadas são disponibilizadas para a comunidade.",
