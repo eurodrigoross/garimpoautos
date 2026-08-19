@@ -11,7 +11,6 @@ import {
   StatusChip,
   inputClass,
 } from "@/components/admin/ui";
-import { SITE } from "@/lib/site";
 
 export const Route = createFileRoute("/admin/_shell/garimpos/")({
   head: () => ({
@@ -136,11 +135,7 @@ function GarimpoRow({ g }: { g: AdminGarimpo }) {
 
   const ask = (label: string, run: () => void) => setConfirming({ label, run });
 
-  const patch = (data: Parameters<typeof update.mutate>[0], message: string) =>
-    update.mutate({ ...data }, { onSuccess: () => undefined, onSettled: () => setConfirming(null) }) ??
-    message;
-
-  const radarUrl = `/#garimpos`;
+  const radarUrl = "/#garimpos";
 
   return (
     <Panel className="p-4">
@@ -248,7 +243,7 @@ function GarimpoRow({ g }: { g: AdminGarimpo }) {
           </GhostButton>
 
           <a
-            href={g.published ? radarUrl : SITE.url ?? "/"}
+            href={radarUrl}
             target="_blank"
             rel="noreferrer"
             className="rounded-md border border-border/60 px-3 py-1.5 text-[10px] font-medium tracking-[0.16em] text-muted-foreground transition-colors hover:border-foreground/50 hover:text-foreground"
