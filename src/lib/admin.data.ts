@@ -1,0 +1,72 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+
+import {
+  checkAdmin,
+  getGarimpo,
+  listGarimpos,
+  updateGarimpo,
+  uploadGarimpoImage,
+  type AdminGarimpo,
+  type GarimpoPatch,
+} from "@/lib/admin.functions";
+
+export const ADMIN_KEYS = {
+  me: ["admin", "me"] as const,
+  list: ["admin", "garimpos"] as const,
+  one: (id: string) => ["admin", "garimpo", id] as const,
+};
+
+export function useAdminSession() {
+  const fn = useServerFn(checkAdmin);
+  return useQuery({ queryKey: ADMIN_KEYS.me, queryFn: () => fn(), retry: false, staleTime: 60_000 });
+}
+
+export function useAdminGarimpos() {
+  const fn = useServerFn(listGarimpos);
+  return useQuery({ queryKey: ADMIN_KEYS.list, queryFn: () => fn(), retry: false });
+}
+
+export function useAdminGarimpo(id: string) {
+  const fn = useServerFn(getGarimpo);
+  return useQuery({
+    queryKey: ADMIN_KEYS.one(id),
+    queryFn: () => fn({ data: { id } }),
+    retry: false,
+    enabled: Boolean(id),
+  });
+}
+
+export function useUpdateGarimpo(successMessage = "Garimpo atualizado.") {
+  const fn = useServerFn(updateGarimpo);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (patch: GarimpoPatch) => fn({ data: patch }) as Promise<AdminGarimpo>,
+    onSuccess: (saved) => {
+      qc.setQueryData(ADMIN_KEYS.one(saved.id), saved);
+      void qc.invalidateQueries({ queryKey: ADMIN_KEYS.list });
+      void qc.invalidateQueries({ queryKey: ["garimpos-public"] });
+      toast.success(successMessage);
+    },
+    onError: (error: Error) => toast.error(error.message || "Erro ao atualizar."),
+  });
+}
+
+export function useUploadGarimpoImage() {
+  const fn = useServerFn(uploadGarimpoImage);
+  return useMutation({
+    mutationFn: async (input: { file: File; code: string }) => {
+      const buffer = await input.file.arrayBuffer();
+      let binary = "";
+      const bytes = new Uint8Array(buffer);
+      for (let i = 0; i < bytes.length; i += 1) binary += String.fromCharCode(bytes[i] as number);
+      return fn({
+        data: { code: input.code, contentType: input.file.type, base64: btoa(binary) },
+      }) as Promise<{ main_image_url: string; path: string }>;
+    },
+    onError: (error: Error) => toast.error(error.message || "Erro ao enviar a foto."),
+  });
+}
+
+export type { AdminGarimpo };
