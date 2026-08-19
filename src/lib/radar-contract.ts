@@ -130,8 +130,8 @@ const enumValue = <T extends string>(
   return v as T;
 };
 
-const httpsUrl = (v: unknown, field: string): string | null => {
-  const s = cleanString(v, field, 500);
+const httpsUrl = (v: unknown, field: string, max = 500): string | null => {
+  const s = cleanString(v, field, max);
   if (!s) return null;
   let url: URL;
   try {
