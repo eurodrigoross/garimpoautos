@@ -63,7 +63,7 @@ function Index() {
         <Solution />
         <TimeSaved />
         <ForWho />
-        <Proof />
+        
         <Transparency />
         <PrimeEcosystem />
         <Pricing />
