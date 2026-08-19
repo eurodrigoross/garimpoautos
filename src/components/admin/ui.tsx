@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
+import { PrimeBadge } from "@/components/PrimeBadge";
 import type { RadarAccessType, RadarStatus } from "@/lib/radar-contract";
 
 export const STATUS_TEXT: Record<RadarStatus, string> = {
@@ -49,7 +50,8 @@ export function StatusChip({ status }: { status: RadarStatus }) {
 }
 
 export function AccessChip({ access }: { access: RadarAccessType }) {
-  return <Chip tone={access === "PRIME" ? "prime" : "muted"}>{ACCESS_TEXT[access]}</Chip>;
+  if (access === "PRIME") return <PrimeBadge size="sm" />;
+  return <Chip tone="muted">{ACCESS_TEXT[access]}</Chip>;
 }
 
 export function PublishChip({ published }: { published: boolean }) {

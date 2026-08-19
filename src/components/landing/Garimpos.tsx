@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowRight, ImageIcon, Lock } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { GarimpoPoints } from "./GarimpoPoints";
+import { PrimeBadge } from "@/components/PrimeBadge";
 import { brl, waGarimpoLink, waGarimpoPrimeLink, WHATSAPP_FREE } from "@/lib/site";
 import { useGarimpos } from "@/lib/garimpos.data";
 import {
@@ -82,7 +83,13 @@ export function GarimpoCard({ g }: { g: Garimpo }) {
       <div className="flex items-center justify-between gap-3 border-b border-border px-6 py-4">
         <span className="inline-flex items-center gap-2 text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">
           {isPrime && <Lock className="size-3" />}
-          {ACCESS_LABEL[g.access]}
+          {isPrime ? (
+            <>
+              GARIMPO <PrimeBadge size="sm" />
+            </>
+          ) : (
+            ACCESS_LABEL[g.access]
+          )}
         </span>
         <span className="rounded-full border border-foreground/25 px-3 py-1 text-[9px] font-bold tracking-[0.16em] text-muted-foreground">
           {STATUS_LABEL[g.status]}
@@ -158,9 +165,7 @@ export function GarimpoCard({ g }: { g: Garimpo }) {
             className="sheen group flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-[11px] font-bold tracking-[0.14em] text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-hover)]"
           >
             <span>DESBLOQUEAR GARIMPO</span>
-            <span className="rounded-md bg-prime px-2 py-1 text-[9px] font-extrabold tracking-[0.16em] text-prime-foreground">
-              PRIME
-            </span>
+            <PrimeBadge />
             <Lock className="size-3.5" />
           </a>
         ) : (
@@ -197,7 +202,13 @@ function PlaceholderCard({
     <article className="flex h-full flex-col rounded-2xl border border-dashed border-border-strong/60 bg-surface/20 p-6">
       <span className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.18em] text-foreground/60">
         {prime && <Lock className="size-3" />}
-        PRÓXIMO GARIMPO {kind}
+        {prime ? (
+          <>
+            PRÓXIMO GARIMPO <PrimeBadge size="sm" />
+          </>
+        ) : (
+          `PRÓXIMO GARIMPO ${kind}`
+        )}
       </span>
       <p className="mt-3 text-sm font-semibold leading-snug text-foreground/70">
         {prime

@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { WHATSAPP_FREE, WHATSAPP_PRIME } from "@/lib/site";
+import { PrimeBadge } from "@/components/PrimeBadge";
 import { BrandLockup } from "@/components/Brand";
 
 
@@ -126,7 +127,9 @@ export function MobileBar() {
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border glass px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] font-bold tracking-[0.18em] text-foreground">GARIMPO PRIME</p>
+          <p className="flex items-center gap-1.5 text-[10px] font-bold tracking-[0.18em] text-foreground">
+            GARIMPO <PrimeBadge size="sm" />
+          </p>
           <p className="text-[11px] text-muted-foreground">R$ 50/mês</p>
         </div>
         <a
