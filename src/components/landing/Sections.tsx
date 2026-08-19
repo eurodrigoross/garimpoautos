@@ -201,7 +201,7 @@ export function Transparency() {
                 {example ? brl(example.garimpo) : "R$ —"}
               </p>
               {example && (
-                <p className="mt-1 text-[11px] text-muted-foreground">{example.vehicle}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground">EXEMPLO</p>
               )}
               <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
                 Veículo + taxas do leilão + comissão do leiloeiro + ágio Garimpo já inclusos.
