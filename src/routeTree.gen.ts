@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiRadarPublishRouteImport } from './routes/api/radar/publish'
 import { Route as ApiRadarUploadImageRouteImport } from './routes/api/radar/upload-image'
+import { Route as ApiPublicRadarHealthRouteImport } from './routes/api/public/radar/health'
 import { Route as ApiPublicRadarPublishRouteImport } from './routes/api/public/radar/publish'
 import { Route as ApiPublicRadarUploadImageRouteImport } from './routes/api/public/radar/upload-image'
 
@@ -30,6 +31,11 @@ const ApiRadarUploadImageRoute = ApiRadarUploadImageRouteImport.update({
   path: '/api/radar/upload-image',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicRadarHealthRoute = ApiPublicRadarHealthRouteImport.update({
+  id: '/api/public/radar/health',
+  path: '/api/public/radar/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicRadarPublishRoute = ApiPublicRadarPublishRouteImport.update({
   id: '/api/public/radar/publish',
   path: '/api/public/radar/publish',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
+  '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
 }
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
+  '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
 }
@@ -61,6 +69,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
+  '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
 }
@@ -70,6 +79,7 @@ export interface FileRouteTypes {
     | '/'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
+    | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
   fileRoutesByTo: FileRoutesByTo
@@ -77,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
+    | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
   id:
@@ -84,6 +95,7 @@ export interface FileRouteTypes {
     | '/'
     | '/api/radar/publish'
     | '/api/radar/upload-image'
+    | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
   fileRoutesById: FileRoutesById
@@ -92,6 +104,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiRadarPublishRoute: typeof ApiRadarPublishRoute
   ApiRadarUploadImageRoute: typeof ApiRadarUploadImageRoute
+  ApiPublicRadarHealthRoute: typeof ApiPublicRadarHealthRoute
   ApiPublicRadarPublishRoute: typeof ApiPublicRadarPublishRoute
   ApiPublicRadarUploadImageRoute: typeof ApiPublicRadarUploadImageRoute
 }
@@ -119,6 +132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRadarUploadImageRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/radar/health': {
+      id: '/api/public/radar/health'
+      path: '/api/public/radar/health'
+      fullPath: '/api/public/radar/health'
+      preLoaderRoute: typeof ApiPublicRadarHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/radar/publish': {
       id: '/api/public/radar/publish'
       path: '/api/public/radar/publish'
@@ -140,6 +160,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiRadarPublishRoute: ApiRadarPublishRoute,
   ApiRadarUploadImageRoute: ApiRadarUploadImageRoute,
+  ApiPublicRadarHealthRoute: ApiPublicRadarHealthRoute,
   ApiPublicRadarPublishRoute: ApiPublicRadarPublishRoute,
   ApiPublicRadarUploadImageRoute: ApiPublicRadarUploadImageRoute,
 }
