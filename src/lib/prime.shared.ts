@@ -6,9 +6,9 @@ import type { Garimpo, GarimpoAccess, GarimpoStatus } from "@/lib/garimpos";
 
 /** Colunas liberadas ao membro Prime. internal_base_cost / internal_agio JAMAIS entram aqui. */
 export const PRIME_GARIMPO_COLUMNS =
-  "id, code, vehicle_name, year, mileage_km, transmission, fuel, location, fipe_value, market_value, garimpo_value, discount_fipe_percent, market_difference, main_image_url, positives, attention_points, garimpo_note, access_type, status, published_at, closed_at";
+  "id, code, vehicle_name, year, mileage_km, transmission, fuel, location, fipe_value, market_value, garimpo_value, discount_fipe_percent, market_difference, main_image_url, positives, attention_points, garimpo_note, access_type, status, published_at, closed_at, sold_at";
 
-/** Limite de encerrados recentes carregados na Área Prime. */
+/** Limite de encerrados/vendidos recentes carregados na Área Prime. */
 export const PRIME_CLOSED_LIMIT = 20;
 
 export type PrimeContent = {
