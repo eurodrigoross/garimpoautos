@@ -24,10 +24,10 @@ function scorePassword(password: string): number {
 }
 
 function strengthLabel(score: number): { label: string; color: string; width: string } {
-  if (score <= 2) return { label: "Fraca", color: "bg-red-500", width: "w-1/5" };
-  if (score <= 3) return { label: "Média", color: "bg-amber-500", width: "w-2/5" };
-  if (score <= 5) return { label: "Forte", color: "bg-emerald-500", width: "w-4/5" };
-  return { label: "Muito forte", color: "bg-emerald-400", width: "w-full" };
+  if (score <= 2) return { label: "Fraca", color: "bg-muted-foreground/40", width: "w-1/5" };
+  if (score <= 3) return { label: "Média", color: "bg-muted-foreground/70", width: "w-2/5" };
+  if (score <= 5) return { label: "Forte", color: "bg-foreground/80", width: "w-4/5" };
+  return { label: "Muito forte", color: "bg-foreground", width: "w-full" };
 }
 
 export function PasswordStrength({ password }: PasswordStrengthProps) {
@@ -42,7 +42,7 @@ export function PasswordStrength({ password }: PasswordStrengthProps) {
         </span>
         <span
           className={`text-xs font-semibold uppercase tracking-wider ${
-            score <= 2 ? "text-red-400" : score <= 3 ? "text-amber-400" : "text-emerald-400"
+            score <= 2 ? "text-muted-foreground" : score <= 3 ? "text-foreground/70" : "text-foreground"
           }`}
         >
           {password.length > 0 ? label : "—"}
@@ -65,7 +65,7 @@ export function PasswordStrength({ password }: PasswordStrengthProps) {
                   password.length === 0
                     ? "bg-white/10 text-white/30"
                     : passed
-                      ? "bg-emerald-500/20 text-emerald-400"
+                      ? "bg-foreground text-background"
                       : "bg-white/10 text-white/40"
                 }`}
               >
@@ -76,7 +76,7 @@ export function PasswordStrength({ password }: PasswordStrengthProps) {
                   password.length === 0
                     ? "text-white/40"
                     : passed
-                      ? "text-emerald-300"
+                      ? "text-foreground"
                       : "text-white/60"
                 }`}
               >
