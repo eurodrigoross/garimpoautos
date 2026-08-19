@@ -101,6 +101,75 @@ export type Database = {
         }
         Relationships: []
       }
+      memberships: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          plan: string
+          starts_at: string
+          status: Database["public"]["Enums"]["membership_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          plan?: string
+          starts_at?: string
+          status?: Database["public"]["Enums"]["membership_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          plan?: string
+          starts_at?: string
+          status?: Database["public"]["Enums"]["membership_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      prime_contents: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          excerpt: string | null
+          id: string
+          published: boolean
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -196,6 +265,78 @@ export type Database = {
         }
         Relationships: []
       }
+      garimpos_teaser: {
+        Row: {
+          access_type: Database["public"]["Enums"]["garimpo_access"] | null
+          attention_points: string[] | null
+          closed_at: string | null
+          code: string | null
+          discount_fipe_percent: number | null
+          fipe_value: number | null
+          fuel: string | null
+          garimpo_note: string | null
+          garimpo_value: number | null
+          id: string | null
+          location: string | null
+          main_image_url: string | null
+          market_difference: number | null
+          market_value: number | null
+          mileage_km: string | null
+          positives: string[] | null
+          published_at: string | null
+          status: Database["public"]["Enums"]["garimpo_status"] | null
+          transmission: string | null
+          vehicle_name: string | null
+          year: string | null
+        }
+        Insert: {
+          access_type?: Database["public"]["Enums"]["garimpo_access"] | null
+          attention_points?: string[] | null
+          closed_at?: string | null
+          code?: string | null
+          discount_fipe_percent?: number | null
+          fipe_value?: number | null
+          fuel?: string | null
+          garimpo_note?: never
+          garimpo_value?: never
+          id?: string | null
+          location?: string | null
+          main_image_url?: string | null
+          market_difference?: never
+          market_value?: number | null
+          mileage_km?: string | null
+          positives?: string[] | null
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["garimpo_status"] | null
+          transmission?: string | null
+          vehicle_name?: string | null
+          year?: string | null
+        }
+        Update: {
+          access_type?: Database["public"]["Enums"]["garimpo_access"] | null
+          attention_points?: string[] | null
+          closed_at?: string | null
+          code?: string | null
+          discount_fipe_percent?: number | null
+          fipe_value?: number | null
+          fuel?: string | null
+          garimpo_note?: never
+          garimpo_value?: never
+          id?: string | null
+          location?: string | null
+          main_image_url?: string | null
+          market_difference?: never
+          market_value?: number | null
+          mileage_km?: string | null
+          positives?: string[] | null
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["garimpo_status"] | null
+          transmission?: string | null
+          vehicle_name?: string | null
+          year?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
@@ -205,11 +346,13 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_prime_member: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
       garimpo_access: "OPEN" | "PRIME"
       garimpo_status: "AVAILABLE" | "RESERVED" | "CLOSED"
+      membership_status: "active" | "inactive" | "expired" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -340,6 +483,7 @@ export const Constants = {
       app_role: ["admin", "moderator", "user"],
       garimpo_access: ["OPEN", "PRIME"],
       garimpo_status: ["AVAILABLE", "RESERVED", "CLOSED"],
+      membership_status: ["active", "inactive", "expired", "cancelled"],
     },
   },
 } as const
