@@ -15,6 +15,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminShellIndexRouteImport } from './routes/admin/_shell/index'
 import { Route as ApiRadarPublishRouteImport } from './routes/api/radar/publish'
 import { Route as ApiRadarUploadImageRouteImport } from './routes/api/radar/upload-image'
+import { Route as AdminShellGarimposIndexRouteImport } from './routes/admin/_shell/garimpos.index'
 import { Route as ApiPublicRadarHealthRouteImport } from './routes/api/public/radar/health'
 import { Route as ApiPublicRadarPublishRouteImport } from './routes/api/public/radar/publish'
 import { Route as ApiPublicRadarUploadImageRouteImport } from './routes/api/public/radar/upload-image'
@@ -49,6 +50,11 @@ const ApiRadarUploadImageRoute = ApiRadarUploadImageRouteImport.update({
   path: '/api/radar/upload-image',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminShellGarimposIndexRoute = AdminShellGarimposIndexRouteImport.update({
+  id: '/garimpos/',
+  path: '/garimpos/',
+  getParentRoute: () => AdminShellRoute,
+} as any)
 const ApiPublicRadarHealthRoute = ApiPublicRadarHealthRouteImport.update({
   id: '/api/public/radar/health',
   path: '/api/public/radar/health',
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
+  '/admin/garimpos/': typeof AdminShellGarimposIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
+  '/admin/garimpos': typeof AdminShellGarimposIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
+  '/admin/_shell/garimpos/': typeof AdminShellGarimposIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
+    | '/admin/garimpos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
+    | '/admin/garimpos'
   id:
     | '__root__'
     | '/'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
+    | '/admin/_shell/garimpos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,6 +201,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRadarUploadImageRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/_shell/garimpos/': {
+      id: '/admin/_shell/garimpos/'
+      path: '/garimpos'
+      fullPath: '/admin/garimpos/'
+      preLoaderRoute: typeof AdminShellGarimposIndexRouteImport
+      parentRoute: typeof AdminShellRoute
+    }
     '/api/public/radar/health': {
       id: '/api/public/radar/health'
       path: '/api/public/radar/health'
@@ -215,10 +234,12 @@ declare module '@tanstack/react-router' {
 
 interface AdminShellRouteChildren {
   AdminShellIndexRoute: typeof AdminShellIndexRoute
+  AdminShellGarimposIndexRoute: typeof AdminShellGarimposIndexRoute
 }
 
 const AdminShellRouteChildren: AdminShellRouteChildren = {
   AdminShellIndexRoute: AdminShellIndexRoute,
+  AdminShellGarimposIndexRoute: AdminShellGarimposIndexRoute,
 }
 
 const AdminShellRouteWithChildren = AdminShellRoute._addFileChildren(
