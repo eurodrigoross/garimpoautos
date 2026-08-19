@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { BrandMark } from "@/components/Brand";
 
 export const Route = createFileRoute("/admin/login")({
   ssr: false,
@@ -40,7 +41,8 @@ function AdminLogin() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm">
-        <div className="mb-10 text-center">
+        <div className="mb-10 flex flex-col items-center text-center">
+          <BrandMark className="mb-4 size-12" />
           <p className="text-sm font-semibold tracking-[0.35em] text-foreground">GARIMPO AUTO</p>
           <p className="mt-2 text-[11px] tracking-[0.3em] text-muted-foreground">
             PAINEL ADMINISTRATIVO
