@@ -4,6 +4,7 @@ import { usePrimeGarimpo } from "@/lib/prime.data";
 import { formatBRL, formatDate, formatPct } from "@/lib/garimpo-finance";
 import { PrimeBadge } from "@/components/PrimeBadge";
 import { waGarimpoPrimeLink } from "@/lib/site";
+import { STATUS_LABEL, isInactiveStatus } from "@/lib/garimpos";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/prime/_shell/garimpos/$id")({
