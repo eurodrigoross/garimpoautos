@@ -1,5 +1,8 @@
-export type TeaserRow = Record<string, unknown> & {
-  status?: string | null;
+export type TeaserValue = string | number | boolean | string[] | null;
+
+export type TeaserRow = {
+  [key: string]: TeaserValue;
+  status: string | null;
 };
 
 /**
