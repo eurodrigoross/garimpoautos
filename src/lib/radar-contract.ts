@@ -5,7 +5,7 @@
  */
 
 export const ACCESS_TYPES = ["OPEN", "PRIME"] as const;
-export const STATUSES = ["AVAILABLE", "RESERVED", "CLOSED"] as const;
+export const STATUSES = ["AVAILABLE", "RESERVED", "SOLD", "CLOSED"] as const;
 
 export type RadarAccessType = (typeof ACCESS_TYPES)[number];
 export type RadarStatus = (typeof STATUSES)[number];
