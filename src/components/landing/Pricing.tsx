@@ -1,6 +1,7 @@
 import { Check, Clock } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { WHATSAPP_FREE, WHATSAPP_PRIME } from "@/lib/site";
+import { PrimeBadge } from "@/components/PrimeBadge";
 
 const free = [
   "Acesso à comunidade Garimpo Aberto",
@@ -68,8 +69,8 @@ export function PrimeEcosystem() {
         <span className="text-[10px] font-semibold tracking-[0.22em] text-muted-foreground">
           O ECOSSISTEMA
         </span>
-        <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-          GARIMPO PRIME
+        <h2 className="mt-4 flex flex-wrap items-center gap-2.5 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+          GARIMPO <PrimeBadge size="lg" />
         </h2>
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
           Seu ecossistema para comprar, organizar e vender melhor.
@@ -96,7 +97,9 @@ export function PrimeEcosystem() {
               {p.soon.length > 0 && (
                 <div className="mt-6 rounded-xl border border-dashed border-border-strong/60 p-4">
                   <p className="text-[10px] font-bold tracking-[0.18em] text-foreground/60">
-                    ROADMAP PRIME — EM DESENVOLVIMENTO
+                    <span className="inline-flex items-center gap-2">
+                      ROADMAP <PrimeBadge size="sm" /> — EM DESENVOLVIMENTO
+                    </span>
                   </p>
                   <ul className="mt-3 space-y-3">
                     {p.soon.map((t) => (
@@ -200,7 +203,9 @@ export function Pricing() {
             <span className="absolute -top-3 left-7 rounded-full bg-primary px-3 py-1 text-[9px] font-bold tracking-[0.16em] text-primary-foreground">
               MAIS ACESSADO
             </span>
-            <h3 className="text-[12px] font-bold tracking-[0.2em] text-foreground">GARIMPO PRIME</h3>
+            <h3 className="flex items-center gap-2 text-[12px] font-bold tracking-[0.2em] text-foreground">
+              GARIMPO <PrimeBadge size="sm" />
+            </h3>
             <p className="mt-4 text-4xl font-extrabold tracking-tight text-foreground">
               R$ 50<span className="text-base font-semibold text-muted-foreground">/mês</span>
             </p>
@@ -221,7 +226,9 @@ export function Pricing() {
               rel="noopener noreferrer"
               className="sheen mt-8 flex items-center justify-center rounded-xl bg-primary px-5 py-3.5 text-[12px] font-bold tracking-wide text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-hover)]"
             >
-              QUERO SER PRIME
+              <span className="inline-flex items-center gap-2">
+                QUERO SER <PrimeBadge size="sm" />
+              </span>
             </a>
             <p className="mt-3 text-center text-[11px] text-muted-foreground">
               Cancele quando quiser.
