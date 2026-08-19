@@ -187,52 +187,54 @@ export function ForWho() {
   );
 }
 
-export function Proof() {
-  return (
-    <section className="mx-auto max-w-6xl border-t border-border px-5 py-20 sm:px-8">
-      <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
-        <Reveal>
-          <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-            NÃO PROMETEMOS MÁGICA.
-            <br />
-            <span className="text-muted-foreground">PROMETEMOS PROCESSO.</span>
-          </h2>
-        </Reveal>
-        <Reveal delay={100}>
-          <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-            <p>
-              Leilão envolve riscos. Um preço baixo não transforma automaticamente um veículo em uma
-              oportunidade.
-            </p>
-            <p>A nossa função é procurar, filtrar e analisar as oportunidades disponíveis.</p>
-            <p className="font-semibold text-foreground">Você decide.</p>
-          </div>
-        </Reveal>
-      </div>
-
-    </section>
-  );
-}
-
 export function Transparency() {
+  const { data } = useGarimpos();
+  const example =
+    (data ?? []).find((g) => g.access === "OPEN" && typeof g.garimpo === "number") ??
+    (data ?? []).find((g) => typeof g.garimpo === "number");
+
   return (
     <section className="border-y border-border bg-surface/30">
-      <div className="mx-auto max-w-4xl px-5 py-20 text-center sm:px-8">
-        <Reveal>
-          <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-            UM VALOR. SEM PEGADINHA.
-          </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            O <span className="font-semibold text-foreground">Valor Garimpo</span> é o valor
-            apresentado para aquela oportunidade. FIPE e média de mercado aparecem apenas como
-            referência de comparação.
-          </p>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Eventuais custos externos ou operacionais — como transporte, documentação ou despachante
-            — dependem de cada operação e são informados e tratados caso a caso, antes da conclusão.
-          </p>
-        </Reveal>
+      <div className="mx-auto max-w-5xl px-5 py-20 sm:px-8">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
+          <Reveal>
+            <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+              NÃO PROMETEMOS MÁGICA.
+              <br />
+              <span className="text-muted-foreground">PROMETEMOS TRANSPARÊNCIA.</span>
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              Analisamos e selecionamos oportunidades. A decisão final é sempre sua. E quando
+              mostramos um Valor Garimpo, mostramos o número que realmente importa.
+            </p>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <div className="rounded-2xl border border-border/80 bg-background/60 p-7 backdrop-blur-md">
+              <p className="text-[10px] font-bold tracking-[0.2em] text-muted-foreground">
+                VALOR FINAL GARIMPO
+              </p>
+              <p className="mt-2 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+                {example ? brl(example.garimpo) : "R$ —"}
+              </p>
+              {example && (
+                <p className="mt-1 text-[11px] text-muted-foreground">{example.vehicle}</p>
+              )}
+              <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+                Veículo + taxas do leilão + comissão do leiloeiro + ágio Garimpo já inclusos.
+              </p>
+              <p className="mt-4 text-[11px] font-bold tracking-[0.16em] text-foreground">
+                SEM TAXA SURPRESA DEPOIS.
+              </p>
+              <p className="mt-4 text-[10px] leading-relaxed text-muted-foreground">
+                Transporte e documentação/despachante, quando necessários, são custos externos e não
+                estão inclusos.
+              </p>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
 }
+
