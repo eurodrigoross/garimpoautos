@@ -1,5 +1,8 @@
 import { Check, X } from "lucide-react";
 import { Reveal } from "./Reveal";
+import { useGarimpos } from "@/lib/garimpos.data";
+import { brl } from "@/lib/site";
+
 
 const problems = [
   ["01", "CENTENAS DE LOTES"],
