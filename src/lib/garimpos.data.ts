@@ -36,6 +36,7 @@ const mapRow = (row: Row): Garimpo => ({
   note: str(row["garimpo_note"] as string | null),
   publishedAt: str(row["published_at"] as string | null),
   closedAt: str(row["closed_at"] as string | null),
+  soldAt: str(row["sold_at"] as string | null),
 });
 
 const sortGarimpos = (list: Garimpo[]) =>
