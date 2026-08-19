@@ -142,7 +142,7 @@ function GarimpoRow({ g }: { g: AdminGarimpo }) {
       <div className="flex flex-wrap items-start gap-4">
         <div className="h-16 w-24 shrink-0 overflow-hidden rounded-md border border-border/50 bg-muted/20">
           {g.main_image_url ? (
-            <img src={g.main_image_url} alt={g.vehicle_name} className="h-full w-full object-cover" loading="lazy" />
+            <img src={g.main_image_url} alt={g.vehicle_name} className="h-full w-full object-contain p-0.5" loading="lazy" />
           ) : (
             <div className="flex h-full items-center justify-center text-[9px] tracking-[0.2em] text-muted-foreground/60">
               SEM FOTO

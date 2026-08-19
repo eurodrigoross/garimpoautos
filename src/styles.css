@@ -46,6 +46,9 @@
   --color-emerald-foreground: var(--emerald-foreground);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
+  --color-prime: var(--prime);
+  --color-prime-foreground: var(--prime-foreground);
+
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
@@ -83,6 +86,12 @@
   --border-strong: oklch(0.4 0 0);
   --input: oklch(0.4 0 0);
   --ring: oklch(0.985 0 0);
+
+  /* Única cor do painel: azul PRIME */
+  --prime: oklch(0.55 0.16 258);
+  --prime-foreground: oklch(0.99 0 0);
+
+
 
   /* Monochrome accents: "gold" and "emerald" tokens now render as white/greys */
   --gold: oklch(0.985 0 0);
