@@ -36,9 +36,21 @@ function AdminAccount() {
     const { error } = await supabase.auth.updateUser({ password });
     setSaving(false);
     if (error) {
-      toast.error(error.message);
+      const raw = error.message.toLowerCase();
+      if (raw.includes("known") || raw.includes("pwned") || raw.includes("breach") || raw.includes("weak")) {
+        toast.error(
+          "Essa senha aparece em vazamentos públicos e foi bloqueada. Use uma senha única (ex.: 3 palavras + números e símbolos).",
+        );
+      } else if (raw.includes("should be different")) {
+        toast.error("A nova senha precisa ser diferente da atual.");
+      } else if (raw.includes("at least")) {
+        toast.error("Senha muito curta para a política de segurança.");
+      } else {
+        toast.error(error.message);
+      }
       return;
     }
+
     setPassword("");
     setConfirm("");
     toast.success("Senha atualizada.");
