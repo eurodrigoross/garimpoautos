@@ -155,9 +155,13 @@ export function GarimpoCard({ g }: { g: Garimpo }) {
             href={waGarimpoPrimeLink(g)}
             target="_blank"
             rel="noopener noreferrer"
-            className="sheen flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-[11px] font-bold tracking-[0.14em] text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-hover)]"
+            className="sheen group flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-[11px] font-bold tracking-[0.14em] text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-hover)]"
           >
-            DESBLOQUEAR GARIMPO <Lock className="size-3.5" />
+            <span>DESBLOQUEAR GARIMPO</span>
+            <span className="rounded-md bg-prime px-2 py-1 text-[9px] font-extrabold tracking-[0.16em] text-prime-foreground">
+              PRIME
+            </span>
+            <Lock className="size-3.5" />
           </a>
         ) : (
           <a
