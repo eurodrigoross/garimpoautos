@@ -21,6 +21,7 @@ import { Route as ApiRadarPublishRouteImport } from './routes/api/radar/publish'
 import { Route as ApiRadarUploadImageRouteImport } from './routes/api/radar/upload-image'
 import { Route as PrimeShellIndexRouteImport } from './routes/prime/_shell/index'
 import { Route as PrimeShellCalculadoraRouteImport } from './routes/prime/_shell/calculadora'
+import { Route as PrimeShellContaRouteImport } from './routes/prime/_shell/conta'
 import { Route as AdminShellGarimposIndexRouteImport } from './routes/admin/_shell/garimpos.index'
 import { Route as AdminShellGarimposIdRouteImport } from './routes/admin/_shell/garimpos.$id'
 import { Route as ApiPublicRadarHealthRouteImport } from './routes/api/public/radar/health'
@@ -91,6 +92,11 @@ const PrimeShellCalculadoraRoute = PrimeShellCalculadoraRouteImport.update({
   path: '/calculadora',
   getParentRoute: () => PrimeShellRoute,
 } as any)
+const PrimeShellContaRoute = PrimeShellContaRouteImport.update({
+  id: '/conta',
+  path: '/conta',
+  getParentRoute: () => PrimeShellRoute,
+} as any)
 const AdminShellGarimposIndexRoute = AdminShellGarimposIndexRouteImport.update({
   id: '/garimpos/',
   path: '/garimpos/',
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/prime/calculadora': typeof PrimeShellCalculadoraRoute
+  '/prime/conta': typeof PrimeShellContaRoute
   '/admin/': typeof AdminShellIndexRoute
   '/prime/': typeof PrimeShellIndexRoute
   '/admin/garimpos/$id': typeof AdminShellGarimposIdRoute
@@ -171,6 +178,7 @@ export interface FileRoutesByTo {
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/prime/calculadora': typeof PrimeShellCalculadoraRoute
+  '/prime/conta': typeof PrimeShellContaRoute
   '/admin': typeof AdminShellIndexRoute
   '/prime': typeof PrimeShellIndexRoute
   '/admin/garimpos/$id': typeof AdminShellGarimposIdRoute
@@ -195,6 +203,7 @@ export interface FileRoutesById {
   '/api/radar/publish': typeof ApiRadarPublishRoute
   '/api/radar/upload-image': typeof ApiRadarUploadImageRoute
   '/prime/_shell/calculadora': typeof PrimeShellCalculadoraRoute
+  '/prime/_shell/conta': typeof PrimeShellContaRoute
   '/admin/_shell/': typeof AdminShellIndexRoute
   '/prime/_shell/': typeof PrimeShellIndexRoute
   '/admin/_shell/garimpos/$id': typeof AdminShellGarimposIdRoute
@@ -220,6 +229,7 @@ export interface FileRouteTypes {
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/prime/calculadora'
+    | '/prime/conta'
     | '/admin/'
     | '/prime/'
     | '/admin/garimpos/$id'
@@ -241,6 +251,7 @@ export interface FileRouteTypes {
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/prime/calculadora'
+    | '/prime/conta'
     | '/admin'
     | '/prime'
     | '/admin/garimpos/$id'
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '/api/radar/publish'
     | '/api/radar/upload-image'
     | '/prime/_shell/calculadora'
+    | '/prime/_shell/conta'
     | '/admin/_shell/'
     | '/prime/_shell/'
     | '/admin/_shell/garimpos/$id'
@@ -377,6 +389,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrimeShellCalculadoraRouteImport
       parentRoute: typeof PrimeShellRoute
     }
+    '/prime/_shell/conta': {
+      id: '/prime/_shell/conta'
+      path: '/conta'
+      fullPath: '/prime/conta'
+      preLoaderRoute: typeof PrimeShellContaRouteImport
+      parentRoute: typeof PrimeShellRoute
+    }
     '/admin/_shell/garimpos/': {
       id: '/admin/_shell/garimpos/'
       path: '/garimpos'
@@ -463,6 +482,7 @@ const AdminShellRouteWithChildren = AdminShellRoute._addFileChildren(
 
 interface PrimeShellRouteChildren {
   PrimeShellCalculadoraRoute: typeof PrimeShellCalculadoraRoute
+  PrimeShellContaRoute: typeof PrimeShellContaRoute
   PrimeShellIndexRoute: typeof PrimeShellIndexRoute
   PrimeShellConteudosSlugRoute: typeof PrimeShellConteudosSlugRoute
   PrimeShellGarimposIdRoute: typeof PrimeShellGarimposIdRoute
@@ -472,6 +492,7 @@ interface PrimeShellRouteChildren {
 
 const PrimeShellRouteChildren: PrimeShellRouteChildren = {
   PrimeShellCalculadoraRoute: PrimeShellCalculadoraRoute,
+  PrimeShellContaRoute: PrimeShellContaRoute,
   PrimeShellIndexRoute: PrimeShellIndexRoute,
   PrimeShellConteudosSlugRoute: PrimeShellConteudosSlugRoute,
   PrimeShellGarimposIdRoute: PrimeShellGarimposIdRoute,
