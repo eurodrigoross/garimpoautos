@@ -51,6 +51,7 @@ export type Garimpo = {
   note?: string | undefined;
   publishedAt?: string | undefined;
   closedAt?: string | undefined;
+  soldAt?: string | undefined;
 };
 
 /** Limite de garimpos ENCERRADOS exibidos publicamente. Prova de operação, não arquivo. */
