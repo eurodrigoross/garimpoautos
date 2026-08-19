@@ -27,6 +27,7 @@ import { Route as ApiPublicRadarHealthRouteImport } from './routes/api/public/ra
 import { Route as ApiPublicRadarPublishRouteImport } from './routes/api/public/radar/publish'
 import { Route as ApiPublicRadarUploadImageRouteImport } from './routes/api/public/radar/upload-image'
 import { Route as PrimeShellConteudosIndexRouteImport } from './routes/prime/_shell/conteudos.index'
+import { Route as PrimeShellConteudosSlugRouteImport } from './routes/prime/_shell/conteudos.$slug'
 import { Route as PrimeShellGarimposIndexRouteImport } from './routes/prime/_shell/garimpos.index'
 import { Route as PrimeShellGarimposIdRouteImport } from './routes/prime/_shell/garimpos.$id'
 
@@ -122,6 +123,11 @@ const PrimeShellConteudosIndexRoute =
     path: '/conteudos/',
     getParentRoute: () => PrimeShellRoute,
   } as any)
+const PrimeShellConteudosSlugRoute = PrimeShellConteudosSlugRouteImport.update({
+  id: '/conteudos/$slug',
+  path: '/conteudos/$slug',
+  getParentRoute: () => PrimeShellRoute,
+} as any)
 const PrimeShellGarimposIndexRoute = PrimeShellGarimposIndexRouteImport.update({
   id: '/garimpos/',
   path: '/garimpos/',
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
+  '/prime/conteudos/$slug': typeof PrimeShellConteudosSlugRoute
   '/prime/garimpos/$id': typeof PrimeShellGarimposIdRoute
   '/admin/garimpos/': typeof AdminShellGarimposIndexRoute
   '/prime/conteudos/': typeof PrimeShellConteudosIndexRoute
@@ -170,6 +177,7 @@ export interface FileRoutesByTo {
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
+  '/prime/conteudos/$slug': typeof PrimeShellConteudosSlugRoute
   '/prime/garimpos/$id': typeof PrimeShellGarimposIdRoute
   '/admin/garimpos': typeof AdminShellGarimposIndexRoute
   '/prime/conteudos': typeof PrimeShellConteudosIndexRoute
@@ -193,6 +201,7 @@ export interface FileRoutesById {
   '/api/public/radar/health': typeof ApiPublicRadarHealthRoute
   '/api/public/radar/publish': typeof ApiPublicRadarPublishRoute
   '/api/public/radar/upload-image': typeof ApiPublicRadarUploadImageRoute
+  '/prime/_shell/conteudos/$slug': typeof PrimeShellConteudosSlugRoute
   '/prime/_shell/garimpos/$id': typeof PrimeShellGarimposIdRoute
   '/admin/_shell/garimpos/': typeof AdminShellGarimposIndexRoute
   '/prime/_shell/conteudos/': typeof PrimeShellConteudosIndexRoute
@@ -217,6 +226,7 @@ export interface FileRouteTypes {
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
+    | '/prime/conteudos/$slug'
     | '/prime/garimpos/$id'
     | '/admin/garimpos/'
     | '/prime/conteudos/'
@@ -237,6 +247,7 @@ export interface FileRouteTypes {
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
+    | '/prime/conteudos/$slug'
     | '/prime/garimpos/$id'
     | '/admin/garimpos'
     | '/prime/conteudos'
@@ -259,6 +270,7 @@ export interface FileRouteTypes {
     | '/api/public/radar/health'
     | '/api/public/radar/publish'
     | '/api/public/radar/upload-image'
+    | '/prime/_shell/conteudos/$slug'
     | '/prime/_shell/garimpos/$id'
     | '/admin/_shell/garimpos/'
     | '/prime/_shell/conteudos/'
@@ -407,6 +419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrimeShellConteudosIndexRouteImport
       parentRoute: typeof PrimeShellRoute
     }
+    '/prime/_shell/conteudos/$slug': {
+      id: '/prime/_shell/conteudos/$slug'
+      path: '/conteudos/$slug'
+      fullPath: '/prime/conteudos/$slug'
+      preLoaderRoute: typeof PrimeShellConteudosSlugRouteImport
+      parentRoute: typeof PrimeShellRoute
+    }
     '/prime/_shell/garimpos/': {
       id: '/prime/_shell/garimpos/'
       path: '/garimpos'
@@ -445,6 +464,7 @@ const AdminShellRouteWithChildren = AdminShellRoute._addFileChildren(
 interface PrimeShellRouteChildren {
   PrimeShellCalculadoraRoute: typeof PrimeShellCalculadoraRoute
   PrimeShellIndexRoute: typeof PrimeShellIndexRoute
+  PrimeShellConteudosSlugRoute: typeof PrimeShellConteudosSlugRoute
   PrimeShellGarimposIdRoute: typeof PrimeShellGarimposIdRoute
   PrimeShellConteudosIndexRoute: typeof PrimeShellConteudosIndexRoute
   PrimeShellGarimposIndexRoute: typeof PrimeShellGarimposIndexRoute
@@ -453,6 +473,7 @@ interface PrimeShellRouteChildren {
 const PrimeShellRouteChildren: PrimeShellRouteChildren = {
   PrimeShellCalculadoraRoute: PrimeShellCalculadoraRoute,
   PrimeShellIndexRoute: PrimeShellIndexRoute,
+  PrimeShellConteudosSlugRoute: PrimeShellConteudosSlugRoute,
   PrimeShellGarimposIdRoute: PrimeShellGarimposIdRoute,
   PrimeShellConteudosIndexRoute: PrimeShellConteudosIndexRoute,
   PrimeShellGarimposIndexRoute: PrimeShellGarimposIndexRoute,
