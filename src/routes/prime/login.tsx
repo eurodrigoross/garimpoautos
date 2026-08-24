@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { BrandMark } from "@/components/Brand";
 import { PrimeBadge } from "@/components/PrimeBadge";
+import { PasswordStrength } from "@/components/admin/password-strength";
 
 export const Route = createFileRoute("/prime/login")({
   ssr: false,
@@ -28,6 +29,14 @@ export const Route = createFileRoute("/prime/login")({
 });
 
 type Mode = "login" | "signup";
+
+const passwordRules = [
+  (v: string) => v.length >= 8,
+  (v: string) => /[A-Z]/.test(v),
+  (v: string) => /[a-z]/.test(v),
+  (v: string) => /\d/.test(v),
+  (v: string) => /[^A-Za-z0-9]/.test(v),
+];
 
 function PrimeLogin() {
   const navigate = useNavigate();
