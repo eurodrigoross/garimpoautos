@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { BrandMark } from "@/components/Brand";
 import { PrimeBadge } from "@/components/PrimeBadge";
+import { PasswordStrength } from "@/components/admin/password-strength";
 
 export const Route = createFileRoute("/prime/login")({
   ssr: false,
@@ -29,6 +30,14 @@ export const Route = createFileRoute("/prime/login")({
 
 type Mode = "login" | "signup";
 
+const passwordRules = [
+  (v: string) => v.length >= 8,
+  (v: string) => /[A-Z]/.test(v),
+  (v: string) => /[a-z]/.test(v),
+  (v: string) => /\d/.test(v),
+  (v: string) => /[^A-Za-z0-9]/.test(v),
+];
+
 function PrimeLogin() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>("login");
@@ -37,6 +46,11 @@ function PrimeLogin() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const allRulesMet = useMemo(
+    () => passwordRules.every((rule) => rule(password)),
+    [password],
+  );
 
   useEffect(() => {
     void supabase.auth.getUser().then(({ data }) => {
@@ -51,6 +65,11 @@ function PrimeLogin() {
     setInfo(null);
 
     if (mode === "signup") {
+      if (!allRulesMet) {
+        setLoading(false);
+        setError("A senha não atende a todos os requisitos de segurança.");
+        return;
+      }
       const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
@@ -125,12 +144,14 @@ function PrimeLogin() {
             />
           </div>
 
+          {mode === "signup" ? <PasswordStrength password={password} /> : null}
+
           {error ? <p className="text-xs text-destructive">{error}</p> : null}
           {info ? <p className="text-xs text-muted-foreground">{info}</p> : null}
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || (mode === "signup" && !allRulesMet)}
             className="w-full rounded-md bg-foreground px-4 py-2.5 text-xs font-semibold tracking-[0.2em] text-background transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             {loading ? "AGUARDE..." : mode === "login" ? "ENTRAR" : "CRIAR ACESSO"}
