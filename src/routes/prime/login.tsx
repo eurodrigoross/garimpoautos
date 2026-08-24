@@ -47,6 +47,11 @@ function PrimeLogin() {
   const [info, setInfo] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const allRulesMet = useMemo(
+    () => passwordRules.every((rule) => rule(password)),
+    [password],
+  );
+
   useEffect(() => {
     void supabase.auth.getUser().then(({ data }) => {
       if (data.user) void navigate({ to: "/prime", replace: true });
@@ -60,6 +65,11 @@ function PrimeLogin() {
     setInfo(null);
 
     if (mode === "signup") {
+      if (!allRulesMet) {
+        setLoading(false);
+        setError("A senha não atende a todos os requisitos de segurança.");
+        return;
+      }
       const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
