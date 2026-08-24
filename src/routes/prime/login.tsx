@@ -144,12 +144,14 @@ function PrimeLogin() {
             />
           </div>
 
+          {mode === "signup" ? <PasswordStrength password={password} /> : null}
+
           {error ? <p className="text-xs text-destructive">{error}</p> : null}
           {info ? <p className="text-xs text-muted-foreground">{info}</p> : null}
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || (mode === "signup" && !allRulesMet)}
             className="w-full rounded-md bg-foreground px-4 py-2.5 text-xs font-semibold tracking-[0.2em] text-background transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             {loading ? "AGUARDE..." : mode === "login" ? "ENTRAR" : "CRIAR ACESSO"}
