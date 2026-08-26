@@ -192,7 +192,7 @@ function Membros() {
                         user_id: m.userId,
                         email: form.email.trim() || null,
                         full_name: form.full_name.trim() || null,
-                        password: form.password || undefined,
+                        password: form.password,
                       },
                       { onSuccess: () => setEditing(null) },
                     );
