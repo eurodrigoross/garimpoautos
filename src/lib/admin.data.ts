@@ -9,6 +9,9 @@ import {
   listGarimpos,
   listMembers,
   setMembership,
+  updateMember,
+  setMemberBlocked,
+  deleteMember,
   updateGarimpo,
   uploadGarimpoImage,
   type AdminGarimpo,
@@ -107,6 +110,50 @@ export function useSetMembership() {
       toast.success("Acesso Prime atualizado.");
     },
     onError: (error: Error) => toast.error(error.message || "Erro ao atualizar acesso."),
+  });
+}
+
+export function useUpdateMember() {
+  const fn = useServerFn(updateMember);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: {
+      user_id: string;
+      email?: string | null;
+      full_name?: string | null;
+      password?: string;
+    }) => fn({ data: input }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: MEMBER_KEYS.list });
+      toast.success("Perfil atualizado.");
+    },
+    onError: (error: Error) => toast.error(error.message || "Erro ao atualizar perfil."),
+  });
+}
+
+export function useSetMemberBlocked() {
+  const fn = useServerFn(setMemberBlocked);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { user_id: string; blocked: boolean }) => fn({ data: input }),
+    onSuccess: (_d, v) => {
+      void qc.invalidateQueries({ queryKey: MEMBER_KEYS.list });
+      toast.success(v.blocked ? "Membro inativado." : "Membro reativado.");
+    },
+    onError: (error: Error) => toast.error(error.message || "Erro ao alterar status."),
+  });
+}
+
+export function useDeleteMember() {
+  const fn = useServerFn(deleteMember);
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { user_id: string }) => fn({ data: input }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: MEMBER_KEYS.list });
+      toast.success("Membro excluído.");
+    },
+    onError: (error: Error) => toast.error(error.message || "Erro ao excluir membro."),
   });
 }
 

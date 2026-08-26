@@ -16,6 +16,7 @@ import {
   type RadarStatus,
 } from "@/lib/radar-contract";
 import { computeFinance } from "@/lib/garimpo-finance";
+import { failedPasswordRules, isValidEmail } from "@/lib/password-policy";
 
 const BUCKET = "garimpo-images";
 const SIGNED_URL_TTL = 60 * 60 * 24 * 3650;
@@ -293,6 +294,8 @@ export const uploadGarimpoImage = createServerFn({ method: "POST" })
 export type AdminMember = {
   userId: string;
   email: string | null;
+  fullName: string | null;
+  blocked: boolean;
   createdAt: string;
   lastSignInAt: string | null;
   isAdmin: boolean;
@@ -322,9 +325,13 @@ export const listMembers = createServerFn({ method: "GET" })
     return users.users.map((u) => {
       const m = byUser.get(u.id);
       const expired = Boolean(m?.expires_at && new Date(m.expires_at).getTime() <= Date.now());
+      const meta = (u.user_metadata ?? {}) as Record<string, unknown>;
+      const bannedUntil = (u as { banned_until?: string | null }).banned_until ?? null;
       return {
         userId: u.id,
         email: u.email ?? null,
+        fullName: (meta["full_name"] as string) ?? null,
+        blocked: Boolean(bannedUntil && new Date(bannedUntil).getTime() > Date.now()),
         createdAt: u.created_at,
         lastSignInAt: u.last_sign_in_at ?? null,
         isAdmin: admins.has(u.id),
@@ -364,6 +371,82 @@ export const setMembership = createServerFn({ method: "POST" })
         } as never,
         { onConflict: "user_id,plan" },
       );
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+
+/** Atualiza perfil do membro (e-mail, nome e senha opcional). */
+export const updateMember = createServerFn({ method: "POST" })
+  .inputValidator((raw: unknown) => {
+    const o = asObject(raw);
+    const { id } = asId({ id: o["user_id"] });
+    const email = optText(o["email"], 255);
+    const fullName = optText(o["full_name"], 120);
+    const password = typeof o["password"] === "string" ? (o["password"] as string) : "";
+    if (email && !isValidEmail(email)) throw new Error("E-mail inválido.");
+    if (password) {
+      const failed = failedPasswordRules(password);
+      if (failed.length > 0) throw new Error(`A senha não atende aos requisitos: ${failed.join(", ")}.`);
+    }
+    return { user_id: id, email, full_name: fullName, password };
+  })
+  .middleware([requireAdmin])
+  .handler(async ({ data }) => {
+    const db = await admin();
+    const payload: Record<string, unknown> = { user_metadata: { full_name: data.full_name } };
+    if (data.email) payload["email"] = data.email;
+    if (data.password) payload["password"] = data.password;
+    const { error } = await db.auth.admin.updateUserById(data.user_id, payload as never);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/** Bloqueia (inativa) ou reativa o login do membro. */
+export const setMemberBlocked = createServerFn({ method: "POST" })
+  .inputValidator((raw: unknown) => {
+    const o = asObject(raw);
+    const { id } = asId({ id: o["user_id"] });
+    return { user_id: id, blocked: Boolean(o["blocked"]) };
+  })
+  .middleware([requireAdmin])
+  .handler(async ({ data, context }) => {
+    if (data.user_id === context.userId) throw new Error("Você não pode bloquear a própria conta.");
+    const db = await admin();
+    const { error } = await db.auth.admin.updateUserById(data.user_id, {
+      ban_duration: data.blocked ? "876000h" : "none",
+    } as never);
+    if (error) throw new Error(error.message);
+    if (data.blocked) {
+      await db
+        .from("memberships")
+        .update({ status: "inactive" } as never)
+        .eq("user_id", data.user_id);
+    }
+    return { ok: true };
+  });
+
+/** Exclui definitivamente o membro e seus vínculos. */
+export const deleteMember = createServerFn({ method: "POST" })
+  .inputValidator((raw: unknown) => {
+    const o = asObject(raw);
+    const { id } = asId({ id: o["user_id"] });
+    return { user_id: id };
+  })
+  .middleware([requireAdmin])
+  .handler(async ({ data, context }) => {
+    if (data.user_id === context.userId) throw new Error("Você não pode excluir a própria conta.");
+    const db = await admin();
+    const { data: isAdminTarget } = await db
+      .from("user_roles")
+      .select("id")
+      .eq("user_id", data.user_id)
+      .eq("role", "admin")
+      .maybeSingle();
+    if (isAdminTarget) throw new Error("Remova o papel de admin antes de excluir este usuário.");
+
+    await db.from("memberships").delete().eq("user_id", data.user_id);
+    const { error } = await db.auth.admin.deleteUser(data.user_id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });

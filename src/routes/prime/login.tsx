@@ -1,10 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { BrandMark } from "@/components/Brand";
 import { PrimeBadge } from "@/components/PrimeBadge";
 import { PasswordStrength } from "@/components/admin/password-strength";
+import { signUpPrimeAccount } from "@/lib/auth.functions";
+import { PASSWORD_RULES } from "@/lib/password-policy";
 
 export const Route = createFileRoute("/prime/login")({
   ssr: false,
@@ -30,16 +33,9 @@ export const Route = createFileRoute("/prime/login")({
 
 type Mode = "login" | "signup";
 
-const passwordRules = [
-  (v: string) => v.length >= 8,
-  (v: string) => /[A-Z]/.test(v),
-  (v: string) => /[a-z]/.test(v),
-  (v: string) => /\d/.test(v),
-  (v: string) => /[^A-Za-z0-9]/.test(v),
-];
-
 function PrimeLogin() {
   const navigate = useNavigate();
+  const signUp = useServerFn(signUpPrimeAccount);
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,7 +44,7 @@ function PrimeLogin() {
   const [loading, setLoading] = useState(false);
 
   const allRulesMet = useMemo(
-    () => passwordRules.every((rule) => rule(password)),
+    () => PASSWORD_RULES.every((rule) => rule.test(password)),
     [password],
   );
 
@@ -70,20 +66,16 @@ function PrimeLogin() {
         setError("A senha não atende a todos os requisitos de segurança.");
         return;
       }
-      const { error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: `${window.location.origin}/prime` },
-      });
-      setLoading(false);
-      if (signUpError) {
-        setError(
-          signUpError.message.toLowerCase().includes("registered")
-            ? "Esse e-mail já possui cadastro. Faça login."
-            : signUpError.message,
-        );
+      try {
+        await signUp({
+          data: { email, password, redirectTo: `${window.location.origin}/prime` },
+        });
+      } catch (err) {
+        setLoading(false);
+        setError(err instanceof Error ? err.message : "Não foi possível criar o acesso.");
         return;
       }
+      setLoading(false);
       setInfo("Cadastro criado. Se pedirmos confirmação por e-mail, confirme e volte para entrar.");
       setMode("login");
       return;
@@ -138,16 +130,23 @@ function PrimeLogin() {
               required
               minLength={8}
               autoComplete={mode === "login" ? "current-password" : "new-password"}
+              aria-describedby={mode === "signup" ? "password-requirements" : undefined}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-md border border-border/60 bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-foreground/40"
             />
           </div>
 
-          {mode === "signup" ? <PasswordStrength password={password} /> : null}
+          {mode === "signup" ? (
+            <PasswordStrength password={password} id="password-requirements" />
+          ) : null}
 
-          {error ? <p className="text-xs text-destructive">{error}</p> : null}
-          {info ? <p className="text-xs text-muted-foreground">{info}</p> : null}
+          <div aria-live="assertive" role="alert">
+            {error ? <p className="text-xs text-destructive">{error}</p> : null}
+          </div>
+          <div aria-live="polite">
+            {info ? <p className="text-xs text-muted-foreground">{info}</p> : null}
+          </div>
 
           <button
             type="submit"
