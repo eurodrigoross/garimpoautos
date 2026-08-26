@@ -85,13 +85,14 @@ function PrimeConta() {
           <input
             type="password"
             autoComplete="new-password"
+            aria-describedby="conta-password-requirements"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-2 w-full rounded-md border border-border/50 bg-background px-3 py-2 text-sm outline-none focus:border-foreground/40"
           />
         </label>
 
-        <PasswordStrength password={password} />
+        <PasswordStrength password={password} id="conta-password-requirements" />
 
         <label className="block">
           <span className="text-[10px] tracking-[0.18em] text-muted-foreground">CONFIRMAR SENHA</span>
