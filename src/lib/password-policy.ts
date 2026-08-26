@@ -14,7 +14,7 @@ export const PASSWORD_RULES = [
 export const MAX_PASSWORD_LENGTH = 72;
 
 export function failedPasswordRules(password: string): string[] {
-  const failed = PASSWORD_RULES.filter((r) => !r.test(password)).map((r) => r.label);
+  const failed: string[] = PASSWORD_RULES.filter((r) => !r.test(password)).map((r) => r.label);
   if (password.length > MAX_PASSWORD_LENGTH) failed.push("No máximo 72 caracteres");
   return failed;
 }

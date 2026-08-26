@@ -37,11 +37,11 @@ export const signUpPrimeAccount = createServerFn({ method: "POST" })
     });
 
     const origin = /^https?:\/\//.test(data.redirectTo) ? data.redirectTo : undefined;
-    const { error } = await client.auth.signUp({
-      email: data.email,
-      password: data.password,
-      options: origin ? { emailRedirectTo: origin } : undefined,
-    });
+    const { error } = await client.auth.signUp(
+      origin
+        ? { email: data.email, password: data.password, options: { emailRedirectTo: origin } }
+        : { email: data.email, password: data.password },
+    );
 
     if (error) {
       const msg = error.message.toLowerCase();
