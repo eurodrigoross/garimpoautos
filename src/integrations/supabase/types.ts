@@ -173,6 +173,78 @@ export type Database = {
         }
         Relationships: []
       }
+      user_deals: {
+        Row: {
+          acquisition_value: number
+          created_at: string
+          documentation_cost: number
+          fipe_value: number | null
+          garimpo_code: string | null
+          garimpo_id: string | null
+          id: string
+          image_url: string | null
+          notes: string | null
+          other_cost: number
+          repair_cost: number
+          sale_date: string | null
+          sale_notes: string | null
+          sale_value: number | null
+          source: Database["public"]["Enums"]["user_deal_source"]
+          status: Database["public"]["Enums"]["user_deal_status"]
+          transport_cost: number
+          updated_at: string
+          user_id: string
+          vehicle_name: string
+          year_model: string | null
+        }
+        Insert: {
+          acquisition_value?: number
+          created_at?: string
+          documentation_cost?: number
+          fipe_value?: number | null
+          garimpo_code?: string | null
+          garimpo_id?: string | null
+          id?: string
+          image_url?: string | null
+          notes?: string | null
+          other_cost?: number
+          repair_cost?: number
+          sale_date?: string | null
+          sale_notes?: string | null
+          sale_value?: number | null
+          source?: Database["public"]["Enums"]["user_deal_source"]
+          status?: Database["public"]["Enums"]["user_deal_status"]
+          transport_cost?: number
+          updated_at?: string
+          user_id: string
+          vehicle_name: string
+          year_model?: string | null
+        }
+        Update: {
+          acquisition_value?: number
+          created_at?: string
+          documentation_cost?: number
+          fipe_value?: number | null
+          garimpo_code?: string | null
+          garimpo_id?: string | null
+          id?: string
+          image_url?: string | null
+          notes?: string | null
+          other_cost?: number
+          repair_cost?: number
+          sale_date?: string | null
+          sale_notes?: string | null
+          sale_value?: number | null
+          source?: Database["public"]["Enums"]["user_deal_source"]
+          status?: Database["public"]["Enums"]["user_deal_status"]
+          transport_cost?: number
+          updated_at?: string
+          user_id?: string
+          vehicle_name?: string
+          year_model?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -287,6 +359,13 @@ export type Database = {
       garimpo_access: "OPEN" | "PRIME"
       garimpo_status: "AVAILABLE" | "RESERVED" | "CLOSED" | "SOLD"
       membership_status: "active" | "inactive" | "expired" | "cancelled"
+      user_deal_source: "GARIMPO_AUTO" | "MANUAL"
+      user_deal_status:
+        | "ANALYSIS"
+        | "ACQUIRED"
+        | "PREPARING"
+        | "FOR_SALE"
+        | "SOLD"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -418,6 +497,14 @@ export const Constants = {
       garimpo_access: ["OPEN", "PRIME"],
       garimpo_status: ["AVAILABLE", "RESERVED", "CLOSED", "SOLD"],
       membership_status: ["active", "inactive", "expired", "cancelled"],
+      user_deal_source: ["GARIMPO_AUTO", "MANUAL"],
+      user_deal_status: [
+        "ANALYSIS",
+        "ACQUIRED",
+        "PREPARING",
+        "FOR_SALE",
+        "SOLD",
+      ],
     },
   },
 } as const
