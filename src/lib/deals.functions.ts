@@ -87,7 +87,7 @@ export const createMyDeal = createServerFn({ method: "POST" })
     const r = (raw ?? {}) as Record<string, unknown>;
     const vehicleName = text(r["vehicleName"], 160);
     if (!vehicleName) throw new Error("Informe o veículo.");
-    const source = r["source"] === "GARIMPO_AUTO" ? "GARIMPO_AUTO" : "MANUAL";
+    const source: "GARIMPO_AUTO" | "MANUAL" = r["source"] === "GARIMPO_AUTO" ? "GARIMPO_AUTO" : "MANUAL";
     const status: DealStatus = r["status"] === "ACQUIRED" ? "ACQUIRED" : "ANALYSIS";
     return {
       source,
@@ -195,7 +195,7 @@ export const updateMyDeal = createServerFn({ method: "POST" })
 
     const { data: row, error } = await context.supabase
       .from("user_deals")
-      .update(patch)
+      .update(patch as never)
       .eq("id", data.id)
       .eq("user_id", context.userId)
       .select(DEAL_COLUMNS)
