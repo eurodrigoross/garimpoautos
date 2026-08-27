@@ -33,8 +33,7 @@ export function useCreateDeal() {
   const fn = useServerFn(createMyDeal);
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: Parameters<typeof fn>[0] extends { data: infer D } ? D : never) =>
-      fn({ data } as never),
+    mutationFn: (data: Record<string, unknown>) => fn({ data } as never),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: DEAL_KEYS.all });
     },
