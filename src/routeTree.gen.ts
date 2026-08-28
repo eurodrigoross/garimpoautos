@@ -32,6 +32,7 @@ import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/em
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as PrimeShellArrematesIndexRouteImport } from './routes/prime/_shell/arremates.index'
+import { Route as PrimeShellArrematesIdRouteImport } from './routes/prime/_shell/arremates.$id'
 import { Route as PrimeShellConteudosIndexRouteImport } from './routes/prime/_shell/conteudos.index'
 import { Route as PrimeShellConteudosSlugRouteImport } from './routes/prime/_shell/conteudos.$slug'
 import { Route as PrimeShellGarimposIndexRouteImport } from './routes/prime/_shell/garimpos.index'
@@ -155,6 +156,11 @@ const PrimeShellArrematesIndexRoute =
     path: '/arremates/',
     getParentRoute: () => PrimeShellRoute,
   } as any)
+const PrimeShellArrematesIdRoute = PrimeShellArrematesIdRouteImport.update({
+  id: '/arremates/$id',
+  path: '/arremates/$id',
+  getParentRoute: () => PrimeShellRoute,
+} as any)
 const PrimeShellConteudosIndexRoute =
   PrimeShellConteudosIndexRouteImport.update({
     id: '/conteudos/',
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/prime/arremates/$id': typeof PrimeShellArrematesIdRoute
   '/prime/conteudos/$slug': typeof PrimeShellConteudosSlugRoute
   '/prime/garimpos/$id': typeof PrimeShellGarimposIdRoute
   '/admin/garimpos/': typeof AdminShellGarimposIndexRoute
@@ -226,6 +233,7 @@ export interface FileRoutesByTo {
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/prime/arremates/$id': typeof PrimeShellArrematesIdRoute
   '/prime/conteudos/$slug': typeof PrimeShellConteudosSlugRoute
   '/prime/garimpos/$id': typeof PrimeShellGarimposIdRoute
   '/admin/garimpos': typeof AdminShellGarimposIndexRoute
@@ -256,6 +264,7 @@ export interface FileRoutesById {
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/prime/_shell/arremates/$id': typeof PrimeShellArrematesIdRoute
   '/prime/_shell/conteudos/$slug': typeof PrimeShellConteudosSlugRoute
   '/prime/_shell/garimpos/$id': typeof PrimeShellGarimposIdRoute
   '/admin/_shell/garimpos/': typeof AdminShellGarimposIndexRoute
@@ -287,6 +296,7 @@ export interface FileRouteTypes {
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
+    | '/prime/arremates/$id'
     | '/prime/conteudos/$slug'
     | '/prime/garimpos/$id'
     | '/admin/garimpos/'
@@ -314,6 +324,7 @@ export interface FileRouteTypes {
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
+    | '/prime/arremates/$id'
     | '/prime/conteudos/$slug'
     | '/prime/garimpos/$id'
     | '/admin/garimpos'
@@ -343,6 +354,7 @@ export interface FileRouteTypes {
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
+    | '/prime/_shell/arremates/$id'
     | '/prime/_shell/conteudos/$slug'
     | '/prime/_shell/garimpos/$id'
     | '/admin/_shell/garimpos/'
@@ -531,6 +543,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrimeShellArrematesIndexRouteImport
       parentRoute: typeof PrimeShellRoute
     }
+    '/prime/_shell/arremates/$id': {
+      id: '/prime/_shell/arremates/$id'
+      path: '/arremates/$id'
+      fullPath: '/prime/arremates/$id'
+      preLoaderRoute: typeof PrimeShellArrematesIdRouteImport
+      parentRoute: typeof PrimeShellRoute
+    }
     '/prime/_shell/conteudos/': {
       id: '/prime/_shell/conteudos/'
       path: '/conteudos'
@@ -586,6 +605,7 @@ interface PrimeShellRouteChildren {
   PrimeShellCalculadoraRoute: typeof PrimeShellCalculadoraRoute
   PrimeShellContaRoute: typeof PrimeShellContaRoute
   PrimeShellIndexRoute: typeof PrimeShellIndexRoute
+  PrimeShellArrematesIdRoute: typeof PrimeShellArrematesIdRoute
   PrimeShellConteudosSlugRoute: typeof PrimeShellConteudosSlugRoute
   PrimeShellGarimposIdRoute: typeof PrimeShellGarimposIdRoute
   PrimeShellArrematesIndexRoute: typeof PrimeShellArrematesIndexRoute
@@ -597,6 +617,7 @@ const PrimeShellRouteChildren: PrimeShellRouteChildren = {
   PrimeShellCalculadoraRoute: PrimeShellCalculadoraRoute,
   PrimeShellContaRoute: PrimeShellContaRoute,
   PrimeShellIndexRoute: PrimeShellIndexRoute,
+  PrimeShellArrematesIdRoute: PrimeShellArrematesIdRoute,
   PrimeShellConteudosSlugRoute: PrimeShellConteudosSlugRoute,
   PrimeShellGarimposIdRoute: PrimeShellGarimposIdRoute,
   PrimeShellArrematesIndexRoute: PrimeShellArrematesIndexRoute,
