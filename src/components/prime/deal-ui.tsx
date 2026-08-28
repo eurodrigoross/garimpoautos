@@ -18,8 +18,8 @@ export function MoneyField({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  hint?: string;
-  placeholder?: string;
+  hint?: string | undefined;
+  placeholder?: string | undefined;
 }) {
   return (
     <label className="block">
@@ -45,7 +45,7 @@ export function TextField({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  placeholder?: string;
+  placeholder?: string | undefined;
 }) {
   return (
     <label className="block">
@@ -69,8 +69,8 @@ export function OfficialCard({
 }: {
   label: string;
   value: string;
-  caption?: string;
-  title?: string;
+  caption?: string | undefined;
+  title?: string | undefined;
 }) {
   return (
     <div
@@ -95,8 +95,8 @@ export function SummaryRow({
 }: {
   label: string;
   value: string;
-  strong?: boolean;
-  sub?: string;
+  strong?: boolean | undefined;
+  sub?: string | undefined;
 }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
