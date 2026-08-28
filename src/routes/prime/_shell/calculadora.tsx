@@ -1,62 +1,102 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
 import { formatBRL } from "@/lib/garimpo-finance";
 import { usePrimeGarimpos } from "@/lib/prime.data";
+import { useCreateDeal } from "@/lib/deals.data";
+import { computeDeal } from "@/lib/deals.shared";
+import {
+  MoneyField,
+  OfficialCard,
+  ResultSummary,
+  TextField,
+  parseMoney,
+} from "@/components/prime/deal-ui";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/prime/_shell/calculadora")({
-  head: () => ({ meta: [{ title: "Calculadora Prime — Garimpo Auto" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [{ title: "Calculadora Prime — Garimpo Auto" }, { name: "robots", content: "noindex" }],
+  }),
   component: Calculadora,
 });
 
-type Fields = {
-  garimpo: string;
-  transporte: string;
-  documentacao: string;
-  reparos: string;
-  outros: string;
-  fipe: string;
-};
+type Mode = "GARIMPO_AUTO" | "MANUAL";
 
-const EMPTY: Fields = {
-  garimpo: "",
-  transporte: "",
-  documentacao: "",
-  reparos: "",
-  outros: "",
-  fipe: "",
-};
+const EMPTY_COSTS = { transporte: "", documentacao: "", reparos: "", outros: "" };
 
-const n = (v: string) => {
-  const parsed = Number(v.replace(/\./g, "").replace(",", "."));
-  return Number.isFinite(parsed) ? parsed : 0;
-};
+const VALOR_GARIMPO_HINT =
+  "Comissão do leiloeiro, taxas administrativas do leilão e ágio Garimpo já inclusos.";
 
 function Calculadora() {
-  const [f, setF] = useState<Fields>(EMPTY);
+  const navigate = useNavigate();
+  const [mode, setMode] = useState<Mode>("GARIMPO_AUTO");
+  const [selectedId, setSelectedId] = useState("");
+  const [costs, setCosts] = useState(EMPTY_COSTS);
+  const [manual, setManual] = useState({ vehicle: "", year: "", acquisition: "", fipe: "" });
+  const [notes, setNotes] = useState("");
+  const [asking, setAsking] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const { data: garimpos } = usePrimeGarimpos();
+  const create = useCreateDeal();
 
-  const set = (key: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setF((prev) => ({ ...prev, [key]: e.target.value }));
+  const selected = useMemo(
+    () => (garimpos ?? []).find((g) => g.id === selectedId) ?? null,
+    [garimpos, selectedId],
+  );
 
-  const result = useMemo(() => {
-    const valorGarimpo = n(f.garimpo);
-    const custosExternos = n(f.transporte) + n(f.documentacao) + n(f.reparos) + n(f.outros);
-    const custoTotal = valorGarimpo + custosExternos;
-    const fipe = n(f.fipe);
-    const margemFipe = fipe > 0 ? fipe - custoTotal : null;
-    const margemPercent = fipe > 0 && custoTotal > 0 ? ((fipe - custoTotal) / custoTotal) * 100 : null;
-    return { valorGarimpo, custosExternos, custoTotal, margemFipe, margemPercent };
-  }, [f]);
+  const setCost = (key: keyof typeof EMPTY_COSTS) => (v: string) =>
+    setCosts((prev) => ({ ...prev, [key]: v }));
 
-  function preencherComGarimpo(id: string) {
-    const g = (garimpos ?? []).find((item) => item.id === id);
-    if (!g) return;
-    setF((prev) => ({
-      ...prev,
-      garimpo: g.garimpo ? String(g.garimpo) : prev.garimpo,
-      fipe: g.fipe ? String(g.fipe) : prev.fipe,
-    }));
+  const acquisition =
+    mode === "GARIMPO_AUTO" ? (selected?.garimpo ?? 0) : parseMoney(manual.acquisition);
+  const fipe = mode === "GARIMPO_AUTO" ? (selected?.fipe ?? 0) : parseMoney(manual.fipe);
+
+  const result = computeDeal({
+    acquisitionValue: acquisition,
+    fipeValue: fipe,
+    transportCost: parseMoney(costs.transporte),
+    documentationCost: parseMoney(costs.documentacao),
+    repairCost: parseMoney(costs.reparos),
+    otherCost: parseMoney(costs.outros),
+  });
+
+  const vehicleName = mode === "GARIMPO_AUTO" ? (selected?.vehicle ?? "") : manual.vehicle.trim();
+  const canSave = vehicleName.length > 0 && acquisition > 0;
+
+  function reset() {
+    setCosts(EMPTY_COSTS);
+    setManual({ vehicle: "", year: "", acquisition: "", fipe: "" });
+    setSelectedId("");
+    setNotes("");
+  }
+
+  async function save(status: "ANALYSIS" | "ACQUIRED") {
+    setError(null);
+    try {
+      const deal = await create.mutateAsync({
+        source: mode,
+        status,
+        garimpoId: mode === "GARIMPO_AUTO" ? (selected?.id ?? null) : null,
+        garimpoCode: mode === "GARIMPO_AUTO" ? (selected?.code ?? null) : null,
+        imageUrl: mode === "GARIMPO_AUTO" ? (selected?.imageUrl ?? null) : null,
+        vehicleName,
+        yearModel: mode === "GARIMPO_AUTO" ? (selected?.year ?? null) : manual.year,
+        acquisitionValue: acquisition,
+        fipeValue: fipe > 0 ? fipe : null,
+        transportCost: parseMoney(costs.transporte),
+        documentationCost: parseMoney(costs.documentacao),
+        repairCost: parseMoney(costs.reparos),
+        otherCost: parseMoney(costs.outros),
+        notes,
+      });
+      setAsking(false);
+      reset();
+      void navigate({ to: "/prime/arremates/$id", params: { id: (deal as { id: string }).id } });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Não foi possível salvar.");
+    }
   }
 
   return (
@@ -64,118 +104,222 @@ function Calculadora() {
       <header>
         <h1 className="text-xl font-semibold tracking-tight">Calculadora de custo total</h1>
         <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          O Valor Garimpo já é o valor final da oportunidade. Aqui você soma apenas os custos
-          externos do seu caso e compara o custo total com a FIPE.
+          Analise uma oportunidade do Garimpo Auto ou um veículo que você mesmo encontrou. Some seus
+          custos e compare o custo total com a FIPE.
         </p>
       </header>
 
-      {garimpos && garimpos.length > 0 ? (
-        <label className="block max-w-sm">
-          <span className="text-[10px] tracking-[0.2em] text-muted-foreground">
-            PREENCHER A PARTIR DE UM GARIMPO
-          </span>
-          <select
-            onChange={(e) => preencherComGarimpo(e.target.value)}
-            defaultValue=""
-            className="mt-2 w-full rounded-md border border-border/50 bg-background px-3 py-2 text-sm outline-none focus:border-foreground/40"
-          >
-            <option value="">Selecionar…</option>
-            {garimpos.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.code} — {g.vehicle}
-              </option>
-            ))}
-          </select>
-        </label>
-      ) : null}
+      <section>
+        <p className="text-[10px] tracking-[0.24em] text-muted-foreground">COMO DESEJA COMEÇAR?</p>
+        <div className="mt-3 inline-flex rounded-lg border border-border/60 p-1">
+          {(
+            [
+              ["GARIMPO_AUTO", "GARIMPO AUTO"],
+              ["MANUAL", "ADICIONAR MANUALMENTE"],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setMode(value)}
+              className={cn(
+                "rounded-md px-4 py-2 text-[10px] tracking-[0.18em] transition-colors",
+                mode === value
+                  ? "bg-foreground text-background"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </section>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-        <div className="grid gap-4 rounded-xl border border-border/50 p-5 sm:grid-cols-2">
-          <div className="sm:col-span-2 rounded-lg border border-border/50 bg-background/40 p-3">
-            <Field label="VALOR GARIMPO (R$)" value={f.garimpo} onChange={set("garimpo")} />
-            <p
-              title="O Valor Garimpo já inclui valor do veículo, comissão do leiloeiro, taxas administrativas do leilão e ágio Garimpo."
-              className="mt-2 text-[10px] leading-relaxed text-muted-foreground"
-            >
-              O Valor Garimpo já inclui valor do veículo, comissão do leiloeiro, taxas
-              administrativas do leilão e ágio Garimpo. Não some esses custos novamente.
+        <div className="space-y-6">
+          {mode === "GARIMPO_AUTO" ? (
+            <section className="space-y-4 rounded-xl border border-border/50 p-5">
+              <label className="block max-w-sm">
+                <span className="text-[10px] tracking-[0.2em] text-muted-foreground">
+                  SELECIONE UM GARIMPO
+                </span>
+                <select
+                  value={selectedId}
+                  onChange={(e) => setSelectedId(e.target.value)}
+                  className="mt-2 w-full rounded-md border border-border/50 bg-background px-3 py-3 text-base outline-none focus:border-foreground/40 sm:py-2 sm:text-sm"
+                >
+                  <option value="">Selecionar…</option>
+                  {(garimpos ?? []).map((g) => (
+                    <option key={g.id} value={g.id}>
+                      {g.code} — {g.vehicle}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              {selected ? (
+                <>
+                  <div className="flex items-center gap-3 border-t border-border/40 pt-4">
+                    {selected.imageUrl ? (
+                      <img
+                        src={selected.imageUrl}
+                        alt={selected.vehicle}
+                        className="h-14 w-20 rounded-md border border-border/40 bg-muted/20 object-contain"
+                        loading="lazy"
+                      />
+                    ) : null}
+                    <div className="min-w-0">
+                      <p className="text-[10px] tracking-[0.2em] text-muted-foreground">
+                        {selected.code}
+                      </p>
+                      <p className="truncate text-sm font-medium">{selected.vehicle}</p>
+                      <p className="text-[11px] text-muted-foreground">{selected.year ?? "—"}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <OfficialCard
+                      label="VALOR GARIMPO"
+                      value={formatBRL(selected.garimpo ?? null)}
+                      caption={`Valor final da oportunidade. ${VALOR_GARIMPO_HINT}`}
+                      title={VALOR_GARIMPO_HINT}
+                    />
+                    <OfficialCard
+                      label="FIPE"
+                      value={formatBRL(selected.fipe ?? null)}
+                      caption="Referência de mercado."
+                    />
+                  </div>
+                </>
+              ) : (
+                <p className="text-[11px] text-muted-foreground">
+                  Escolha um garimpo para carregar veículo, ano, Valor Garimpo e FIPE.
+                </p>
+              )}
+            </section>
+          ) : (
+            <section className="grid gap-4 rounded-xl border border-border/50 p-5 sm:grid-cols-2">
+              <p className="sm:col-span-2 text-[10px] tracking-[0.24em] text-muted-foreground">
+                DADOS DO VEÍCULO
+              </p>
+              <TextField
+                label="NOME / MODELO DO VEÍCULO"
+                value={manual.vehicle}
+                onChange={(v) => setManual((p) => ({ ...p, vehicle: v }))}
+                placeholder="Ex.: Fiat Argo Drive 1.0"
+              />
+              <TextField
+                label="ANO / MODELO"
+                value={manual.year}
+                onChange={(v) => setManual((p) => ({ ...p, year: v }))}
+                placeholder="2020/2021"
+              />
+              <MoneyField
+                label="VALOR DE AQUISIÇÃO (R$)"
+                value={manual.acquisition}
+                onChange={(v) => setManual((p) => ({ ...p, acquisition: v }))}
+                hint="Quanto você pagou (ou pretende pagar) pelo veículo."
+              />
+              <MoneyField
+                label="FIPE (R$)"
+                value={manual.fipe}
+                onChange={(v) => setManual((p) => ({ ...p, fipe: v }))}
+              />
+            </section>
+          )}
+
+          <section className="grid gap-4 rounded-xl border border-border/50 p-5 sm:grid-cols-2">
+            <p className="sm:col-span-2 text-[10px] tracking-[0.24em] text-muted-foreground">
+              SEUS CUSTOS ESTIMADOS
             </p>
-          </div>
-          <Field label="TRANSPORTE / REMOÇÃO (R$)" value={f.transporte} onChange={set("transporte")} />
-          <Field label="DOCUMENTAÇÃO / DESPACHANTE (R$)" value={f.documentacao} onChange={set("documentacao")} />
-          <Field label="REPAROS PREVISTOS (R$)" value={f.reparos} onChange={set("reparos")} />
-          <Field label="OUTROS CUSTOS (R$)" value={f.outros} onChange={set("outros")} />
-          <Field label="FIPE (R$)" value={f.fipe} onChange={set("fipe")} />
-          <button
-            type="button"
-            onClick={() => setF(EMPTY)}
-            className="sm:col-span-2 justify-self-start rounded-md border border-border/60 px-3 py-1.5 text-[10px] tracking-[0.2em] text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground"
-          >
-            LIMPAR
-          </button>
+            <MoneyField
+              label="TRANSPORTE / REMOÇÃO (R$)"
+              value={costs.transporte}
+              onChange={setCost("transporte")}
+            />
+            <MoneyField
+              label="DOCUMENTAÇÃO / DESPACHANTE (R$)"
+              value={costs.documentacao}
+              onChange={setCost("documentacao")}
+            />
+            <MoneyField
+              label="REPAROS / MANUTENÇÃO (R$)"
+              value={costs.reparos}
+              onChange={setCost("reparos")}
+            />
+            <MoneyField label="OUTROS CUSTOS (R$)" value={costs.outros} onChange={setCost("outros")} />
+            <label className="block sm:col-span-2">
+              <span className="text-[10px] tracking-[0.18em] text-muted-foreground">
+                OBSERVAÇÕES (OPCIONAL)
+              </span>
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                rows={3}
+                className="mt-2 w-full rounded-md border border-border/50 bg-background px-3 py-2 text-sm outline-none focus:border-foreground/40"
+              />
+            </label>
+            <button
+              type="button"
+              onClick={reset}
+              className="sm:col-span-2 justify-self-start rounded-md border border-border/60 px-3 py-1.5 text-[10px] tracking-[0.2em] text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground"
+            >
+              LIMPAR
+            </button>
+          </section>
         </div>
 
-        <aside className="h-fit space-y-4 rounded-xl border border-border/50 p-5">
-          <Row label="Valor Garimpo (final)" value={formatBRL(result.valorGarimpo)} />
-          <Row label="Custos externos" value={formatBRL(result.custosExternos)} />
-          <div className="border-t border-border/40 pt-4">
-            <Row label="Custo total estimado" value={formatBRL(result.custoTotal)} strong />
-          </div>
-          <div className="border-t border-border/40 pt-4">
-            <Row
-              label="Margem até a FIPE"
-              value={result.margemFipe === null ? "—" : formatBRL(result.margemFipe)}
-              strong
-            />
-            <Row
-              label="Percentual sobre o custo total"
-              value={
-                result.margemPercent === null
-                  ? "—"
-                  : `${result.margemPercent.toFixed(1).replace(".", ",")}%`
-              }
-            />
-          </div>
-          <p className="text-[10px] leading-relaxed text-muted-foreground">
-            A FIPE é referência de mercado, não preço de venda garantido. Simulação baseada nos
-            valores informados por você — não representa garantia de venda, lucro ou resultado.
-          </p>
+        <aside className="h-fit space-y-5 rounded-xl border border-border/50 p-5 lg:sticky lg:top-6">
+          <ResultSummary
+            acquisitionLabel={mode === "GARIMPO_AUTO" ? "Valor Garimpo (final)" : "Valor de aquisição"}
+            acquisitionValue={acquisition}
+            costs={result.costs}
+            totalCost={result.totalCost}
+            fipe={fipe}
+            fipeMargin={result.fipeMargin}
+            belowFipePct={result.belowFipePct}
+          />
+
+          {asking ? (
+            <div className="space-y-2 border-t border-border/40 pt-4">
+              <p className="text-[10px] tracking-[0.2em] text-muted-foreground">COMO DESEJA SALVAR?</p>
+              <button
+                type="button"
+                disabled={create.isPending}
+                onClick={() => void save("ANALYSIS")}
+                className="w-full rounded-md border border-border/60 px-3 py-2.5 text-[10px] tracking-[0.2em] transition-colors hover:border-foreground/40 disabled:opacity-50"
+              >
+                EM ANÁLISE
+              </button>
+              <button
+                type="button"
+                disabled={create.isPending}
+                onClick={() => void save("ACQUIRED")}
+                className="w-full rounded-md border border-border/60 px-3 py-2.5 text-[10px] tracking-[0.2em] transition-colors hover:border-foreground/40 disabled:opacity-50"
+              >
+                {mode === "GARIMPO_AUTO" ? "ARREMATADO / COMPRADO" : "COMPRADO"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setAsking(false)}
+                className="w-full py-1 text-[10px] tracking-[0.2em] text-muted-foreground hover:text-foreground"
+              >
+                CANCELAR
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              disabled={!canSave}
+              onClick={() => setAsking(true)}
+              className="w-full rounded-md bg-prime px-4 py-3 text-[11px] font-semibold tracking-[0.18em] text-prime-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
+            >
+              SALVAR EM MEUS ARREMATES
+            </button>
+          )}
+          {error ? <p className="text-[11px] text-muted-foreground">{error}</p> : null}
         </aside>
       </div>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
-  return (
-    <label className="block">
-      <span className="text-[10px] tracking-[0.18em] text-muted-foreground">{label}</span>
-      <input
-        inputMode="decimal"
-        value={value}
-        onChange={onChange}
-        placeholder="0"
-        className="mt-2 w-full rounded-md border border-border/50 bg-background px-3 py-2 text-sm tabular-nums outline-none focus:border-foreground/40"
-      />
-    </label>
-  );
-}
-
-function Row({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
-  return (
-    <div className="flex items-baseline justify-between gap-3">
-      <span className="text-[11px] text-muted-foreground">{label}</span>
-      <span className={strong ? "text-base font-semibold tabular-nums" : "text-sm tabular-nums"}>
-        {value}
-      </span>
     </div>
   );
 }
