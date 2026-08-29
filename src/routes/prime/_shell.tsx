@@ -23,11 +23,12 @@ const NAV = [
   { to: "/prime", label: "INÍCIO", exact: true },
   { to: "/prime/garimpos", label: "GARIMPOS", exact: false },
   { to: "/prime/calculadora", label: "CALCULADORA", exact: false },
+  { to: "/prime/arremates", label: "MEUS ARREMATES", exact: false },
   { to: "/prime/conteudos", label: "CONTEÚDOS", exact: false },
   { to: "/prime/conta", label: "MINHA CONTA", exact: false },
 ] as const;
 
-const SOON = ["MEUS ARREMATES", "COMUNIDADE VIP", "MENTORIAS", "FERRAMENTAS AVANÇADAS"];
+const SOON = ["COMUNIDADE VIP", "MENTORIAS", "FERRAMENTAS AVANÇADAS"];
 
 function PrimeShell() {
   const { user } = Route.useRouteContext();
