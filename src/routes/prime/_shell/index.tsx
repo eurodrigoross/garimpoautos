@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { usePrimeGarimpos, usePrimeContents, usePrimeSession } from "@/lib/prime.data";
+import { useMyDeals } from "@/lib/deals.data";
 import { formatBRL, formatDate } from "@/lib/garimpo-finance";
 import { PrimeBadge } from "@/components/PrimeBadge";
 import { WHATSAPP_PRIME } from "@/lib/site";
@@ -20,6 +21,11 @@ function PrimeHome() {
   const reserved = list.filter((g) => g.status === "RESERVED");
   const sold = list.filter((g) => g.status === "SOLD");
   const closed = list.filter((g) => g.status === "CLOSED");
+
+  const myDeals = useMyDeals().data ?? [];
+  const myAnalysis = myDeals.filter((d) => d.status === "ANALYSIS").length;
+  const mySold = myDeals.filter((d) => d.status === "SOLD").length;
+  const myOngoing = myDeals.length - myAnalysis - mySold;
 
   return (
     <div className="space-y-10">
