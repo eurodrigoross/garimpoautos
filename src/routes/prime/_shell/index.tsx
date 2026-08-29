@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { usePrimeGarimpos, usePrimeContents, usePrimeSession } from "@/lib/prime.data";
+import { useMyDeals } from "@/lib/deals.data";
 import { formatBRL, formatDate } from "@/lib/garimpo-finance";
 import { PrimeBadge } from "@/components/PrimeBadge";
 import { WHATSAPP_PRIME } from "@/lib/site";
@@ -21,6 +22,11 @@ function PrimeHome() {
   const sold = list.filter((g) => g.status === "SOLD");
   const closed = list.filter((g) => g.status === "CLOSED");
 
+  const myDeals = useMyDeals().data ?? [];
+  const myAnalysis = myDeals.filter((d) => d.status === "ANALYSIS").length;
+  const mySold = myDeals.filter((d) => d.status === "SOLD").length;
+  const myOngoing = myDeals.length - myAnalysis - mySold;
+
   return (
     <div className="space-y-10">
       <header>
@@ -39,6 +45,20 @@ function PrimeHome() {
         <Stat label="RESERVADOS" value={String(reserved.length)} />
         <Stat label="VENDIDOS" value={String(sold.length)} />
         <Stat label="ENCERRADOS" value={String(closed.length)} />
+      </section>
+
+      <section className="space-y-4">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-xs tracking-[0.24em] text-muted-foreground">MEUS ARREMATES</h2>
+          <Link to="/prime/arremates" className="text-[11px] tracking-[0.16em] hover:underline">
+            ABRIR
+          </Link>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Stat label="EM ANÁLISE" value={String(myAnalysis)} />
+          <Stat label="EM ANDAMENTO" value={String(myOngoing)} />
+          <Stat label="VENDIDOS" value={String(mySold)} />
+        </div>
       </section>
 
       <section className="space-y-4">
