@@ -7,7 +7,15 @@ import { formatBRL, formatDate } from "@/lib/garimpo-finance";
 import { SourceChip, StatusChip } from "@/components/prime/deal-ui";
 import { cn } from "@/lib/utils";
 
+const STATUS_KEYS = ["ALL", "ANALYSIS", "ACQUIRED", "PREPARING", "FOR_SALE", "SOLD"] as const;
+
 export const Route = createFileRoute("/prime/_shell/arremates/")({
+  validateSearch: (search: Record<string, unknown>): { status?: "ALL" | DealStatus } => {
+    const s = String(search["status"] ?? "");
+    return (STATUS_KEYS as readonly string[]).includes(s)
+      ? { status: s as "ALL" | DealStatus }
+      : {};
+  },
   head: () => ({
     meta: [{ title: "Meus Arremates — Garimpo Auto" }, { name: "robots", content: "noindex" }],
   }),
