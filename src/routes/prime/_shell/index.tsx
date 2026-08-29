@@ -43,6 +43,20 @@ function PrimeHome() {
 
       <section className="space-y-4">
         <div className="flex items-baseline justify-between">
+          <h2 className="text-xs tracking-[0.24em] text-muted-foreground">MEUS ARREMATES</h2>
+          <Link to="/prime/arremates" className="text-[11px] tracking-[0.16em] hover:underline">
+            ABRIR
+          </Link>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Stat label="EM ANÁLISE" value={String(myAnalysis)} />
+          <Stat label="EM ANDAMENTO" value={String(myOngoing)} />
+          <Stat label="VENDIDOS" value={String(mySold)} />
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <div className="flex items-baseline justify-between">
           <h2 className="text-xs tracking-[0.24em] text-muted-foreground">GARIMPOS RECENTES</h2>
           <Link to="/prime/garimpos" className="text-[11px] tracking-[0.16em] hover:underline">
             VER TODOS
