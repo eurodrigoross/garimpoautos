@@ -38,6 +38,8 @@ function Calculadora() {
   const [mode, setMode] = useState<Mode>(search.modo === "manual" ? "MANUAL" : "GARIMPO_AUTO");
   const [selectedId, setSelectedId] = useState("");
   const [costs, setCosts] = useState(EMPTY_COSTS);
+  const [extras, setExtras] = useState<{ id: string; label: string; value: number }[]>([]);
+  const [extraDraft, setExtraDraft] = useState("");
   const [manual, setManual] = useState({ vehicle: "", year: "", acquisition: "", fipe: "" });
   const [notes, setNotes] = useState("");
   const [asking, setAsking] = useState(false);
