@@ -60,6 +60,9 @@ function Calculadora() {
     mode === "GARIMPO_AUTO" ? (selected?.garimpo ?? 0) : parseMoney(manual.acquisition);
   const fipe = mode === "GARIMPO_AUTO" ? (selected?.fipe ?? 0) : parseMoney(manual.fipe);
 
+  const extrasTotal = extras.reduce((acc, e) => acc + e.value, 0);
+  const outrosTotal = parseMoney(costs.outros) + extrasTotal;
+
   const result = computeDeal({
     acquisitionValue: acquisition,
     fipeValue: fipe,
