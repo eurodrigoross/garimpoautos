@@ -77,9 +77,21 @@ function Calculadora() {
 
   function reset() {
     setCosts(EMPTY_COSTS);
+    setExtras([]);
+    setExtraDraft("");
     setManual({ vehicle: "", year: "", acquisition: "", fipe: "" });
     setSelectedId("");
     setNotes("");
+  }
+
+  function addExtra() {
+    const value = parseMoney(extraDraft);
+    if (value <= 0) return;
+    setExtras((prev) => [
+      ...prev,
+      { id: `${Date.now()}-${prev.length}`, label: `Extra ${prev.length + 1}`, value },
+    ]);
+    setExtraDraft("");
   }
 
   async function save(status: "ANALYSIS" | "ACQUIRED") {
