@@ -66,7 +66,7 @@ function Calculadora() {
     transportCost: parseMoney(costs.transporte),
     documentationCost: parseMoney(costs.documentacao),
     repairCost: parseMoney(costs.reparos),
-    otherCost: parseMoney(costs.outros),
+    otherCost: outrosTotal,
   });
 
   const vehicleName = mode === "GARIMPO_AUTO" ? (selected?.vehicle ?? "") : manual.vehicle.trim();
