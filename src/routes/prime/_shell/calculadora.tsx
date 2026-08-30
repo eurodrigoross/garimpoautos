@@ -34,7 +34,8 @@ const VALOR_GARIMPO_HINT =
 
 function Calculadora() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<Mode>("GARIMPO_AUTO");
+  const search = Route.useSearch();
+  const [mode, setMode] = useState<Mode>(search.modo === "manual" ? "MANUAL" : "GARIMPO_AUTO");
   const [selectedId, setSelectedId] = useState("");
   const [costs, setCosts] = useState(EMPTY_COSTS);
   const [manual, setManual] = useState({ vehicle: "", year: "", acquisition: "", fipe: "" });
