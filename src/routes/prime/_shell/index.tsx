@@ -348,8 +348,7 @@ function Metric({
           negative && "text-muted-foreground",
         )}
       >
-        {negative ? "-" : ""}
-        {negative ? value.replace("-", "") : value}
+        {value}
       </p>
       <p className="mt-2 text-[10px] leading-relaxed text-muted-foreground/70">{hint}</p>
       {foot ? (
