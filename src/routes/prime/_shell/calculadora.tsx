@@ -15,6 +15,10 @@ import {
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/prime/_shell/calculadora")({
+  validateSearch: (search: Record<string, unknown>): { modo?: "manual" | "auto" } => {
+    const m = String(search["modo"] ?? "");
+    return m === "manual" || m === "auto" ? { modo: m } : {};
+  },
   head: () => ({
     meta: [{ title: "Calculadora Prime — Garimpo Auto" }, { name: "robots", content: "noindex" }],
   }),
