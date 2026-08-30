@@ -110,7 +110,7 @@ function Calculadora() {
         transportCost: parseMoney(costs.transporte),
         documentationCost: parseMoney(costs.documentacao),
         repairCost: parseMoney(costs.reparos),
-        otherCost: parseMoney(costs.outros),
+        otherCost: outrosTotal,
         notes,
       });
       setAsking(false);
