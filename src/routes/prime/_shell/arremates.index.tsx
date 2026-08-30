@@ -32,7 +32,8 @@ const FILTERS: { key: "ALL" | DealStatus; label: string }[] = [
 ];
 
 function Arremates() {
-  const [filter, setFilter] = useState<"ALL" | DealStatus>("ALL");
+  const search = Route.useSearch();
+  const [filter, setFilter] = useState<"ALL" | DealStatus>(search.status ?? "ALL");
   const { data, isLoading } = useMyDeals();
 
   const deals = data ?? [];

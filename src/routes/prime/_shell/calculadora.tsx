@@ -15,6 +15,10 @@ import {
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/prime/_shell/calculadora")({
+  validateSearch: (search: Record<string, unknown>): { modo?: "manual" | "auto" } => {
+    const m = String(search["modo"] ?? "");
+    return m === "manual" || m === "auto" ? { modo: m } : {};
+  },
   head: () => ({
     meta: [{ title: "Calculadora Prime — Garimpo Auto" }, { name: "robots", content: "noindex" }],
   }),
@@ -30,7 +34,8 @@ const VALOR_GARIMPO_HINT =
 
 function Calculadora() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<Mode>("GARIMPO_AUTO");
+  const search = Route.useSearch();
+  const [mode, setMode] = useState<Mode>(search.modo === "manual" ? "MANUAL" : "GARIMPO_AUTO");
   const [selectedId, setSelectedId] = useState("");
   const [costs, setCosts] = useState(EMPTY_COSTS);
   const [manual, setManual] = useState({ vehicle: "", year: "", acquisition: "", fipe: "" });
