@@ -76,16 +76,29 @@ function ArremateDetalhe() {
     );
   }
 
+  const extrasTotal = extras.reduce((acc, e) => acc + e.value, 0);
+  const outrosTotal = parseMoney(costs.outros) + extrasTotal;
+
   const live = computeDeal({
     acquisitionValue: deal.acquisitionValue,
     fipeValue: deal.fipeValue,
     transportCost: parseMoney(costs.transporte),
     documentationCost: parseMoney(costs.documentacao),
     repairCost: parseMoney(costs.reparos),
-    otherCost: parseMoney(costs.outros),
+    otherCost: outrosTotal,
     saleValue: deal.saleValue,
     status: deal.status,
   });
+
+  function addExtra() {
+    const value = parseMoney(extraDraft);
+    if (value <= 0) return;
+    setExtras((prev) => [
+      ...prev,
+      { id: `${Date.now()}-${prev.length}`, label: `Extra ${prev.length + 1}`, value },
+    ]);
+    setExtraDraft("");
+  }
 
   async function saveCosts() {
     setMsg(null);
@@ -95,9 +108,11 @@ function ArremateDetalhe() {
         transportCost: parseMoney(costs.transporte),
         documentationCost: parseMoney(costs.documentacao),
         repairCost: parseMoney(costs.reparos),
-        otherCost: parseMoney(costs.outros),
+        otherCost: outrosTotal,
         notes,
       });
+      setExtras([]);
+      setExtraDraft("");
       setMsg("Custos atualizados.");
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "Erro ao salvar.");
