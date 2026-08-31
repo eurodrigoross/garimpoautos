@@ -37,6 +37,8 @@ function ArremateDetalhe() {
   const remove = useDeleteDeal();
 
   const [costs, setCosts] = useState({ transporte: "", documentacao: "", reparos: "", outros: "" });
+  const [extras, setExtras] = useState<{ id: string; label: string; value: number }[]>([]);
+  const [extraDraft, setExtraDraft] = useState("");
   const [notes, setNotes] = useState("");
   const [sale, setSale] = useState({ value: "", date: "", notes: "" });
   const [askSold, setAskSold] = useState(false);
@@ -50,6 +52,8 @@ function ArremateDetalhe() {
       reparos: toInput(deal.repairCost),
       outros: toInput(deal.otherCost),
     });
+    setExtras([]);
+    setExtraDraft("");
     setNotes(deal.notes ?? "");
     setSale({
       value: deal.saleValue ? toInput(deal.saleValue) : "",
