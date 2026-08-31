@@ -297,6 +297,67 @@ function ArremateDetalhe() {
             value={costs.outros}
             onChange={(v) => setCosts((p) => ({ ...p, outros: v }))}
           />
+          <div className="sm:col-span-2 rounded-lg border border-dashed border-border/60 p-4">
+            <p className="text-[10px] tracking-[0.18em] text-muted-foreground">
+              CUSTOS EXTRAS (OPCIONAL)
+            </p>
+            <p className="mt-1 text-[10px] text-muted-foreground/70">
+              Surgiu um gasto que não se encaixa nos campos acima? Digite o valor e pressione Enter
+              para somá-lo aos outros custos ao salvar.
+            </p>
+            {extras.length > 0 ? (
+              <ul className="mt-3 space-y-1.5">
+                {extras.map((extra) => (
+                  <li
+                    key={extra.id}
+                    className="flex items-center justify-between gap-3 rounded-md border border-border/40 bg-muted/20 px-3 py-1.5"
+                  >
+                    <span className="text-[11px] text-muted-foreground">{extra.label}</span>
+                    <span className="flex items-center gap-3">
+                      <span className="text-sm tabular-nums">{formatBRL(extra.value)}</span>
+                      <button
+                        type="button"
+                        aria-label={`Remover ${extra.label}`}
+                        onClick={() => setExtras((prev) => prev.filter((e) => e.id !== extra.id))}
+                        className="text-[10px] tracking-[0.15em] text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        REMOVER
+                      </button>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <div className="mt-3 flex items-center gap-2">
+              <input
+                inputMode="decimal"
+                value={extraDraft}
+                onChange={(e) => setExtraDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addExtra();
+                  }
+                }}
+                placeholder="0"
+                aria-label="Valor do custo extra"
+                className="w-full max-w-[180px] rounded-md border border-border/50 bg-background px-3 py-2 text-sm tabular-nums outline-none transition-colors focus:border-foreground/40"
+              />
+              <button
+                type="button"
+                onClick={addExtra}
+                disabled={parseMoney(extraDraft) <= 0}
+                className="rounded-md border border-border/60 px-3 py-2 text-[10px] tracking-[0.2em] text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground disabled:opacity-40"
+              >
+                + ADICIONAR
+              </button>
+              {extrasTotal > 0 ? (
+                <span className="ml-auto text-[11px] tabular-nums text-muted-foreground">
+                  Extras: {formatBRL(extrasTotal)}
+                </span>
+              ) : null}
+            </div>
+          </div>
           <label className="block sm:col-span-2">
             <span className="text-[10px] tracking-[0.18em] text-muted-foreground">OBSERVAÇÕES</span>
             <textarea
