@@ -15,7 +15,6 @@ import { Route as AdminShellRouteImport } from './routes/admin/_shell'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as PrimeShellRouteImport } from './routes/prime/_shell'
 import { Route as PrimeLoginRouteImport } from './routes/prime/login'
-import { Route as PrimeResetPasswordRouteImport } from './routes/prime/reset-password'
 import { Route as AdminShellIndexRouteImport } from './routes/admin/_shell/index'
 import { Route as AdminShellContaRouteImport } from './routes/admin/_shell/conta'
 import { Route as AdminShellMembrosRouteImport } from './routes/admin/_shell/membros'
@@ -67,11 +66,6 @@ const PrimeShellRoute = PrimeShellRouteImport.update({
 const PrimeLoginRoute = PrimeLoginRouteImport.update({
   id: '/prime/login',
   path: '/prime/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrimeResetPasswordRoute = PrimeResetPasswordRouteImport.update({
-  id: '/prime/reset-password',
-  path: '/prime/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminShellIndexRoute = AdminShellIndexRouteImport.update({
@@ -196,7 +190,6 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/prime': typeof PrimeShellRouteWithChildren
   '/prime/login': typeof PrimeLoginRoute
-  '/prime/reset-password': typeof PrimeResetPasswordRoute
   '/admin/conta': typeof AdminShellContaRoute
   '/admin/membros': typeof AdminShellMembrosRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
@@ -225,7 +218,6 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/login': typeof AdminLoginRoute
   '/prime/login': typeof PrimeLoginRoute
-  '/prime/reset-password': typeof PrimeResetPasswordRoute
   '/admin/conta': typeof AdminShellContaRoute
   '/admin/membros': typeof AdminShellMembrosRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
@@ -257,7 +249,6 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/prime/_shell': typeof PrimeShellRouteWithChildren
   '/prime/login': typeof PrimeLoginRoute
-  '/prime/reset-password': typeof PrimeResetPasswordRoute
   '/admin/_shell/conta': typeof AdminShellContaRoute
   '/admin/_shell/membros': typeof AdminShellMembrosRoute
   '/api/radar/publish': typeof ApiRadarPublishRoute
@@ -290,7 +281,6 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/prime'
     | '/prime/login'
-    | '/prime/reset-password'
     | '/admin/conta'
     | '/admin/membros'
     | '/api/radar/publish'
@@ -319,7 +309,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/login'
     | '/prime/login'
-    | '/prime/reset-password'
     | '/admin/conta'
     | '/admin/membros'
     | '/api/radar/publish'
@@ -350,7 +339,6 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/prime/_shell'
     | '/prime/login'
-    | '/prime/reset-password'
     | '/admin/_shell/conta'
     | '/admin/_shell/membros'
     | '/api/radar/publish'
@@ -382,7 +370,6 @@ export interface RootRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   PrimeShellRoute: typeof PrimeShellRouteWithChildren
   PrimeLoginRoute: typeof PrimeLoginRoute
-  PrimeResetPasswordRoute: typeof PrimeResetPasswordRoute
   ApiRadarPublishRoute: typeof ApiRadarPublishRoute
   ApiRadarUploadImageRoute: typeof ApiRadarUploadImageRoute
   ApiPublicRadarHealthRoute: typeof ApiPublicRadarHealthRoute
@@ -435,13 +422,6 @@ declare module '@tanstack/react-router' {
       path: '/prime/login'
       fullPath: '/prime/login'
       preLoaderRoute: typeof PrimeLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/prime/reset-password': {
-      id: '/prime/reset-password'
-      path: '/prime/reset-password'
-      fullPath: '/prime/reset-password'
-      preLoaderRoute: typeof PrimeResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/_shell/': {
@@ -656,7 +636,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   PrimeShellRoute: PrimeShellRouteWithChildren,
   PrimeLoginRoute: PrimeLoginRoute,
-  PrimeResetPasswordRoute: PrimeResetPasswordRoute,
   ApiRadarPublishRoute: ApiRadarPublishRoute,
   ApiRadarUploadImageRoute: ApiRadarUploadImageRoute,
   ApiPublicRadarHealthRoute: ApiPublicRadarHealthRoute,
