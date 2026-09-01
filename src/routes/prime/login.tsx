@@ -31,7 +31,7 @@ export const Route = createFileRoute("/prime/login")({
   component: PrimeLogin,
 });
 
-type Mode = "login" | "signup";
+type Mode = "login" | "signup" | "forgot";
 
 function PrimeLogin() {
   const navigate = useNavigate();
