@@ -136,25 +136,41 @@ function PrimeLogin() {
             />
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="password" className="text-[11px] tracking-[0.2em] text-muted-foreground">
-              SENHA
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              minLength={8}
-              autoComplete={mode === "login" ? "current-password" : "new-password"}
-              aria-describedby={mode === "signup" ? "password-requirements" : undefined}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-md border border-border/60 bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-foreground/40"
-            />
-          </div>
+          {mode === "forgot" ? null : (
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-[11px] tracking-[0.2em] text-muted-foreground">
+                SENHA
+              </label>
+              <input
+                id="password"
+                type="password"
+                required
+                minLength={8}
+                autoComplete={mode === "login" ? "current-password" : "new-password"}
+                aria-describedby={mode === "signup" ? "password-requirements" : undefined}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-md border border-border/60 bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-foreground/40"
+              />
+            </div>
+          )}
 
           {mode === "signup" ? (
             <PasswordStrength password={password} id="password-requirements" />
+          ) : null}
+
+          {mode === "login" ? (
+            <button
+              type="button"
+              onClick={() => {
+                setMode("forgot");
+                setError(null);
+                setInfo(null);
+              }}
+              className="block text-right text-[11px] tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
+            >
+              ESQUECI MINHA SENHA
+            </button>
           ) : null}
 
           <div aria-live="assertive" role="alert">
