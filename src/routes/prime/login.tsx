@@ -31,7 +31,7 @@ export const Route = createFileRoute("/prime/login")({
   component: PrimeLogin,
 });
 
-type Mode = "login" | "signup";
+type Mode = "login" | "signup" | "forgot";
 
 function PrimeLogin() {
   const navigate = useNavigate();
@@ -59,6 +59,22 @@ function PrimeLogin() {
     setLoading(true);
     setError(null);
     setInfo(null);
+
+    if (mode === "forgot") {
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/prime/reset-password`,
+      });
+      setLoading(false);
+      if (resetError) {
+        setError("Não foi possível enviar o link de recuperação. Tente novamente.");
+        return;
+      }
+      setInfo(
+        "Se o e-mail estiver cadastrado, enviaremos um link para redefinir sua senha. Verifique sua caixa de entrada.",
+      );
+      setPassword("");
+      return;
+    }
 
     if (mode === "signup") {
       if (!allRulesMet) {
@@ -120,25 +136,41 @@ function PrimeLogin() {
             />
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="password" className="text-[11px] tracking-[0.2em] text-muted-foreground">
-              SENHA
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              minLength={8}
-              autoComplete={mode === "login" ? "current-password" : "new-password"}
-              aria-describedby={mode === "signup" ? "password-requirements" : undefined}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-md border border-border/60 bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-foreground/40"
-            />
-          </div>
+          {mode === "forgot" ? null : (
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-[11px] tracking-[0.2em] text-muted-foreground">
+                SENHA
+              </label>
+              <input
+                id="password"
+                type="password"
+                required
+                minLength={8}
+                autoComplete={mode === "login" ? "current-password" : "new-password"}
+                aria-describedby={mode === "signup" ? "password-requirements" : undefined}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-md border border-border/60 bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-foreground/40"
+              />
+            </div>
+          )}
 
           {mode === "signup" ? (
             <PasswordStrength password={password} id="password-requirements" />
+          ) : null}
+
+          {mode === "login" ? (
+            <button
+              type="button"
+              onClick={() => {
+                setMode("forgot");
+                setError(null);
+                setInfo(null);
+              }}
+              className="block text-right text-[11px] tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
+            >
+              ESQUECI MINHA SENHA
+            </button>
           ) : null}
 
           <div aria-live="assertive" role="alert">
@@ -150,10 +182,16 @@ function PrimeLogin() {
 
           <button
             type="submit"
-            disabled={loading || (mode === "signup" && !allRulesMet)}
+            disabled={loading || (mode === "signup" && !allRulesMet) || (mode === "forgot" && !email)}
             className="w-full rounded-md bg-foreground px-4 py-2.5 text-xs font-semibold tracking-[0.2em] text-background transition-opacity hover:opacity-90 disabled:opacity-50"
           >
-            {loading ? "AGUARDE..." : mode === "login" ? "ENTRAR" : "CRIAR ACESSO"}
+            {loading
+              ? "AGUARDE..."
+              : mode === "login"
+                ? "ENTRAR"
+                : mode === "signup"
+                  ? "CRIAR ACESSO"
+                  : "ENVIAR LINK DE RECUPERAÇÃO"}
           </button>
 
           <button
@@ -165,7 +203,11 @@ function PrimeLogin() {
             }}
             className="w-full text-center text-[11px] tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
           >
-            {mode === "login" ? "AINDA NÃO TENHO ACESSO" : "JÁ TENHO ACESSO"}
+            {mode === "forgot"
+              ? "VOLTAR PARA O LOGIN"
+              : mode === "login"
+                ? "AINDA NÃO TENHO ACESSO"
+                : "JÁ TENHO ACESSO"}
           </button>
         </form>
 
