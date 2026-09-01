@@ -60,6 +60,22 @@ function PrimeLogin() {
     setError(null);
     setInfo(null);
 
+    if (mode === "forgot") {
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/prime/reset-password`,
+      });
+      setLoading(false);
+      if (resetError) {
+        setError("Não foi possível enviar o link de recuperação. Tente novamente.");
+        return;
+      }
+      setInfo(
+        "Se o e-mail estiver cadastrado, enviaremos um link para redefinir sua senha. Verifique sua caixa de entrada.",
+      );
+      setPassword("");
+      return;
+    }
+
     if (mode === "signup") {
       if (!allRulesMet) {
         setLoading(false);
