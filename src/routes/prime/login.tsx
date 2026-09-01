@@ -182,10 +182,16 @@ function PrimeLogin() {
 
           <button
             type="submit"
-            disabled={loading || (mode === "signup" && !allRulesMet)}
+            disabled={loading || (mode === "signup" && !allRulesMet) || (mode === "forgot" && !email)}
             className="w-full rounded-md bg-foreground px-4 py-2.5 text-xs font-semibold tracking-[0.2em] text-background transition-opacity hover:opacity-90 disabled:opacity-50"
           >
-            {loading ? "AGUARDE..." : mode === "login" ? "ENTRAR" : "CRIAR ACESSO"}
+            {loading
+              ? "AGUARDE..."
+              : mode === "login"
+                ? "ENTRAR"
+                : mode === "signup"
+                  ? "CRIAR ACESSO"
+                  : "ENVIAR LINK DE RECUPERAÇÃO"}
           </button>
 
           <button
@@ -197,7 +203,11 @@ function PrimeLogin() {
             }}
             className="w-full text-center text-[11px] tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
           >
-            {mode === "login" ? "AINDA NÃO TENHO ACESSO" : "JÁ TENHO ACESSO"}
+            {mode === "forgot"
+              ? "VOLTAR PARA O LOGIN"
+              : mode === "login"
+                ? "AINDA NÃO TENHO ACESSO"
+                : "JÁ TENHO ACESSO"}
           </button>
         </form>
 
