@@ -21,6 +21,7 @@ const NAV = [
   { to: "/admin", label: "VISÃO GERAL", exact: true },
   { to: "/admin/garimpos", label: "GARIMPOS", exact: false },
   { to: "/admin/membros", label: "MEMBROS", exact: false },
+  { to: "/admin/migracao", label: "MIGRAÇÃO", exact: false },
   { to: "/admin/conta", label: "CONTA", exact: false },
 ] as const;
 
